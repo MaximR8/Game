@@ -298,6 +298,33 @@ visiteurs ont la même adresse, et un seul tricheur bloquerait tout le monde) ; 
   sur l'écran d'accueil**. L'adresse publique est un autre site que l'adresse locale : les parties ne se
   mélangent pas.
 
+## 🤖 L'app Android — fabriquée sur le PC de Maxim *(30/09/2026)*
+
+Pas de Codemagic pour Android (ses minutes restent à Vesta, et à l'iPhone plus tard) : Godot fabrique l'APK sous Windows.
+- **Java 17 portable** : `C:\Users\Maxim\outils-jeu\jdk-17` (Temurin) — **rien de global** (ni JAVA_HOME, ni PATH : le
+  Java 8 de Maxim reste le sien). Godot le connaît par ses réglages d'éditeur (`export/android/java_sdk_path`, dans
+  `%APPDATA%\Godot\editor_settings-4.7.tres` ; la copie d'avant : `….avant-android`).
+- **Le kit Android** : celui de Vesta (`%LOCALAPPDATA%\Android\Sdk`, build-tools 35 à 37, android-36) — on n'y a rien changé.
+- **Les modèles d'export Android** de Godot 4.7.2 : `%APPDATA%\Godot\export_templates\4.7.2.stable\android_*` (tirés du
+  `.tpz` officiel, gardé dans `outils-jeu`).
+- **La clé de signature** : `C:\Users\Maxim\cles-la-poussette\poussette-release.jks` (alias `poussette`) et son mot de
+  passe dans `LIRE-MOI.txt` à côté — ⛔ **jamais dans le dépôt**, à sauvegarder dans le gestionnaire de mots de passe de
+  Maxim. Empreinte SHA-256 : `03:77:21:13:…:E4:69:40` (celle que Google demandera pour la connexion Google).
+- Le réglage d'export « Android » (`export_presets.cfg`) : `be.poizot.poussette`, arm64 seulement, cible SDK 36, Internet +
+  vibration ; le projet : portrait (`window/handheld/orientation=1`), textures ETC2/ASTC (exigé par Android ; le web n'en
+  prend pas : son `.pck` n'a pas bougé).
+
+```bash
+K=C:/Users/Maxim/cles-la-poussette; P=$(grep 'Mot de passe' $K/LIRE-MOI.txt | sed 's/.*: //' | tr -d '\r')
+GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$K/poussette-release.jks GODOT_ANDROID_KEYSTORE_RELEASE_USER=poussette \
+GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$P" ./Godot_v4.7.2-stable_win64_console.exe --headless --path ./proto_degagement \
+  --export-release "Android" ../android/la-poussette.apk                # → android/ (hors du dépôt), ~70 Mo
+java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify --print-certs android/la-poussette.apk
+```
+- 🔴 Les mots de passe de la clé passent par des **variables d'environnement**, jamais par `export_presets.cfg` (vérifier :
+  `grep -i keystore proto_degagement/export_presets.cfg` → vide).
+- Pour le Play Store : un **AAB** (il faudra la fabrication Gradle de Godot) ; l'APK sert aux essais (installation directe).
+
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 
 Le projet (`_NOUVEAU_PROJET`) est un dépôt Git depuis le 30/09 — pour Codemagic (l'app iPhone) et pour l'historique.

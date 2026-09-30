@@ -12,6 +12,24 @@
 
 ---
 
+## 🧪 **La première app Android (APK d'essai) : be.poizot.poussette 0.1** — *fabriquée le 30/09/2026, pas publiée*
+
+**En clair.** Le jeu existe maintenant en **vraie app Android** (70 Mo), fabriquée sur le PC de Maxim, signée avec la clé du
+jeu, à installer directement sur un téléphone Android (hors store). Elle parle au même serveur : un joueur qui a lié son
+compte y retrouve sa partie (« J'ai déjà un compte »). Le web ne change pas.
+
+🔴 **POURQUOI** — Maxim, 30/09 : *« l'idée c'est d'avoir une app et mon VPS, basta »* ; Codemagic reste à Vesta (et à
+l'iPhone plus tard, sur un compte à part) : Android se fabrique sans lui (INFRA § l'app Android).
+
+· Java 17 portable (`outils-jeu`), la clé `cles-la-poussette/` (hors du dépôt), le réglage d'export « Android », le portrait,
+  les textures ETC2/ASTC. Vérifié : signature v2/v3 par la clé du jeu (`apksigner`) ; paquet, cible SDK 36, permissions
+  (`aapt2`) ; le `.pck` web inchangé (à 128 octets près : les réglages).
+
+**Pas testé** : sur un téléphone Android (la fluidité de la Nébuleuse hors du navigateur — D13 —, le son, le clavier du
+panneau Compte).
+
+---
+
 ## ✅ **Lier son compte par mail : retrouver sa partie sur un autre téléphone ; le code HALAMADRID** — **EN PROD** *(29/09/2026, 23 h 41)*
 
 **En clair.** Dans le Menu → Compte : **« Lier mon compte »** (un mail, un mot de passe de 8 caractères ou plus) sur le
