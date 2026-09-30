@@ -1,0 +1,124 @@
+:root{
+  color-scheme: dark;
+  --nuit:#0f0c18; --nuit2:#181428; --nuit3:#221c38; --trait:#2e2748;
+  --mauve:#7a5cc8; --mauve-clair:#b9a2f0;
+  --or:#caa968; --or-vif:#f1d28a; --or-filet:rgba(202,169,104,.55); --sur-or:#2b1b06;
+  --ivoire:#efe9dc; --sourd:#a9a3b8; --pale:#6f6886;
+  --toi:#7fd0b0; --lui:#e59a8a;
+  --titre:"Fraunces", Georgia, "Times New Roman", serif;
+  --ui:"Barlow Semi Condensed", "Arial Narrow", Arial, sans-serif;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--nuit);color:var(--ivoire);font:15px/1.35 var(--ui);-webkit-tap-highlight-color:transparent;overflow-x:hidden;overscroll-behavior:none}
+#ciel{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#app{position:relative;z-index:1;max-width:520px;margin:0 auto;height:100%;padding-inline:12px;box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-user-select:none;user-select:none}
+button:focus-visible{outline:2px solid var(--or-vif);outline-offset:2px}
+*{box-sizing:border-box}
+
+/* ——— le menu ——— */
+.menu{display:flex;flex-direction:column;gap:12px;padding-block:16px 28px}
+.menu h1{margin:0;font:700 26px/1.1 var(--titre);display:flex;align-items:center;gap:9px}
+.menu h1 svg{width:20px;height:20px;fill:var(--or)}
+.menu .sous{margin:0;color:var(--sourd);font-size:15px;text-wrap:balance}
+.tuiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tuile{position:relative;display:flex;flex-direction:column;gap:0;text-align:left;border:1px solid var(--trait);border-radius:13px;overflow:hidden;background:var(--nuit2);padding:0;transition:transform .12s}
+.tuile:active{transform:scale(.98)}
+.tuile .vis{height:92px;position:relative;overflow:hidden;background:#1d1732}
+.tuile .vis img{position:absolute;width:62px;height:78px;object-fit:cover;border-radius:6px;border:1px solid var(--or-filet);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.tuile .num{position:absolute;left:8px;top:6px;font:700 13px var(--titre);color:var(--or-vif);z-index:2;text-shadow:0 1px 2px #000}
+.tuile .corps{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px}
+.tuile b{font:600 16px/1.1 var(--ui)}
+.tuile .acc{font-size:13px;color:var(--sourd);line-height:1.25}
+.tuile .meta{margin-top:4px;display:flex;justify-content:space-between;font-size:12px;color:var(--pale);font-variant-numeric:tabular-nums}
+.tuile .meta .jouee{color:var(--mauve-clair)}
+.menu h2.groupe{margin:10px 0 0;font:700 20px var(--titre);color:var(--or-vif)}
+.groupe-replie{border-top:1px solid var(--trait);padding-top:8px}
+.groupe-replie summary{cursor:pointer;font:700 17px var(--titre);color:var(--sourd);padding:6px 0}
+.groupe-replie[open] summary{color:var(--or-vif)}
+.groupe-replie .tuiles{margin-top:8px}
+.menu .pied{font-size:13px;color:var(--pale);text-align:center;margin:4px 0 0}
+
+/* ——— l'écran d'une démo ——— */
+.ecran{height:100%;display:flex;flex-direction:column;gap:6px;padding-block:8px 10px}
+.ecran .tete{display:flex;align-items:center;gap:8px;min-height:36px}
+.retour{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--trait);background:var(--nuit2);display:grid;place-items:center}
+.retour svg{width:18px;height:18px;stroke:var(--ivoire);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ecran .nomdemo{flex:1;min-width:0;font:700 17px/1.1 var(--titre);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{display:flex;align-items:center;gap:6px;font:700 20px var(--titre);font-variant-numeric:tabular-nums;white-space:nowrap}
+.score .j{color:var(--toi)} .score .a{color:var(--lui)} .score .sep{font:500 12px var(--ui);color:var(--pale)}
+.consigne{min-height:30px;display:flex;align-items:center;justify-content:center;text-align:center;font:600 16px/1.15 var(--ui);letter-spacing:.02em;color:var(--or-vif);background:rgba(24,20,40,.8);border:1px solid var(--trait);border-radius:10px;padding:4px 10px}
+.consigne.lui{color:var(--lui)}
+.consigne.calme{color:var(--sourd)}
+.scene{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;position:relative}
+
+/* ——— les cartes ——— */
+.carte{position:relative;border-radius:8px;overflow:hidden;background:var(--nuit3);border:1px solid var(--or-filet);aspect-ratio:4/5;flex:none;-webkit-user-select:none;user-select:none}
+.carte img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.carte::after{content:"";position:absolute;inset:0;border-top:3px solid var(--t,#888);border-radius:8px;pointer-events:none}
+.carte.sbire{background:linear-gradient(160deg,color-mix(in srgb,var(--t) 40%,#15101f),#120e1c 85%)}
+.carte .embleme{position:absolute;inset:12% 16% 30%;display:grid;place-items:center}
+.carte .embleme svg{width:100%;height:100%;fill:var(--t);opacity:.85}
+.carte .nom{position:absolute;left:0;right:0;bottom:0;padding:12px 3px 3px;background:linear-gradient(0deg,rgba(10,8,16,.95),rgba(10,8,16,.7) 60%,transparent);font:600 11px/1.05 var(--ui);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carte .force{position:absolute;right:3px;top:4px;min-width:22px;height:22px;padding:0 4px;border-radius:6px 6px 11px 11px;display:grid;place-items:center;font:700 14px var(--titre);color:var(--sur-or);background:linear-gradient(180deg,var(--or-vif),var(--or));box-shadow:0 1px 3px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+.carte .gem{position:absolute;left:3px;top:4px;width:21px;height:21px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--ui);color:#fff;background:radial-gradient(circle at 35% 30%,#cdb8ff 0,#8363d8 40%,#3d2a7a 100%);box-shadow:0 1px 2px rgba(0,0,0,.6)}
+.carte.j{border-color:var(--toi);box-shadow:0 0 0 2px var(--toi)}
+.carte.a{border-color:var(--lui);box-shadow:0 0 0 2px var(--lui)}
+.carte.choisie{transform:translateY(-9px);box-shadow:0 0 0 3px var(--or-vif),0 8px 14px rgba(0,0,0,.5)}
+.carte.eteinte{filter:grayscale(.8) brightness(.5)}
+.carte.brille{animation:brille 1.1s ease-in-out infinite}
+@keyframes brille{50%{box-shadow:0 0 0 3px var(--or-vif)}}
+.carte.dos{background:linear-gradient(160deg,#3b2d63,#1d1634);border-color:rgba(202,169,104,.45)}
+.carte.dos::after{border-top-color:transparent}
+.carte.dos svg{position:absolute;inset:22%;width:56%;height:56%;fill:var(--or)}
+.retourne{animation:retourne .45s ease-out}
+@keyframes retourne{0%{transform:rotateY(90deg) scale(1.08)}100%{transform:none}}
+.secoue{animation:secoue .32s}
+@keyframes secoue{25%{transform:translateX(-5px)}50%{transform:translateX(5px);filter:brightness(1.7)}75%{transform:translateX(-2px)}}
+.bond{animation:bond .3s ease-out}
+@keyframes bond{40%{transform:translateY(-10px) scale(1.05)}}
+
+/* ——— boutons ——— */
+.btn{border:none;border-radius:12px;padding:12px 16px;font:700 17px var(--ui);letter-spacing:.03em;transition:transform .1s,filter .1s}
+.btn:active{transform:translateY(2px)}
+.btn[disabled]{filter:grayscale(.85) brightness(.5);cursor:default}
+.btn.or{color:var(--sur-or);background:linear-gradient(180deg,var(--or-vif),var(--or) 60%,#a8864a);box-shadow:0 3px 0 #6d5427,0 5px 10px rgba(0,0,0,.4)}
+.btn.or:active{box-shadow:0 1px 0 #6d5427}
+.btn.sec{background:var(--nuit3);color:var(--ivoire);border:1px solid #3a3257;font-weight:600;font-size:15px}
+.btn.mauve{color:#fff;background:linear-gradient(180deg,#9b7fe6,#5e44a8);box-shadow:0 3px 0 #35266a}
+.rangee{display:flex;gap:8px}
+.rangee .btn{flex:1}
+
+/* ——— nombres qui s'envolent ——— */
+#flots{position:fixed;inset:0;pointer-events:none;z-index:40}
+.flot{position:fixed;transform:translate(-50%,-50%);font:700 22px var(--titre);color:#fff;text-shadow:0 2px 0 #000,0 0 3px #000;animation:flot .9s ease-out forwards;white-space:nowrap}
+.flot.or{color:var(--or-vif);font-size:26px}
+.flot.vert{color:var(--toi)} .flot.rose{color:var(--lui)}
+.flot.mot{font:700 15px var(--ui);color:var(--mauve-clair);letter-spacing:.04em}
+.flot.gros{font-size:34px;color:var(--or-vif)}
+@keyframes flot{0%{opacity:0;margin-top:8px}15%{opacity:1}100%{opacity:0;margin-top:-40px}}
+
+/* ——— le guide ——— */
+#guide{position:fixed;inset:0;z-index:50;pointer-events:none}
+#guide .mur{position:fixed;background:rgba(6,5,12,.66);pointer-events:auto}
+#guide .anneau{position:fixed;border:2px solid var(--or-vif);border-radius:12px;animation:anneau 1.2s ease-in-out infinite}
+@keyframes anneau{50%{box-shadow:0 0 0 5px rgba(241,210,138,.25)}}
+#guide .doigt{position:fixed;width:44px;height:44px;transform:translate(-8px,-4px);animation:doigt 1.1s ease-in-out infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+#guide .doigt.tire{animation:tire 1.6s ease-in-out infinite}
+@keyframes doigt{50%{transform:translate(-8px,6px)}}
+@keyframes tire{0%{transform:translate(-8px,-4px);opacity:0}15%{opacity:1}70%{transform:translate(-8px,90px);opacity:1}100%{transform:translate(-8px,90px);opacity:0}}
+#guide .bulle{position:fixed;left:50%;transform:translateX(-50%);width:min(340px,calc(100% - 32px));background:linear-gradient(180deg,#352a5e,#231b40);border:1px solid var(--or);border-radius:14px;padding:12px 14px;text-align:center;font:600 19px/1.2 var(--ui);color:var(--ivoire);box-shadow:0 10px 26px rgba(0,0,0,.55);pointer-events:auto}
+#guide .bulle small{display:block;margin-top:7px;font:500 13px var(--ui);color:var(--or-vif);letter-spacing:.06em;text-transform:uppercase}
+#guide .passer{position:fixed;right:12px;top:10px;pointer-events:auto;background:rgba(24,20,40,.9);border:1px solid var(--trait);border-radius:9px;padding:6px 10px;font-size:13px;color:var(--sourd)}
+
+/* ——— fin de partie ——— */
+#fin{position:fixed;inset:0;z-index:45;background:rgba(8,6,14,.72);display:grid;place-items:center;padding:16px}
+.fin-boite{width:min(400px,100%);background:linear-gradient(180deg,#2d2350,#191430);border:1px solid var(--or-filet);border-radius:16px;padding:20px 18px;text-align:center;display:flex;flex-direction:column;gap:10px;animation:entre .35s ease-out}
+.fin-boite svg{width:44px;height:44px;fill:var(--or-vif);margin:0 auto}
+.fin-boite h2{margin:0;font:700 32px var(--titre)}
+.fin-boite p{margin:0;color:var(--sourd);text-wrap:balance}
+.fin-boite .compte{font-size:13px;color:var(--mauve-clair)}
+.fin-boite .btn{width:100%}
+@keyframes entre{0%{opacity:0;transform:translateY(12px) scale(.95)}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}

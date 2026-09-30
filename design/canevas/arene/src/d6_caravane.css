@@ -1,0 +1,30 @@
+/* 6 · La Caravane */
+.cv-info{display:flex;align-items:center;justify-content:space-between;flex:none}
+.cv-lib{font:600 15px var(--ui);color:var(--sourd)}
+.cv-etapes{display:flex;gap:4px}
+.cv-etapes svg{width:20px;height:20px;fill:#3a3257}
+.cv-etapes .ok svg{fill:var(--or-vif)}
+.cv-rang{display:flex;flex-wrap:wrap;align-items:flex-end;gap:5px;flex:none;padding-block:2px}
+.cv-rang .cv-tit{flex-basis:100%}
+.cv-tit{font:600 12.5px var(--ui);color:var(--toi);text-transform:uppercase;letter-spacing:.06em}
+.cv-tit.lui{color:var(--lui)}
+.cv-m{width:54px;display:flex;flex-direction:column;gap:2px;position:relative}
+.cv-m .carte{width:100%}
+.cv-m.devant{width:70px}
+.cv-m.sel .carte{box-shadow:0 0 0 3px var(--or-vif)}
+.cv-m.cible .carte{outline:2px dashed var(--or-vif);outline-offset:1px}
+.cv-pv{height:6px;border-radius:3px;background:#2a2340;overflow:hidden}
+.cv-pv i{display:block;height:100%;background:var(--toi);transition:width .25s}
+.cv-adv .cv-pv i{background:var(--lui)}
+.cv-st{font:600 11px var(--ui);color:var(--sourd);text-align:center;font-variant-numeric:tabular-nums}
+.cv-niv{position:absolute;left:0;right:0;top:3px;text-align:center;color:var(--or-vif);font-size:12px;text-shadow:0 1px 2px #000;z-index:2}
+.cv-mil{flex:1;min-height:4px}
+.cv-offres{flex:none;display:flex;flex-direction:column;gap:5px}
+.cv-grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-inline:8px}
+.cv-offre{padding:0;border:none;background:none;display:flex;flex-direction:column;gap:3px;align-items:center}
+.cv-offre .carte{width:100%}
+.cv-os{font:600 13px var(--ui);color:var(--sourd)}
+.cv-offre.monte .cv-os{color:var(--or-vif)}
+.cv-offre.monte .carte{box-shadow:0 0 0 2px var(--or-vif)}
+.cv-coupJ{animation:frJ .3s ease-out}
+.cv-coupA{animation:frA .3s ease-out}

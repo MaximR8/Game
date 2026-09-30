@@ -1,0 +1,30 @@
+/* Le moteur des créatures : cartes, panneau d'actions, cibles */
+.cr2{position:relative;display:flex;flex-direction:column;gap:2px;width:100%;min-width:0;cursor:pointer;border-radius:9px;padding:3px;transition:background .15s}
+.cr2 .carte{width:100%}
+.cr2.j .carte{border-color:var(--toi)}
+.cr2.a .carte{border-color:var(--lui)}
+.cr2.sel{background:rgba(241,210,138,.18);box-shadow:0 0 0 2px var(--or-vif)}
+.cr2.ko{opacity:.35}
+.cr2.ciblable{background:rgba(127,208,176,.2);box-shadow:0 0 0 3px var(--toi);animation:brille 1s ease-in-out infinite}
+.cr2-stade{position:absolute;left:3px;top:4px;min-width:20px;height:18px;padding:0 4px;border-radius:5px;background:rgba(10,8,16,.88);color:var(--or-vif);font:700 11px/18px var(--titre);text-align:center;z-index:2}
+.cr2-plan{position:absolute;left:2px;right:2px;bottom:3px;border-radius:5px;background:rgba(58,44,102,.95);color:#fff;font:700 10.5px/1.15 var(--ui);text-align:center;padding:2px 1px;z-index:2}
+.cr2-nom{font:600 12px/1.1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.cr2-pv{height:6px;border-radius:3px;background:#2a2340;overflow:hidden}
+.cr2-pv i{display:block;height:100%;background:var(--toi);transition:width .25s}
+.cr2.a .cr2-pv i{background:var(--lui)}
+.cr2-chiffres{font:600 11px var(--ui);color:var(--sourd);text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cr2-statuts{font:600 10px/1.15 var(--ui);color:var(--mauve-clair);text-align:center}
+.cr2.petit .cr2-chiffres,.cr2.petit .cr2-statuts{font-size:9.5px}
+.pn{flex:none;background:rgba(24,20,40,.9);border:1px solid var(--trait);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:64px}
+.pn-titre{font:600 14px var(--ui);color:var(--or-vif);text-align:center}
+.pn-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px}
+.pn-btn{display:flex;flex-direction:column;gap:1px;align-items:flex-start;text-align:left;padding:7px 8px;border-radius:10px;border:1px solid #4a3d78;background:linear-gradient(180deg,#30265a,#231c40)}
+.pn-btn b{font:700 14px/1.1 var(--ui)}
+.pn-btn span{font-size:11.5px;line-height:1.15;color:var(--sourd)}
+.pn-btn[disabled]{filter:grayscale(.8) brightness(.5)}
+.pn-btn.or{background:linear-gradient(180deg,var(--or-vif),var(--or));border-color:var(--or);color:var(--sur-or)}
+.pn-btn.or span{color:#5a4318}
+.pn-annuler{align-self:center;background:none;border:none;color:var(--sourd);font-size:13px;text-decoration:underline;padding:2px}
+.jl{flex:none;min-height:20px;font-size:13px;color:var(--sourd);text-align:center}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pts{display:flex;align-items:center;gap:6px}

@@ -1,0 +1,31 @@
+/* 3 · Les Constellations */
+.cs-boss{display:flex;gap:12px;align-items:center;background:rgba(24,20,40,.78);border:1px solid var(--trait);border-radius:12px;padding:8px;flex:none}
+.cs-bosscarte{width:72px}
+.cs-info{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.cs-bnom{font:700 19px var(--titre)}
+.cs-pv{height:11px;border-radius:6px;background:#2a2340;overflow:hidden}
+.cs-pv i{display:block;height:100%;background:linear-gradient(90deg,#e59a8a,#e0743a);transition:width .5s}
+.cs-pvtxt{font:600 14px var(--ui);color:var(--sourd);font-variant-numeric:tabular-nums}
+.cs-cpt{display:flex;gap:14px;font-size:13.5px;color:var(--sourd)}
+.cs-cpt b{color:var(--or-vif);font:700 17px var(--titre)}
+.cs-calc{min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:none}
+.cs-cnom{font:700 23px/1.1 var(--titre);color:var(--or-vif)}
+.cs-cform{font:600 17px var(--ui);color:var(--ivoire);font-variant-numeric:tabular-nums}
+.cs-vide{color:var(--sourd);font-size:14.5px;max-width:290px;text-wrap:balance}
+.cs-astres{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;flex:none}
+.cs-astre{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;background:#2a2045;border:1px solid var(--or-filet);font:600 12.5px var(--ui);cursor:pointer}
+.cs-astre svg{width:14px;height:14px;fill:var(--or-vif)}
+.cs-main{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;padding-top:12px;margin-top:auto;flex:none}
+.cs-main .carte{width:100%;cursor:pointer;transition:transform .15s}
+.cs-type{position:absolute;left:3px;top:6px;font:700 9.5px var(--ui);text-transform:uppercase;letter-spacing:.04em;text-shadow:0 1px 2px #000,0 0 2px #000}
+.cs-lignes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:3}
+.cs-trait{fill:none;stroke:var(--or-vif);stroke-width:2.5;stroke-dasharray:5 5}
+.cs-lignes polygon{fill:var(--or-vif)}
+.cs-graine{font-size:11.5px;color:var(--pale);text-align:center;flex:none}
+.cs-choix{position:absolute;inset:0;z-index:5;background:rgba(10,8,18,.94);border-radius:14px;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:16px;text-align:center}
+.cs-choix h3{margin:0;font:700 24px var(--titre)}
+.cs-choix p{margin:0;color:var(--sourd)}
+.cs-astrechoix{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px;border-radius:14px;border:1px solid var(--or);background:linear-gradient(180deg,#352a5e,#231b40)}
+.cs-astrechoix svg{width:28px;height:28px;fill:var(--or-vif)}
+.cs-astrechoix b{font:700 19px var(--titre)}
+.cs-astrechoix span{color:var(--sourd);font-size:14.5px}

@@ -1,0 +1,29 @@
+# Prototype « le dégagement » — serveur statique pour tester au pouce.
+# Rien d'autre ne tourne ici : ni base, ni API, ni secret.
+#
+#   docker compose up -d                démarrer
+#   docker compose up -d --force-recreate   après une modif de nginx.conf
+#   docker compose down                 arrêter
+#
+# Un réexport du jeu ne demande RIEN : le dossier web/ est monté en
+# direct, il suffit de recharger la page.
+
+services:
+  proto:
+    image: nginx:alpine
+    container_name: proto-degagement
+    restart: unless-stopped
+    ports:
+      - "8099:80"     # http — healthcheck et curl seulement
+      - "18443:443"   # https — 🔴 c'est celui-ci qu'on ouvre sur le téléphone
+                      # ⛔ PAS 8443 : déjà pris sur le NAS (20/09/2026)
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx-common.inc:/etc/nginx/conf.d/common.inc:ro
+      - ./certs:/etc/nginx/certs:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/index.html || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

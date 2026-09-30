@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Avant le combat</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050a08;font-family:"Fraunces",Georgia,serif}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; color: #efe9dc; background: radial-gradient(ellipse 80% 40% at 50% 12%, rgba(70,48,112,0.32), transparent 70%), radial-gradient(ellipse 70% 40% at 20% 85%, rgba(38,92,78,0.35), transparent 70%), #060c0a; display: flex; flex-direction: column; gap: 10px; padding: 16px 18px 18px 18px; box-sizing: border-box;">
+
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button type="button" aria-label="Retour au chapitre" style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(202,169,104,0.6); background: #0b1411; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#efe9dc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">NIVEAU 17 · LE GRAND NORD</span>
+  </div>
+
+  <!-- l'adversaire -->
+  <div style="display: flex; gap: 14px; align-items: center;">
+    <div style="width: 108px; height: 136px; flex-shrink: 0; border-radius: 12px; overflow: hidden; border: 2px solid #caa968; box-shadow: 0 0 0 3px #060c0a, 0 0 0 4px rgba(202,169,104,0.45);"><img src="/_blob/3defacbc6cef025b60855a10e0eb1a33" alt="Loki" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%;"></div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 27px; font-style: italic; line-height: 1.05;">Loki le farceur</span>
+      <span style="align-self: flex-start; padding: 2px 9px; border-radius: 7px; border: 1px solid #f1d28a; font-size: 10px; font-weight: 600; letter-spacing: 0.16em; color: #f1d28a;">AVENTURIER</span>
+      <span style="font-size: 13px; font-style: italic; color: #a9b4ae; line-height: 1.35;">« Une carte n'est jamais ce qu'elle paraît. Regarde mieux. »</span>
+    </div>
+  </div>
+
+  <!-- son deck -->
+  <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(202,169,104,0.5); background: rgba(6,10,9,0.78);">
+    <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">SON DECK · TOUT SE VOIT</span>
+    <div style="display: flex; justify-content: space-between;">
+      <sc-for list="{{ lui }}" as="c" hint-placeholder-count="5">
+        <div style="position: relative; width: 58px; height: 81px; border-radius: 7px; overflow: hidden; background: #1c1a20; border: 1px solid rgba(229,154,138,0.8);">
+          <img src="{{ c.img }}" alt="" style="position: absolute; left: 4px; top: 4px; width: 48px; height: 71px; object-fit: cover; border-radius: 4px;">
+          <span style="position: absolute; left: 22px; top: 2px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.h }}</span>
+          <span style="position: absolute; right: 2px; top: 33px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.d }}</span>
+          <span style="position: absolute; left: 22px; bottom: 2px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.b }}</span>
+          <span style="position: absolute; left: 2px; top: 33px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.g }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- la règle du niveau -->
+  <div style="display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(143,195,222,0.6); background: rgba(20,40,52,0.55);">
+    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0;"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none" stroke="#dff3ff" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #bfe3f2;">LA RÈGLE DU NIVEAU</span>
+      <span style="font-family: 'Barlow Semi Condensed', sans-serif; font-size: 15px;">Terres de Glace : 3 cases donnent +1 aux cartes Glace.</span>
+    </div>
+  </div>
+
+  <!-- les étoiles et la récompense -->
+  <div style="display: flex; flex-direction: column; gap: 7px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(202,169,104,0.5); background: rgba(6,10,9,0.78);">
+    <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">LES ÉTOILES DU NIVEAU</span>
+    <div style="display: flex; gap: 10px; align-items: baseline;"><span style="width: 44px; color: #f1d28a; font-size: 14px;">★</span><span style="font-family: 'Barlow Semi Condensed', sans-serif; font-size: 15px;">Gagner</span></div>
+    <div style="display: flex; gap: 10px; align-items: baseline;"><span style="width: 44px; color: #f1d28a; font-size: 14px;">★★</span><span style="font-family: 'Barlow Semi Condensed', sans-serif; font-size: 15px;">Gagner avec 6 cartes ou plus</span></div>
+    <div style="display: flex; gap: 10px; align-items: baseline;"><span style="width: 44px; color: #f1d28a; font-size: 14px;">★★★</span><span style="font-family: 'Barlow Semi Condensed', sans-serif; font-size: 15px;">Défi : gagner sans carte de stade III</span></div>
+    <div style="height: 1px; background: rgba(202,169,104,0.3); margin: 2px 0;"></div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">1RE VICTOIRE</span>
+      <img src="/_blob/f7e518877ec3800cb268522bd61ec6ff" alt="" style="width: 26px; height: 26px;"><span style="font-size: 15px;">× 40</span>
+      <img src="/_blob/009f32f58494a16544a2e85281755653" alt="" style="width: 26px; height: 26px;"><span style="font-size: 15px;">× 1</span>
+    </div>
+  </div>
+
+  <!-- ton deck -->
+  <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(127,208,176,0.55); background: rgba(6,10,9,0.78);">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #7fd0b0;">TON DECK · LES ESPRITS DE L'EAU · POIDS 13/14</span>
+      <button type="button" style="padding: 3px 10px; border-radius: 10px; border: 1px solid rgba(202,169,104,0.7); background: #0b1411; color: #efe9dc; font-family: Fraunces, Georgia, serif; font-size: 13px;">Changer</button>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+      <sc-for list="{{ toi }}" as="c" hint-placeholder-count="5">
+        <div style="position: relative; width: 58px; height: 81px; border-radius: 7px; overflow: hidden; background: #1c1a20; border: 1px solid rgba(127,208,176,0.9);">
+          <img src="{{ c.img }}" alt="" style="position: absolute; left: 4px; top: 4px; width: 48px; height: 71px; object-fit: cover; border-radius: 4px;">
+          <span style="position: absolute; left: 22px; top: 2px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.h }}</span>
+          <span style="position: absolute; right: 2px; top: 33px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.d }}</span>
+          <span style="position: absolute; left: 22px; bottom: 2px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.b }}</span>
+          <span style="position: absolute; left: 2px; top: 33px; width: 14px; height: 14px; border-radius: 4px; background: rgba(10,8,16,0.92); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center;">{{ c.g }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <button type="button" style="margin-top: auto; height: 54px; border-radius: 14px; border: 0; background: linear-gradient(180deg, #f6dea0, #d8b56c 55%, #a8843f); box-shadow: 0 3px 0 #6d5427, inset 0 1px 0 rgba(255,255,255,0.6); color: #2b1b06; font-family: Fraunces, Georgia, serif; font-size: 23px; font-weight: 600;">Combattre</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      lui: [
+        { img: '/_blob/3defacbc6cef025b60855a10e0eb1a33', h: 5, d: 7, b: 3, g: 6 },
+        { img: '/_blob/a7153c235059a7b21bd0e8e6b02417cd', h: 6, d: 5, b: 6, g: 5 },
+        { img: '/_blob/e84defbb49f25e88cdc63e11918224f0', h: 9, d: 5, b: 3, g: 6 },
+        { img: '/_blob/d5c3f38da41b6f2b682360391cf6b6fa', h: 8, d: 6, b: 5, g: 4 },
+        { img: '/_blob/e2b54beee67c4b4ebab07c08299061cd', h: 6, d: 6, b: 6, g: 5 }
+      ],
+      toi: [
+        { img: '/_blob/ea07f2b4f766d88de58b90debbbaea94', h: 8, d: 4, b: 5, g: 5 },
+        { img: '/_blob/52d2daa28af6c3ec34ad04fd1be610e3', h: 7, d: 5, b: 5, g: 4 },
+        { img: '/_blob/2920aa632092080feb0f4047acfcc88d', h: 4, d: 8, b: 5, g: 5 },
+        { img: '/_blob/2ea259491ec42c13cef54be9775ea73c', h: 6, d: 6, b: 5, g: 6 },
+        { img: '/_blob/b6f5539c07c4320828020471049492e4', h: 9, d: 6, b: 4, g: 3 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

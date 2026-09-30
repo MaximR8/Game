@@ -1,0 +1,25 @@
+/* 8 · Les Trois Terres */
+.tt-terres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;flex:1;min-height:0;align-content:start}
+.tt-terre{display:flex;flex-direction:column;gap:4px;border-radius:11px;padding:4px;background:rgba(24,20,40,.55);border:2px solid transparent}
+.tt-terre.pj{border-color:rgba(127,208,176,.55)}
+.tt-terre.pa{border-color:rgba(229,154,138,.55)}
+.tt-terre.ok{border-color:var(--or-vif);background:rgba(58,44,102,.6);cursor:pointer}
+.tt-terre.non{opacity:.5}
+.tt-camp{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.tt-camp .carte{width:100%;cursor:pointer}
+.tt-place{aspect-ratio:4/5;border-radius:7px;border:1px dashed #2e2748}
+.tt-place.hors{border-color:transparent}
+.tt-attente{outline:2px dashed var(--or-vif);outline-offset:-2px}
+.tt-plaque{border-radius:9px;background:linear-gradient(180deg,#2d2350,#1f1938);border:1px solid var(--or-filet);padding:5px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.tt-plaque h3{margin:0;font:700 14px/1.1 var(--titre);text-wrap:balance}
+.tt-plaque p{margin:0;font-size:11px;line-height:1.15;color:var(--sourd);text-wrap:balance}
+.tt-plaque .tt-ferme{color:#bfe3f2;text-transform:uppercase;font-weight:600}
+.tt-score{display:flex;align-items:center;justify-content:center;gap:5px;font:700 22px var(--titre);font-variant-numeric:tabular-nums}
+.tt-score .j{color:var(--toi)} .tt-score .a{color:var(--lui)}
+.tt-score i{font:600 9.5px/1 var(--ui);font-style:normal;color:var(--pale);text-transform:uppercase;letter-spacing:.03em;max-width:42px}
+.tt-score .mene{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.tt-info{min-height:36px;font-size:13.5px;color:var(--sourd);text-align:center;display:flex;align-items:center;justify-content:center;flex:none;text-wrap:balance}
+.tt-main{display:flex;gap:5px;overflow-x:auto;padding:10px 2px 4px;flex:none}
+.tt-main .carte{width:58px;cursor:pointer;transition:transform .15s}
+.tt-bas{display:flex;align-items:center;gap:10px;flex:none}
+.tt-bas .btn{flex:1}

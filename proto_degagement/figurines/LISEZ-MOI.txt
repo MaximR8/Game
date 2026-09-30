@@ -1,0 +1,1 @@
+# Depose ici les PNG generes : motte.png, broque.png, linge.png, epingle.png, touffe.png, cornu.png

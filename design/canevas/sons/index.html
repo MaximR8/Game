@@ -1,0 +1,210 @@
+<title>Les sons de la Nébuleuse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&display=swap">
+<style>
+  /* Un seul thème, celui du jeu (le look « Conte mystique ») : encre, jade, or, ivoire. */
+  :root {
+    color-scheme: dark;
+    --encre: #0b0f0e;
+    --panneau: #121a17;
+    --panneau-2: #172320;
+    --filet: rgba(207, 173, 110, 0.42);
+    --filet-pale: rgba(207, 173, 110, 0.18);
+    --or: #caa968;
+    --or-vif: #f1d28a;
+    --ivoire: #efe9dc;
+    --sourd: #a9b4ae;
+    --jade: #7fd0b0;
+    --jade-fonce: #1f5c4a;
+    --serif: "Castoro", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+  body {
+    background: var(--encre);
+    color: var(--ivoire);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.5;
+    padding-inline: 16px;
+    padding-block: 28px 140px;
+  }
+  .page { max-width: 880px; margin: 0 auto; display: grid; gap: 34px; }
+  header { display: grid; gap: 10px; }
+  .etiquette {
+    font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--or);
+  }
+  h1 { margin: 0; font-weight: 400; font-style: italic; font-size: clamp(34px, 7vw, 52px); line-height: 1.05; text-wrap: balance; }
+  .chapeau { margin: 0; color: var(--sourd); max-width: 62ch; }
+  .chapeau b { color: var(--ivoire); font-weight: 400; }
+
+  section { display: grid; gap: 14px; }
+  .moment { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; }
+  .lettre {
+    grid-row: span 2; font-size: 40px; font-style: italic; color: var(--or-vif); line-height: 1; min-width: 1ch;
+  }
+  h2 { margin: 0; font-weight: 400; font-size: 24px; text-wrap: balance; }
+  .ou { margin: 0; color: var(--sourd); font-size: 15px; max-width: 64ch; }
+
+  .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .grille:has(.film) { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  video.film { width: 100%; max-height: 72vh; border-radius: 12px; background: #000; display: block; }
+  .son {
+    background: var(--panneau); border: 1px solid var(--filet-pale); border-radius: 18px;
+    padding: 14px 14px 12px; display: grid; gap: 10px; align-content: start;
+  }
+  .son.garde { border-color: var(--or); background: linear-gradient(180deg, #1c231a, var(--panneau)); box-shadow: 0 0 0 1px var(--or) inset; }
+  .tete { display: flex; align-items: baseline; gap: 10px; }
+  .code { font-size: 22px; color: var(--or-vif); font-variant-numeric: tabular-nums; }
+  .nom { font-size: 16px; line-height: 1.25; }
+  .boutons { display: flex; flex-wrap: wrap; gap: 8px; }
+  button {
+    font: inherit; cursor: pointer; border-radius: 999px; padding: 7px 14px 6px; font-size: 15px;
+    background: var(--panneau-2); color: var(--ivoire); border: 1px solid var(--filet);
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  button:focus-visible { outline: 2px solid var(--jade); outline-offset: 2px; }
+  button.jouer .tri { width: 0; height: 0; border-left: 9px solid var(--or-vif); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+  button.jouer.en-cours { background: var(--jade-fonce); border-color: var(--jade); }
+  button.jouer.en-cours .tri { border: 0; width: 9px; height: 10px; background: linear-gradient(90deg, var(--jade) 0 35%, transparent 35% 65%, var(--jade) 65%); }
+  button.garder { background: transparent; color: var(--sourd); border-color: var(--filet-pale); }
+  .son.garde button.garder { color: #2b1b06; background: var(--or-vif); border-color: var(--or-vif); }
+  .barre { height: 3px; border-radius: 3px; background: var(--filet-pale); overflow: hidden; }
+  .barre i { display: block; height: 100%; width: 0; background: var(--jade); }
+
+  .note { margin: 0; font-size: 14px; color: var(--sourd); font-style: italic; }
+
+  .choix {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(11, 15, 14, 0.94); border-top: 1px solid var(--filet);
+    backdrop-filter: blur(6px);
+  }
+  .choix .dedans { max-width: 880px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .choix .ligne { flex: 1 1 260px; font-size: 16px; }
+  .choix .ligne span { color: var(--or-vif); font-variant-numeric: tabular-nums; }
+  .choix button { background: var(--or-vif); color: #2b1b06; border-color: var(--or-vif); }
+  .choix .fait { color: var(--jade); font-size: 14px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="page">
+  <header>
+    <div class="etiquette">La Poussette · l'objet gagné · 29/09/2026</div>
+    <h1>Les sons de la Nébuleuse</h1>
+    <p class="chapeau">Neuvième tour : <b>« le son quand on gagne des objets, il fait mal aux oreilles »</b>.
+      Mesuré : le carillon d'aujourd'hui sortait 9 à 11 dB au-dessus de toutes les pièces, toute son énergie là où l'oreille
+      est la plus sensible (1 à 6 kHz). Voici trois façons plus douces ; toutes gardent le <b>gros paquet de pièces</b> quand
+      l'objet tombe avec son tas. <b>« En jeu »</b> : 7 secondes de Nébuleuse, l'objet tombe à la 3ᵉ seconde. OB0, c'est
+      aujourd'hui. Touche <b>Je garde</b>, puis copie ta ligne.</p>
+  </header>
+  <div id="moments"></div>
+  <p class="note">Au même volume d'ensemble. Déjà changé dans le jeu, sans choix à faire : le bloc du haut ne
+    fait plus aucun bruit en bougeant, et les pièces qui s'entrechoquent sont de vraies pièces.</p>
+</div>
+
+<div class="choix" role="region" aria-label="Ton choix">
+  <div class="dedans">
+    <div class="ligne">Ton choix : <span id="ligne">rien encore</span></div>
+    <button type="button" id="copier">Copier ma ligne</button>
+    <span class="fait" id="fait" hidden>Copiée</span>
+  </div>
+</div>
+
+<script>
+  const MOMENTS = [{"g": "OB", "titre": "Quand tu gagnes un objet", "ou": "« Écouter » : le son seul (avec le paquet) ; « En jeu » : dans la Nébuleuse, la musique derrière.", "genre": "piece"}];
+  const SONS = [["OB", "OB1", "Le paquet seul, sans mélodie", ["OB1.mp3", "OB1-jeu.mp3"]], ["OB", "OB2", "La même mélodie, une octave plus bas, adoucie", ["OB2.mp3", "OB2-jeu.mp3"]], ["OB", "OB3", "Une note ronde et grave, comme un bol", ["OB3.mp3", "OB3-jeu.mp3"]], ["OB", "OB0", "Aujourd'hui : le carillon", ["OB0.mp3", "OB0-jeu.mp3"]]];
+  const GENRE = Object.fromEntries(MOMENTS.map(m => [m.g, m.genre]));
+  const groupe = (f) => f.replace(/(-serie|-cascade|-jeu)?\.(mp3|mp4)$/, "").replace(/\d+$/, "");
+  const LIBELLE = (f) => f.includes("-serie") ? "Trois de suite" : f.includes("-cascade") ? "En cascade" : f.includes("-jeu") ? "En jeu"
+    : GENRE[groupe(f)] === "famille" ? "De l'Or au Full art" : "Écouter";
+
+  let choix = {};
+  try { choix = JSON.parse(localStorage.getItem("sons-choix-9") || "{}"); } catch (e) { choix = {}; }
+
+  const lecteur = new Audio();
+  lecteur.preload = "auto";
+  let bouton_en_cours = null, barre_en_cours = null;
+
+  function arreter() {
+    lecteur.pause();
+    if (bouton_en_cours) bouton_en_cours.classList.remove("en-cours");
+    if (barre_en_cours) barre_en_cours.style.width = "0";
+    bouton_en_cours = null; barre_en_cours = null;
+  }
+  lecteur.addEventListener("ended", arreter);
+  lecteur.addEventListener("timeupdate", () => {
+    if (barre_en_cours && lecteur.duration) barre_en_cours.style.width = (100 * lecteur.currentTime / lecteur.duration) + "%";
+  });
+
+  // Les versions d'une même scène (genre « ab ») : passer de l'une à l'autre reprend au même instant.
+  let fichier_en_cours = null;
+  function jouer(b, fichier, barre) {
+    if (bouton_en_cours === b) { arreter(); return; }
+    const reprise = bouton_en_cours && fichier_en_cours && GENRE[groupe(fichier)] === "ab"
+      && groupe(fichier_en_cours) === groupe(fichier) ? lecteur.currentTime : 0;
+    arreter();
+    lecteur.src = "ecoute/" + fichier;
+    fichier_en_cours = fichier;
+    const partir = () => { try { lecteur.currentTime = reprise; } catch (e) {} lecteur.play().catch(() => {}); };
+    if (reprise > 0) lecteur.addEventListener("loadedmetadata", partir, { once: true }); else partir();
+    b.classList.add("en-cours");
+    bouton_en_cours = b; barre_en_cours = barre;
+  }
+
+  function maj_ligne() {
+    const l = MOMENTS.map(m => m.g).filter(g => choix[g]).map(g => choix[g]);
+    document.getElementById("ligne").textContent = l.length ? l.join(" · ") : "rien encore";
+    document.querySelectorAll(".son").forEach(el => el.classList.toggle("garde", choix[el.dataset.g] === el.dataset.code));
+    document.querySelectorAll(".son button.garder").forEach(bt => {
+      bt.textContent = choix[bt.closest(".son").dataset.g] === bt.closest(".son").dataset.code ? "Gardé" : "Je garde";
+    });
+    try { localStorage.setItem("sons-choix-9", JSON.stringify(choix)); } catch (e) {}
+  }
+
+  const racine = document.getElementById("moments");
+  for (const m of MOMENTS) {
+    const s = document.createElement("section");
+    s.innerHTML = `<div class="moment"><div class="lettre">${m.g}</div><h2>${m.titre}</h2><p class="ou">${m.ou}</p></div><div class="grille"></div>`;
+    const grille = s.querySelector(".grille");
+    for (const [g, code, nom, fichiers] of SONS.filter(x => x[0] === m.g)) {
+      const c = document.createElement("div");
+      c.className = "son"; c.dataset.g = g; c.dataset.code = code;
+      c.innerHTML = `<div class="tete"><span class="code">${code}</span><span class="nom">${nom}</span></div><div class="boutons"></div><div class="barre"><i></i></div>`;
+      const bs = c.querySelector(".boutons"), barre = c.querySelector(".barre i");
+      for (const f of fichiers) {
+        if (f.endsWith(".mp4")) {
+          const v = document.createElement("video");
+          v.src = "ecoute/" + f; v.controls = true; v.playsInline = true; v.preload = "metadata";
+          v.className = "film"; v.addEventListener("play", arreter);
+          c.insertBefore(v, bs);
+          continue;
+        }
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "jouer"; b.id = "jouer-" + f.replace(".mp3", "");
+        b.innerHTML = `<span class="tri" aria-hidden="true"></span>${LIBELLE(f)}`;
+        b.addEventListener("click", () => jouer(b, f, barre));
+        bs.appendChild(b);
+      }
+      const gb = document.createElement("button");
+      gb.type = "button"; gb.className = "garder"; gb.id = "garder-" + code; gb.textContent = "Je garde";
+      gb.addEventListener("click", () => { choix[g] = choix[g] === code ? undefined : code; if (!choix[g]) delete choix[g]; maj_ligne(); });
+      bs.appendChild(gb);
+      grille.appendChild(c);
+    }
+    racine.appendChild(s);
+  }
+  maj_ligne();
+
+  document.getElementById("copier").addEventListener("click", () => {
+    const t = "Sons : " + document.getElementById("ligne").textContent;
+    const fait = document.getElementById("fait");
+    const montrer = () => { fait.hidden = false; setTimeout(() => fait.hidden = true, 1800); };
+    try {
+      navigator.clipboard.writeText(t).then(montrer).catch(() => selection());
+    } catch (e) { selection(); }
+    function selection() {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById("ligne"));
+      const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+  });
+</script>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Voyage : l'Aventure</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050a08;font-family:"Fraunces",Georgia,serif}
+@keyframes onde{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; color: #efe9dc; background: radial-gradient(ellipse 70% 45% at 15% 75%, rgba(38,92,78,0.42), transparent 70%), radial-gradient(ellipse 60% 40% at 85% 25%, rgba(70,48,112,0.30), transparent 70%), #060c0a;">
+  <svg width="390" height="844" viewBox="0 0 390 844" aria-hidden="true" style="position: absolute; left: 0; top: 0;">
+    <g fill="#e8e3f0" opacity="0.7"><circle cx="32" cy="140" r="0.9"/><circle cx="360" cy="190" r="1.1"/><circle cx="70" cy="420" r="0.8"/><circle cx="330" cy="470" r="0.9"/><circle cx="210" cy="610" r="0.7"/><circle cx="18" cy="560" r="1"/><circle cx="372" cy="640" r="0.8"/><circle cx="150" cy="700" r="0.9"/><circle cx="300" cy="120" r="0.7"/><circle cx="110" cy="96" r="0.8"/></g>
+    <g fill="#f1d28a"><path d="M52 250l1.2 4.8 4.8 1.2-4.8 1.2-1.2 4.8-1.2-4.8-4.8-1.2 4.8-1.2z"/><path d="M345 330l1 4 4 1-4 1-1 4-1-4-4-1 4-1z"/><path d="M28 690l1 4 4 1-4 1-1 4-1-4-4-1 4-1z"/></g>
+  </svg>
+
+  <!-- le bandeau Constellations -->
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 6px 20px;">
+    <div style="display: flex; align-items: center; gap: 8px;"><img src="/_blob/07228addf250f6b1c924e9a5ef353b3e" alt="" style="width: 34px; height: 34px;"><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 24px; font-weight: 600; line-height: 1;">13</span><span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">ÉTOILES</span></div></div>
+    <div style="display: flex; align-items: center; gap: 8px;"><img src="/_blob/f7e518877ec3800cb268522bd61ec6ff" alt="" style="width: 34px; height: 34px;"><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 24px; font-weight: 600; line-height: 1;">1270</span><span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">POUSSIÈRE</span></div></div>
+    <div style="display: flex; align-items: center; gap: 8px;"><img src="/_blob/4a2bda3d275374e7dd0f1b13b45693db" alt="" style="width: 34px; height: 34px;"><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 24px; font-weight: 600; line-height: 1;">4</span><span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">PIERRES</span></div></div>
+  </div>
+  <div style="position: relative; margin: 2px 20px 0 20px; height: 10px; border-bottom: 1px solid rgba(202,169,104,0.55);"></div>
+
+  <!-- les trois modes du Voyage -->
+  <div style="position: relative; display: flex; gap: 8px; padding: 14px 20px 0 20px;">
+    <button type="button" style="flex-grow: 1; height: 38px; border-radius: 12px; border: 1px solid #caa968; background: linear-gradient(180deg, #3f9c7d, #1d5745); color: #f3efe4; font-family: Fraunces, Georgia, serif; font-size: 16px; font-weight: 600;">Aventure</button>
+    <button type="button" style="flex-grow: 1; height: 38px; border-radius: 12px; border: 1px solid rgba(202,169,104,0.6); background: #0b1411; color: #d9d2c3; font-family: Fraunces, Georgia, serif; font-size: 16px;">Duel</button>
+    <button type="button" style="flex-grow: 1; height: 38px; border-radius: 12px; border: 1px solid rgba(202,169,104,0.6); background: #0b1411; color: #d9d2c3; font-family: Fraunces, Georgia, serif; font-size: 16px;">Classé</button>
+  </div>
+
+  <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 14px;">
+    <div style="font-size: 32px; font-style: italic; font-weight: 400; line-height: 1;">Le Voyage</div>
+    <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.22em; color: #a9b4ae;">10 TERRES DE LÉGENDES · 100 COMBATS</div>
+  </div>
+
+  <!-- la carte du ciel des chapitres -->
+  <div style="position: relative; width: 354px; height: 372px; margin: 10px auto 0 auto;">
+    <svg width="354" height="372" viewBox="0 0 354 372" aria-hidden="true" style="position: absolute; left: 0; top: 0;">
+      <path d="M72 330 C 150 330, 190 285, 262 262" fill="none" stroke="#caa968" stroke-width="2"/>
+      <path d="M262 262 C 330 240, 150 215, 96 176 C 50 140, 220 128, 270 100 C 320 72, 190 50, 150 36" fill="none" stroke="rgba(202,169,104,0.45)" stroke-width="1.5" stroke-dasharray="3 6"/>
+      <path d="M150 36 C 120 24, 90 14, 60 8" fill="none" stroke="rgba(202,169,104,0.25)" stroke-width="1.5" stroke-dasharray="3 6"/>
+    </svg>
+    <!-- chapitre 1, terminé -->
+    <div style="position: absolute; left: 44px; top: 302px; width: 56px; height: 56px; border-radius: 50%; overflow: hidden; border: 2px solid #f1d28a; box-shadow: 0 2px 8px rgba(0,0,0,0.7);"><img src="/_blob/e2d25f501ef69640a3f647ccf1ebdf83" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%;"></div>
+    <div style="position: absolute; left: 110px; top: 306px; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">CHAPITRE 1</span>
+      <span style="font-size: 16px; font-style: italic;">Les Landes celtes</span>
+      <span style="font-size: 12px; color: #f1d28a;">★ 30 / 30 · terminé</span>
+    </div>
+    <!-- chapitre 2, en cours -->
+    <div style="position: absolute; left: 228px; top: 228px; width: 68px; height: 68px; border-radius: 50%; border: 2px solid #7fd0b0; animation: onde 2.2s ease-out infinite;"></div>
+    <div style="position: absolute; left: 228px; top: 228px; width: 68px; height: 68px; border-radius: 50%; overflow: hidden; border: 3px solid #7fd0b0; box-shadow: 0 2px 10px rgba(0,0,0,0.7);"><img src="/_blob/d5c3f38da41b6f2b682360391cf6b6fa" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%;"></div>
+    <div style="position: absolute; left: 96px; top: 238px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+      <span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #7fd0b0;">CHAPITRE 2 · EN COURS</span>
+      <span style="font-size: 16px; font-style: italic;">Le Grand Nord</span>
+      <span style="font-size: 12px; color: #f1d28a;">★ 14 / 30</span>
+    </div>
+    <!-- chapitres 3, 4, 5 : à venir -->
+    <div style="position: absolute; left: 70px; top: 150px; width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid #3b4843;"><img src="/_blob/52d2daa28af6c3ec34ad04fd1be610e3" alt="" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.35);"></div>
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; left: 87px; top: 167px;"><rect x="5" y="11" width="14" height="10" rx="2" fill="#a9b4ae"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#a9b4ae" stroke-width="2"/></svg>
+    <div style="position: absolute; left: 132px; top: 158px; display: flex; flex-direction: column; gap: 2px; opacity: 0.75;">
+      <span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">CHAPITRE 3</span>
+      <span style="font-size: 15px; font-style: italic;">L'Orient</span>
+    </div>
+    <div style="position: absolute; left: 244px; top: 74px; width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid #3b4843;"><img src="/_blob/b6f5539c07c4320828020471049492e4" alt="" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.35);"></div>
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; left: 261px; top: 91px;"><rect x="5" y="11" width="14" height="10" rx="2" fill="#a9b4ae"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#a9b4ae" stroke-width="2"/></svg>
+    <div style="position: absolute; left: 150px; top: 82px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; opacity: 0.75;">
+      <span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">CHAPITRE 4</span>
+      <span style="font-size: 15px; font-style: italic;">L'Asie</span>
+    </div>
+    <div style="position: absolute; left: 126px; top: 12px; width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid #3b4843;"><img src="/_blob/89d2f01c7455915b2f4d3f2b7011b275" alt="" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.35);"></div>
+    <div style="position: absolute; left: 184px; top: 20px; display: flex; flex-direction: column; gap: 2px; opacity: 0.75;">
+      <span style="font-size: 9px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">CHAPITRE 5</span>
+      <span style="font-size: 15px; font-style: italic;">La Méditerranée</span>
+    </div>
+  </div>
+
+  <!-- continuer -->
+  <div style="position: relative; margin: 6px 18px 0 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 16px; border: 1px solid rgba(202,169,104,0.55); background: rgba(6,10,9,0.78);">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: #a9b4ae;">PROCHAIN COMBAT</span>
+      <span style="font-size: 12px; font-style: italic; color: #f1d28a;">Coffre à 20 ★ : encore 6</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="/_blob/3defacbc6cef025b60855a10e0eb1a33" alt="" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; border: 2px solid #caa968;">
+      <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1;">
+        <span style="font-size: 17px; font-style: italic;">Niveau 17 · Loki le farceur</span>
+        <span style="font-family: 'Barlow Semi Condensed', sans-serif; font-size: 13px; color: #a9b4ae;">Le Grand Nord · Aventurier</span>
+      </div>
+    </div>
+    <button type="button" style="height: 50px; border-radius: 14px; border: 0; background: linear-gradient(180deg, #f6dea0, #d8b56c 55%, #a8843f); box-shadow: 0 3px 0 #6d5427, inset 0 1px 0 rgba(255,255,255,0.6); color: #2b1b06; font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600;">Continuer</button>
+  </div>
+
+  <!-- la barre Médaillons -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 112px;">
+    <div style="position: absolute; left: 0; right: 0; top: 16px; height: 6px; background: repeating-linear-gradient(90deg, rgba(202,169,104,0.45) 0 1px, transparent 1px 9px);"></div>
+    <div style="position: absolute; left: 0; right: 0; top: 22px; height: 1px; background: rgba(202,169,104,0.65);"></div>
+    <div style="position: absolute; left: 12px; right: 12px; top: 30px; display: flex; justify-content: space-between; align-items: flex-start;">
+      <div style="position: relative; width: 60px; height: 60px;"><img src="/_blob/1889aa54f751daea22920463a8f9d6ad" alt="" style="position: absolute; left: 0; top: 0; width: 60px; height: 60px;"><img src="/_blob/cd706e4e939215cbe3989d98aa9ac17d" alt="Nébuleuse" style="position: absolute; left: 14px; top: 14px; width: 32px; height: 32px;"></div>
+      <div style="position: relative; width: 60px; height: 60px;"><img src="/_blob/1889aa54f751daea22920463a8f9d6ad" alt="" style="position: absolute; left: 0; top: 0; width: 60px; height: 60px;"><img src="/_blob/ed8f915d53ee2a413cb977ba5d9168a7" alt="Astrolabe" style="position: absolute; left: 14px; top: 14px; width: 32px; height: 32px;"></div>
+      <div style="position: relative; width: 60px; height: 60px;"><img src="/_blob/1889aa54f751daea22920463a8f9d6ad" alt="" style="position: absolute; left: 0; top: 0; width: 60px; height: 60px;"><img src="/_blob/03c249a00edcc0dccfe7976c42ffbd5c" alt="Atlas" style="position: absolute; left: 14px; top: 14px; width: 32px; height: 32px;"></div>
+      <div style="position: relative; width: 78px; height: 96px; margin-top: -20px; display: flex; flex-direction: column; align-items: center;">
+        <div style="position: relative; width: 78px; height: 78px;"><img src="/_blob/7d30bc60c2158cfce06ade864aa7d606" alt="" style="position: absolute; left: 0; top: 0; width: 78px; height: 78px;"><img src="/_blob/5b898cefcdcff450f9ab33621a1e1abd" alt="Voyage" style="position: absolute; left: 18px; top: 18px; width: 42px; height: 42px;"></div>
+        <span style="margin-top: -2px; padding: 1px 10px; border-radius: 8px; border: 1px solid #caa968; background: #070d0b; font-size: 10px; font-weight: 600; letter-spacing: 0.18em;">VOYAGE</span>
+      </div>
+      <div style="position: relative; width: 60px; height: 60px;"><img src="/_blob/1889aa54f751daea22920463a8f9d6ad" alt="" style="position: absolute; left: 0; top: 0; width: 60px; height: 60px;"><img src="/_blob/771882fc50e7ccc906ee1a03a6804b5e" alt="Présages" style="position: absolute; left: 14px; top: 14px; width: 32px; height: 32px;"></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

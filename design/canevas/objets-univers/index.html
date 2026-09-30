@@ -1,0 +1,1216 @@
+<title>Objets de l'univers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Castoro+Titling&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --encre: #0c0f0e;
+    --encre-2: #121816;
+    --ivoire: #efe9dc;
+    --sourd: #a9b4ae;
+    --sourd-2: #66716c;
+    --jade: #7fd0b0;
+    --or: #caa968;
+    --or-vif: #f1d28a;
+    --or-sombre: #6b4a18;
+    --filet: rgba(207, 173, 110, 0.78);
+    --filet-2: rgba(207, 173, 110, 0.30);
+    --serif: "Castoro", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --titre: "Castoro Titling", "Castoro", "Palatino Linotype", Georgia, serif;
+  }
+  html { background: var(--encre); }
+  body { background: var(--encre); color: var(--ivoire); font-family: var(--serif); font-size: 17px; line-height: 1.5; padding-inline: 16px; padding-block: 0 64px; }
+  #ciel { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  main { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; }
+  header { padding-block: 48px 8px; max-width: 70ch; }
+  .sourcil { font-family: var(--titre); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--filet); }
+  h1 { font-weight: 400; font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 10px 0 14px; text-wrap: balance; }
+  h2 { font-weight: 400; font-size: clamp(26px, 4vw, 34px); line-height: 1.15; margin: 6px 0 10px; text-wrap: balance; }
+  h3 { font-weight: 400; font-size: 20px; margin: 0 0 4px; }
+  p { margin: 0 0 12px; max-width: 66ch; }
+  .doux { color: var(--sourd); }
+  section { padding-block: 44px 8px; border-top: 1px solid var(--filet-2); margin-top: 36px; }
+  header + section { border-top: 0; margin-top: 8px; }
+  .captures { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 18px; margin-top: 18px; }
+  .captures figure { margin: 0; display: grid; gap: 8px; }
+  .captures img { width: 100%; border-radius: 12px; border: 1px solid var(--filet-2); display: block; }
+  .captures figcaption { font-style: italic; font-size: 14px; color: var(--sourd); }
+  .captures.deux { grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); max-width: 760px; }
+  figure.large { margin: 22px 0 0; display: grid; gap: 8px; }
+  figure.large img { width: 100%; border-radius: 12px; border: 1px solid var(--filet-2); display: block; }
+  figure.large figcaption { font-style: italic; font-size: 14px; color: var(--sourd); }
+  .legende { font-style: italic; font-size: 14px; color: var(--sourd); margin-top: 8px; }
+  .nouveau { display: inline-block; font-family: var(--titre); font-size: 10px; letter-spacing: 0.16em; color: var(--encre); background: var(--or-vif); border-radius: 4px; padding: 1px 6px 0; margin-left: 6px; vertical-align: 2px; }
+  .liste { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 62ch; }
+  .liste li { padding-left: 18px; position: relative; }
+  .liste li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 6px; height: 6px; background: var(--or); transform: rotate(45deg); }
+  .chiffre-or {
+    color: var(--or-vif); font-variant-numeric: tabular-nums; line-height: 1;
+    text-shadow: 1px 0 0 #1a1208, -1px 0 0 #1a1208, 0 1px 0 #1a1208, 0 -1px 0 #1a1208, 1px 1px 0 #1a1208, -1px -1px 0 #1a1208, 1px -1px 0 #1a1208, -1px 1px 0 #1a1208, 0 2px 0 #000;
+  }
+  .etoile-svg { display: block; }
+
+  /* ── Les objets ── */
+  .groupe { margin-top: 26px; }
+  .groupe > .sourcil { display: block; margin-bottom: 12px; }
+  .objets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 18px; }
+  .objet { display: grid; grid-template-rows: 124px auto auto; justify-items: center; text-align: center; gap: 2px; }
+  .objet .img { position: relative; width: 116px; height: 116px; }
+  .objet .img img { width: 116px; height: 116px; display: block; }
+  .objet .nom { font-size: 17px; }
+  .objet .role { font-style: italic; font-size: 14px; color: var(--sourd); line-height: 1.35; max-width: 22ch; }
+  .objet.large { grid-column: span 2; grid-template-columns: 124px 1fr; grid-template-rows: auto; justify-items: start; text-align: left; align-items: center; column-gap: 16px; }
+  .objet.large .texte { display: grid; gap: 2px; }
+  .objet.large .role { max-width: 34ch; }
+  @media (max-width: 420px) { .objet.large { grid-column: span 1; grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+  .scintille { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; pointer-events: none; }
+  .tailles { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px; margin-top: 30px; align-items: start; }
+  @media (max-width: 760px) { .tailles { grid-template-columns: 1fr; } }
+  .plateau { position: relative; overflow: hidden; border-radius: 14px; border: 1px solid var(--filet-2); aspect-ratio: 639 / 350; }
+  .plateau > img.fond { position: absolute; left: 0; width: 100%; top: -140.2%; }
+  .plateau .pose { position: absolute; transform: translate(-50%, -50%); filter: drop-shadow(0 3px 2px rgba(0,0,0,0.55)); }
+  .rangee-icones { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; padding: 16px; border-radius: 14px; background: var(--encre-2); border: 1px solid var(--filet-2); }
+  .rangee-icones img { width: 30px; height: 30px; }
+  .rangee-icones img.petit { width: 22px; height: 22px; }
+
+  /* ── Les boutons de jeu ── */
+  .btn {
+    appearance: none; cursor: pointer; font: inherit; position: relative;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 18px; padding: 11px 20px 12px; border-radius: 15px;
+    color: #2b1b06; text-shadow: 0 1px 0 rgba(255, 244, 210, 0.65);
+    background: linear-gradient(#fbe7ab 0%, #e6bf6c 45%, #c79a45 100%);
+    border: 1.5px solid #7d5a22;
+    box-shadow: 0 6px 0 var(--or-sombre), 0 9px 12px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255, 252, 230, 0.8), inset 0 -3px 0 rgba(125, 85, 25, 0.35);
+    transition: box-shadow 70ms, filter 70ms; touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  }
+  .btn img { width: 24px; height: 24px; filter: drop-shadow(0 1px 0 rgba(60,40,10,0.4)); }
+  .btn .cout { font-variant-numeric: tabular-nums; }
+  .btn.enfonce { box-shadow: 0 1px 0 var(--or-sombre), 0 2px 4px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255, 252, 230, 0.8), inset 0 -2px 0 rgba(125, 85, 25, 0.35); filter: brightness(1.12); }
+  .btn.second {
+    color: var(--ivoire); text-shadow: 0 1px 0 #000;
+    background: linear-gradient(#22302b 0%, #15201c 55%, #0e1512 100%);
+    border: 1.5px solid var(--or);
+    box-shadow: 0 6px 0 #3b2e17, 0 9px 12px rgba(0,0,0,0.5), inset 0 1.5px 0 rgba(241, 210, 138, 0.28), inset 0 -3px 0 rgba(0,0,0,0.3);
+  }
+  .btn.second.enfonce { box-shadow: 0 1px 0 #3b2e17, 0 2px 4px rgba(0,0,0,0.5), inset 0 1.5px 0 rgba(241, 210, 138, 0.28); }
+  .btn.second .cout { color: var(--or-vif); }
+  .btn.petit { font-size: 15px; padding: 7px 13px 8px; border-radius: 12px; }
+  .btn.petit img { width: 20px; height: 20px; }
+  .btn.eteint { filter: grayscale(0.85) brightness(0.7); }
+  .btn:focus-visible { outline: 2px solid var(--or-vif); outline-offset: 4px; }
+  .etincelle { position: fixed; width: 16px; height: 16px; margin: -8px 0 0 -8px; pointer-events: none; z-index: 60; }
+  .bulle {
+    position: absolute; transform: translateX(-50%); white-space: nowrap; z-index: 20;
+    font-style: italic; font-size: 12.5px; color: var(--ivoire); padding: 5px 10px; border-radius: 9px;
+    background: rgba(13,18,16,0.98); border: 1px solid var(--filet); pointer-events: none;
+  }
+
+  /* ── Le téléphone ── */
+  .choix { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 22px; }
+  .choix .btn[aria-pressed="true"] { border-color: var(--or-vif); }
+  .choix .btn[aria-pressed="true"] .lettre { color: var(--or-vif); }
+  .lettre { font-family: var(--titre); letter-spacing: 0.1em; }
+  .duo { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 36px; align-items: start; }
+  @media (max-width: 820px) { .duo { grid-template-columns: 1fr; } }
+  .tel-cadre { width: 360px; max-width: 100%; }
+  .tel-boite { position: relative; width: 360px; height: 800px; transform-origin: 0 0; }
+  .tel { position: absolute; inset: 0; overflow: hidden; border-radius: 34px; background: #070908; border: 1px solid var(--filet-2); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+  .tel > img.ecran { position: absolute; left: 0; top: 0; width: 360px; height: 800px; }
+  .tel canvas.effets { position: absolute; inset: 0; width: 360px; height: 800px; pointer-events: none; z-index: 12; }
+  .volant { position: absolute; left: 0; top: 0; width: 38px; height: 38px; z-index: 13; pointer-events: none; will-change: transform; }
+  .hud-fond { position: absolute; left: 0; right: 0; top: 0; height: 74px; background: linear-gradient(#090c0b 78%, rgba(9,12,11,0)); z-index: 3; }
+  .tel .zone-hud { position: absolute; left: 0; right: 0; top: 0; z-index: 5; }
+  .tel .zone-nav { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; }
+  .nav-fond { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: #080b0a; z-index: 3; }
+  .zone-hud { position: relative; height: 66px; }
+  .zone-nav { position: relative; height: 80px; }
+  .plus { position: absolute; z-index: 14; font-size: 13px; pointer-events: none; }
+
+  .panneau-bas {
+    position: absolute; left: 10px; right: 10px; top: 488px; height: 100px; z-index: 4;
+    display: grid; grid-template-columns: 1fr 1px 1.15fr; align-items: stretch;
+    background: linear-gradient(#111916, #0b100e); border: 1px solid var(--filet); border-radius: 14px;
+    box-shadow: inset 0 0 0 3px #0b0e0d, inset 0 0 0 4px var(--filet-2);
+  }
+  .panneau-bas .sep-v { background: var(--filet-2); margin: 14px 0; }
+  .panneau-bas .sourcil { font-size: 7.5px; letter-spacing: 0.2em; }
+  .reserve, .plateau-jour { min-width: 0; padding: 11px 10px 8px 12px; display: grid; align-content: start; gap: 5px; }
+  .ligne-res { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .piece-anneau { position: relative; width: 50px; height: 50px; flex: none; }
+  .piece-anneau img { position: absolute; left: 7px; top: 7px; width: 36px; height: 36px; }
+  .piece-anneau svg { position: absolute; inset: 0; width: 50px; height: 50px; transform: rotate(-90deg); }
+  .piece-anneau .piste { fill: none; stroke: rgba(207,173,110,0.18); stroke-width: 3; }
+  .piece-anneau .progres { fill: none; stroke: var(--or-vif); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 144.5; stroke-dashoffset: 144.5; }
+  .grand { font-size: 26px; }
+  .sur { font-size: 14px; color: var(--sourd); margin-left: 3px; font-variant-numeric: tabular-nums; }
+  .ligne-pj { display: flex; align-items: baseline; gap: 6px; }
+  .texte-pj { font-style: italic; font-size: 12.5px; color: var(--sourd); line-height: 1.2; }
+  .rangee-pj { display: flex; align-items: center; gap: 6px; }
+  .pips { display: flex; gap: 1px; min-width: 0; }
+  .pips svg { width: 9px; height: 9px; flex: none; }
+  .plus-plateau {
+    appearance: none; cursor: pointer; width: 24px; height: 24px; flex: none; border-radius: 50%; margin-left: auto;
+    display: grid; place-items: center; font: 400 18px/1 var(--serif); color: #2b1b06; padding: 0 0 2px;
+    background: linear-gradient(#fbe7ab, #c79a45); border: 1px solid #7d5a22; box-shadow: 0 2px 0 var(--or-sombre);
+  }
+  .promo {
+    position: absolute; left: 14px; right: 14px; top: 622px; height: 92px; z-index: 4; border-radius: 14px;
+    border: 1.5px dashed rgba(207,173,110,0.45); background: rgba(8,11,10,0.72);
+    display: grid; place-items: center; text-align: center; font-style: italic; font-size: 13px; color: var(--sourd);
+  }
+  .bourse {
+    position: absolute; right: 9px; top: 70px; width: 232px; z-index: 9; padding: 12px 12px 10px;
+    background: rgba(13, 18, 16, 0.98); border: 1px solid var(--filet); border-radius: 13px;
+  }
+  .bourse .sourcil { font-size: 8px; display: block; text-align: center; margin-bottom: 8px; }
+  .bourse .grille { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 4px; }
+  .bourse .p { display: grid; justify-items: center; gap: 1px; }
+  .bourse .p img { width: 34px; height: 34px; }
+  .bourse .p span { font-size: 12px; font-variant-numeric: tabular-nums; }
+  .bourse .p.vide img { opacity: 0.35; }
+  .bourse .p.vide span { color: var(--sourd-2); }
+
+  /* ── A · Médaillons ── */
+  .hudA { position: absolute; left: 22px; right: 8px; top: 12px; display: flex; gap: 22px; }
+  .resA { position: relative; flex: 1; height: 32px; }
+  .resA .barre { position: absolute; left: 6px; right: 0; top: 4px; bottom: 4px; border-radius: 12px; background: linear-gradient(#111a17, #070b09); border: 1px solid var(--filet); box-shadow: inset 0 1px 0 rgba(241,210,138,0.15); }
+  .resA .med, .ongA .med {
+    position: absolute; border-radius: 50%; display: grid; place-items: center;
+    background: radial-gradient(circle at 36% 30%, #24332e, #0a0f0d 72%);
+    border: 2px solid var(--or); box-shadow: 0 0 0 1px #2c200d, 0 3px 5px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(0,0,0,0.45);
+  }
+  .resA .med { left: -16px; top: -3px; width: 38px; height: 38px; }
+  .resA .med img { width: 29px; height: 29px; }
+  .resA .chiffre-or { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-size: 17px; }
+  .navA { position: absolute; inset: 0; background: linear-gradient(#10171a00, #0f1513 14%, #070908); }
+  .navA::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 1px; background: var(--filet); }
+  .navA::after { content: ""; position: absolute; left: 0; right: 0; top: 15px; height: 5px; background: repeating-linear-gradient(90deg, rgba(207,173,110,0.5) 0 1px, transparent 1px 8px); }
+  .navA .rang { position: absolute; top: 0; bottom: 0; left: 12px; right: 12px; display: grid; grid-template-columns: repeat(5, 1fr); }
+  .ongA { position: relative; }
+  .ongA .med { left: 50%; top: 26px; width: 44px; height: 44px; transform: translateX(-50%); transition: all .38s cubic-bezier(.34,1.56,.64,1); }
+  .ongA .med img { width: 30px; height: 30px; filter: saturate(0.3) brightness(0.62); transition: all .3s; }
+  .ongA.actif .med { top: 0px; width: 54px; height: 54px; border-color: var(--or-vif); background: radial-gradient(circle at 36% 28%, #3a8a70, #103229 70%); box-shadow: 0 0 0 2px #080b0a, 0 0 0 3.5px rgba(241,210,138,0.6), 0 8px 12px rgba(0,0,0,0.6); }
+  .ongA.actif .med img { width: 36px; height: 36px; filter: none; }
+  .ongA .lib { position: absolute; left: 50%; bottom: 5px; transform: translateX(-50%); font-family: var(--titre); font-size: 8.5px; letter-spacing: 0.14em; color: var(--or-vif); white-space: nowrap; padding: 3px 7px 2px; border: 1px solid var(--filet); border-radius: 5px; background: #0b100e; opacity: 0; transition: opacity .25s; }
+  .ongA.actif .lib { opacity: 1; }
+  .ongA .etoile-top { position: absolute; left: 50%; top: -11px; width: 18px; height: 18px; margin-left: -9px; opacity: 0; transition: opacity .3s; }
+  .ongA.actif .etoile-top { opacity: 1; animation: scintiller 2.6s ease-in-out infinite; }
+  .ongA .cadenas { position: absolute; left: calc(50% + 12px); top: 52px; }
+
+  /* ── B · Le cœur ── */
+  .hudB { position: absolute; left: 8px; right: 8px; top: 8px; height: 52px; display: grid; grid-template-columns: 1fr 124px 1fr; align-items: start; }
+  .hudB .bande { position: absolute; left: 0; right: 0; top: 7px; height: 32px; border-radius: 16px; background: linear-gradient(#131c19, #080c0a); border: 1px solid var(--filet); }
+  .resB { position: relative; z-index: 1; height: 46px; display: flex; align-items: center; gap: 7px; padding-top: 0; margin-top: 0; }
+  .resB.gauche { padding-left: 12px; }
+  .resB.droite { justify-content: flex-end; padding-right: 14px; }
+  .resB img { width: 25px; height: 25px; }
+  .resB .chiffre-or { font-size: 16px; }
+  .resB .lib, .resD .lib, .resC .lib { font-family: var(--titre); font-size: 7px; letter-spacing: 0.18em; color: var(--filet); display: block; margin-top: 3px; }
+  .resB.centre { height: 52px; justify-content: center; }
+  .resB.centre .cartouche { position: absolute; inset: 0; background: linear-gradient(#fbe7ab, #9c7536); clip-path: polygon(0 0, 100% 0, 100% 72%, 60% 100%, 40% 100%, 0 72%); }
+  .resB.centre .cartouche::after { content: ""; position: absolute; inset: 1.5px; background: radial-gradient(circle at 50% 20%, #2a3d36, #0a0f0d 75%); clip-path: polygon(0 0, 100% 0, 100% 72%, 60% 100%, 40% 100%, 0 72%); }
+  .resB.centre .contenu { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; margin-top: -6px; }
+  .resB.centre img { width: 32px; height: 32px; }
+  .resB.centre .chiffre-or { font-size: 21px; }
+  .navB { position: absolute; inset: 0; }
+  .navB svg.arche { position: absolute; left: 0; top: 0; width: 100%; height: 80px; overflow: visible; }
+  .navB .rang { position: absolute; left: 8px; right: 8px; bottom: 0; height: 64px; display: grid; grid-template-columns: 1fr 1fr 96px 1fr 1fr; }
+  .ongB { position: relative; display: grid; justify-items: center; align-content: center; gap: 2px; padding-top: 4px; }
+  .ongB img.emb { width: 28px; height: 28px; filter: saturate(0.3) brightness(0.6); transition: all .35s cubic-bezier(.34,1.56,.64,1); }
+  .ongB .lib { font-size: 10.5px; color: var(--sourd); transition: color .25s; white-space: nowrap; }
+  .ongB.actif img.emb { width: 34px; height: 34px; filter: none; transform: translateY(-3px); }
+  .ongB.actif .lib { color: var(--ivoire); }
+  .ongB .etoile-top { position: absolute; top: -8px; left: 50%; width: 15px; height: 15px; margin-left: -7.5px; opacity: 0; transition: opacity .3s; }
+  .ongB.actif .etoile-top { opacity: 1; animation: scintiller 2.6s ease-in-out infinite; }
+  .ongB .cadenas { position: absolute; left: calc(50% + 8px); top: 22px; }
+  .ongB.coeur { align-content: end; padding-bottom: 7px; }
+  .ongB.coeur .joyau { position: absolute; left: 50%; top: -34px; width: 70px; height: 70px; margin-left: -35px; border-radius: 50%; display: grid; place-items: center;
+    background: radial-gradient(circle at 38% 32%, #5b47a6, #231a58 50%, #0b0a1e 80%);
+    box-shadow: 0 0 0 3px #d8b56a, 0 0 0 4.5px #5b4216, 0 0 0 7px #080b0a, 0 10px 14px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(0,0,0,0.5); transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+  .ongB.coeur .joyau img { width: 46px; height: 46px; filter: saturate(0.5) brightness(0.75); transition: filter .3s; }
+  .ongB.coeur.actif .joyau { transform: translateY(-4px) scale(1.06); }
+  .ongB.coeur.actif .joyau img { filter: none; }
+  .ongB.coeur .graduation { position: absolute; inset: -12px; width: 94px; height: 94px; }
+  .ongB.coeur.actif .graduation { animation: tourner 24s linear infinite; }
+  .ongB.coeur .etoile-top { top: -58px; }
+  @keyframes tourner { to { transform: rotate(360deg); } }
+
+  /* ── C · Émaux ── */
+  .plaque { position: relative; background: linear-gradient(#fbe7ab, #9c7536); clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px); }
+  .plaque > .email { position: absolute; inset: 1.5px; clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px); background: linear-gradient(#17221e, #0a0f0d); }
+  .hudC { position: absolute; left: 8px; right: 8px; top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .resC { height: 42px; }
+  .resC .email { display: flex; align-items: center; gap: 6px; padding-left: 7px; }
+  .resC img { width: 27px; height: 27px; }
+  .resC .chiffre-or { font-size: 16px; }
+  .navC { position: absolute; inset: 0; background: linear-gradient(rgba(8,11,10,0), #080b0a 22%); }
+  .navC::before, .navC::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: var(--filet); }
+  .navC::before { top: 20px; }
+  .navC::after { bottom: 6px; }
+  .navC .rang { position: absolute; left: 12px; right: 12px; bottom: 10px; height: 70px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; align-items: end; }
+  .ongC { position: relative; height: 70px; }
+  .ongC .plaque { position: absolute; left: 0; right: 0; bottom: 0; height: 52px; transition: all .35s cubic-bezier(.34,1.56,.64,1); }
+  .ongC .email { display: grid; justify-items: center; align-content: center; gap: 1px; }
+  .ongC img { width: 28px; height: 28px; filter: saturate(0.3) brightness(0.6); transition: all .3s; }
+  .ongC .lib { font-family: var(--titre); font-size: 7.5px; letter-spacing: 0.12em; color: var(--or-vif); display: none; white-space: nowrap; }
+  .ongC.actif .plaque { height: 72px; bottom: 2px; }
+  .ongC.actif .email { background: linear-gradient(#347d66, #103229); }
+  .ongC.actif img { width: 36px; height: 36px; filter: none; }
+  .ongC.actif .lib { display: block; }
+  .ongC .etoile-top { position: absolute; left: 50%; top: -12px; width: 16px; height: 16px; margin-left: -8px; opacity: 0; z-index: 2; }
+  .ongC.actif .etoile-top { opacity: 1; animation: scintiller 2.6s ease-in-out infinite; }
+  .ongC .cadenas { position: absolute; right: 8px; bottom: 8px; z-index: 2; }
+  .ongC.scelle .email { background: linear-gradient(#101512, #070a09); }
+
+  /* ── D · Constellations ── */
+  .hudD { position: absolute; left: 12px; right: 12px; top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .hudD svg.liens { position: absolute; left: 0; top: 0; width: 100%; height: 40px; overflow: visible; }
+  .resD { position: relative; display: flex; align-items: center; gap: 7px; }
+  .resD img { width: 30px; height: 30px; }
+  .resD .chiffre-or { font-size: 19px; }
+  .navD { position: absolute; inset: 0; background: linear-gradient(rgba(6,9,8,0), #060908 18%); }
+  .navD::before { content: ""; position: absolute; left: 10%; right: 10%; top: 14px; height: 1px; background: linear-gradient(90deg, transparent, var(--filet), transparent); }
+  .navD .rang { position: absolute; left: 8px; right: 8px; bottom: 0; height: 64px; display: grid; grid-template-columns: repeat(5, 1fr); }
+  .ongD { position: relative; display: grid; justify-items: center; align-content: center; gap: 3px; }
+  .ongD .icone { position: relative; width: 36px; height: 36px; }
+  .ongD .icone svg { position: absolute; inset: 5px; width: 26px; height: 26px; fill: none; stroke: var(--sourd); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0.1 3; transition: opacity .3s; }
+  .ongD .icone img { position: absolute; inset: 0; width: 36px; height: 36px; opacity: 0; transform: scale(0.4); transition: all .45s cubic-bezier(.34,1.56,.64,1); }
+  .ongD.actif .icone svg { opacity: 0; }
+  .ongD.actif .icone img { opacity: 1; transform: scale(1); }
+  .ongD .lib { font-size: 11px; color: var(--sourd); white-space: nowrap; transition: color .25s; }
+  .ongD.actif .lib { color: var(--ivoire); }
+  .ongD.scelle .icone svg { stroke: var(--sourd-2); opacity: 0.6; }
+  .ongD.scelle .lib { color: var(--sourd-2); }
+  .ongD .cadenas { position: absolute; left: calc(50% + 10px); top: 26px; }
+
+  .ong { appearance: none; background: none; border: 0; padding: 0; margin: 0; color: inherit; font: inherit; cursor: pointer; }
+  .ong:focus-visible { outline: 1px solid var(--or-vif); outline-offset: -2px; border-radius: 8px; }
+  .scelle img.emb, .scelle .med img, .ongC.scelle img { filter: grayscale(1) brightness(0.32) !important; }
+  @keyframes scintiller { 0%, 100% { transform: rotate(0) scale(1); } 45% { transform: rotate(10deg) scale(0.84); } 60% { transform: rotate(-4deg) scale(1.1); } }
+
+  .comparer { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(362px, 100%), 1fr)); gap: 22px; margin-top: 30px; }
+  .planche { background: #080b0a; border: 1px solid var(--filet-2); border-radius: 16px; padding: 14px 0 0; overflow: hidden; display: grid; gap: 0; }
+  .planche .tete { padding: 0 16px 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .planche .tete h3 { margin: 0; }
+  .planche .tete .lettre { color: var(--or-vif); font-size: 13px; }
+  .planche .vide { height: 64px; background: url("img/ecran-poussoir.webp") center 38% / 110% auto no-repeat; opacity: 0.35; }
+  .planche .zone-hud, .planche .zone-nav { width: 360px; max-width: 100%; margin: 0 auto; }
+  .planche .zone-nav { margin-top: 26px; }
+  .explication { min-height: 7.5em; }
+
+  /* ── Les gestes ── */
+  .gestes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 18px; }
+  @media (max-width: 900px) { .gestes { grid-template-columns: 1fr; } }
+  .geste { background: var(--encre-2); border: 1px solid var(--filet-2); border-radius: 16px; padding: 18px 16px 22px; display: grid; gap: 14px; justify-items: center; align-content: start; }
+  .geste .tete { justify-self: stretch; }
+  .geste .tete p { font-size: 14.5px; color: var(--sourd); margin: 0; }
+  .scene { position: relative; width: 250px; height: 330px; }
+  .scene canvas { position: absolute; inset: -30px; width: 310px; height: 390px; pointer-events: none; z-index: 3; }
+  .carte { position: absolute; left: 25px; top: 18px; width: 200px; height: 280px; }
+  .carte img { width: 200px; height: 280px; display: block; border-radius: 10px; }
+  .scene .ligne { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 15px; color: var(--sourd); font-variant-numeric: tabular-nums; }
+  .scene .ligne b { font-weight: 400; color: var(--ivoire); display: inline-block; min-width: 1.4ch; }
+  .boutons-demo { position: relative; display: grid; gap: 22px; justify-items: center; padding-top: 12px; }
+  .badge-lvl {
+    position: absolute; left: 50%; top: -13px; transform: translateX(-50%); z-index: 2; white-space: nowrap;
+    padding: 3px 11px 2px; border-radius: 8px; background: linear-gradient(#1c2723, #0b100e); border: 1.5px solid var(--or);
+    box-shadow: 0 3px 0 #3b2e17; display: flex; align-items: baseline; gap: 5px;
+  }
+  .badge-lvl .l { font-family: var(--titre); font-size: 10px; letter-spacing: 0.14em; color: var(--or-vif); }
+  .badge-lvl .chiffre-or { font-size: 17px; }
+  .lvl-eclat { position: absolute; left: 50%; top: 45%; z-index: 4; display: flex; align-items: baseline; gap: 8px; pointer-events: none; transform: translate(-50%, -50%); }
+  .lvl-eclat .l { font-family: var(--titre); font-size: 26px; letter-spacing: 0.1em; }
+  .lvl-eclat .chiffre-or { font-size: 64px; }
+  .lvl-eclat .l.chiffre-or { font-size: 26px; }
+  .apercu-evo { position: relative; width: 200px; height: 280px; }
+  .apercu-evo img { width: 200px; height: 280px; border-radius: 10px; display: block; }
+
+  /* ── L'évolution, en plein écran ── */
+  .evo-plein { position: fixed; inset: 0; z-index: 50; background: radial-gradient(ellipse at 50% 45%, #10201b, #050807 70%); cursor: pointer; overflow: hidden; }
+  .evo-plein canvas.fond-effets { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+  .evo-carte { position: absolute; z-index: 2; }
+  .evo-carte img, .evo-carte .blanc { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 4.5%; }
+  .evo-carte .blanc { opacity: 0; }
+  .evo-carte img.st2 { opacity: 0; }
+  .evo-pierre { position: absolute; z-index: 4; pointer-events: none; }
+  .evo-legende { position: absolute; left: 0; right: 0; bottom: max(26px, env(safe-area-inset-bottom, 0px)); z-index: 5; text-align: center; font-style: italic; font-size: 15px; color: var(--sourd); }
+  .evo-titre { position: absolute; left: 0; right: 0; z-index: 5; text-align: center; opacity: 0; }
+  .evo-titre .sourcil { font-size: 13px; }
+  .evo-titre .nom { font-size: 30px; display: block; margin-top: 4px; }
+
+  .decider { background: var(--encre-2); border: 1px solid var(--filet); border-radius: 16px; padding: 22px 22px 14px; margin-top: 18px; }
+  .decider ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 70ch; }
+  .decider li::marker { color: var(--or); }
+  @media (prefers-reduced-motion: reduce) { .ongA.actif .etoile-top, .ongB.actif .etoile-top, .ongC.actif .etoile-top, .ongB.coeur.actif .graduation { animation: none; } }
+</style>
+
+<canvas id="ciel" aria-hidden="true"></canvas>
+<main>
+  <header>
+    <span class="sourcil">La Poussette · canevas des lots 14 et 15 · version 10</span>
+    <h1>Les objets de l'univers</h1>
+    <p><b>Nouveau : les billes en vraies sphères, sans chevauchement</b>, en captures juste en dessous. Les lots 14 et 15, le bloc mauve, les pièces nettes et la première version des billes sont en ligne.</p>
+    <p>Ce qui change depuis la version 2 : l'étoile d'invocation et sa ceinture d'astéroïdes noirs, ton mélange (le bandeau Constellations, la barre Médaillons, l'onglet actif plus petit), la poussière de niveau qui suit le coût, et l'évolution avec la pierre en 3D et le blanc qui s'évapore en poussière d'or.</p>
+    <p class="doux">Tout ce qui bouge ici est à essayer du doigt. Le téléphone est une vraie capture du jeu, avec le nouveau bandeau, le nouveau cadre et la nouvelle barre posés dessus.</p>
+  </header>
+
+  <section id="billes-vraies">
+    <span class="sourcil">26 septembre, soir · pas encore déployé</span>
+    <h2>Des sphères, et plus de chevauchement</h2>
+    <p>Chaque bille a maintenant un corps à sa taille, qui ne penche pas : deux billes ne peuvent plus se dessiner l'une dans l'autre. Son éclairage est celui d'une sphère parfaite telle qu'on la voit à l'écran (la vue est oblique : une boule s'y affichait en œuf, et son éclairage suivait). Le voile tourne comme une planète et passe derrière le bord, pendant que l'objet reste au centre.</p>
+    <div class="captures deux">
+      <figure><img src="img/v10-plateau.webp" alt="Le plateau avec les deux billes"><figcaption>Le plateau : la bille mauve de l'étoile, la bille bleue de la poussière.</figcaption></figure>
+      <figure><img src="img/v10-billes.webp" alt="Les deux billes en icône et sur des pièces"><figcaption>En icône : le voile enroulé comme une planète.</figcaption></figure>
+    </div>
+    <figure class="large"><img src="img/v10-billes-jeu.webp" alt="Les billes sur le tas, de près"><figcaption>De près, sur le tas : rondes, éclairées d'un côté, l'arc du reflet sur le bord.</figcaption></figure>
+  </section>
+
+  <section id="billes-3d">
+    <span class="sourcil">26 septembre, 15 h 48 · en ligne (remplacée juste au-dessus)</span>
+    <h2>De vraies billes, deux couleurs</h2>
+    <p>Le voile est enroulé sur la sphère (il se serre vers le bord, et tourne lentement dans le jeu), l'objet flotte au centre, grossi par le verre ; le côté opposé à la lumière s'assombrit, le bord aussi ; la fenêtre se reflète en un arc le long du bord et un petit point vif. La poussière est bleu nuit, l'étoile d'invocation mauve : on ne les confond plus.</p>
+    <div class="captures deux">
+      <figure><img src="img/v9-plateau.webp" alt="Le plateau avec les deux billes"><figcaption>Le plateau : la bille mauve de l'étoile (en haut à gauche), la bille bleue de la poussière (en bas).</figcaption></figure>
+      <figure><img src="img/v9-billes.webp" alt="Les deux billes en icône et posées sur des pièces"><figcaption>En icône : l'étoile d'or dans la nébuleuse mauve ; la poussière d'or dans la nuit bleue.</figcaption></figure>
+    </div>
+    <figure class="large"><img src="img/v9-billes-jeu.webp" alt="Les billes sur le tas, de près"><figcaption>De près, sur le tas.</figcaption></figure>
+  </section>
+
+  <section id="billes-mauves">
+    <span class="sourcil">26 septembre, après-midi · la version d'avant (remplacée juste au-dessus)</span>
+    <h2>Deux billes mauves, l'objet au centre</h2>
+    <p>Comme tu l'as demandé : le voile mauve et ses étoiles sur toute la surface, plus de bord blanc, et au centre la poussière d'or (un tourbillon) ou l'étoile d'or. Dans la machine, l'intérieur est plaqué dans l'axe de la caméra : l'objet reste au centre de ce qu'on voit.</p>
+    <div class="captures deux">
+      <figure><img src="img/v8-plateau.webp" alt="Le plateau avec les deux billes mauves"><figcaption>Le plateau : la bille de l'étoile et la bille de poussière, mauves ; les pièces nettes.</figcaption></figure>
+      <figure><img src="img/v8-billes.webp" alt="Les billes sur le tas, de près, et en icône"><figcaption>De près sur le tas, puis en icône : la poussière d'or en tourbillon, l'étoile d'or.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="spheres">
+    <span class="sourcil">26 septembre, midi · première version des billes (remplacée juste au-dessus)</span>
+    <h2>Des billes de verre, des pièces nettes</h2>
+    <div class="captures deux">
+      <figure><img src="img/v7-plateau.webp" alt="Le plateau : les deux billes de verre, les pièces nettes, le bloc mauve"><figcaption>Le plateau : la bille d'invocation et la bille de poussière, de vraies sphères de verre ; les pièces ont retrouvé leur relief.</figcaption></figure>
+      <figure><img src="img/v7-billes.webp" alt="Les deux billes en icône, et posées sur des pièces"><figcaption>En icône : la galaxie violette et l'étoile d'or ; la nuit bleue et sa poussière d'or. Le bord du verre laisse voir ce qu'il y a derrière.</figcaption></figure>
+    </div>
+    <figure class="large"><img src="img/v7-billes-jeu.webp" alt="Les billes sur le tas, de près"><figcaption>De près, sur le tas : la bille reste droite (ronde, elle se voit pareille de tous les côtés), l'étoile au centre ; en bas, on voit les pièces à travers le verre. Le corps physique ne change pas : le jeu reste le même.</figcaption></figure>
+    <figure class="large"><img src="img/v7-pieces.webp" alt="Les pièces : avant hier, la version terne en ligne, maintenant"><figcaption>Les pièces : avant tes retouches · la version en ligne (terne : le relief avait perdu un tiers de son contraste, 0,078 → 0,052) · maintenant (relief 0,079, et l'écart entre pièces le plus faible : 0,27 → 0,18).</figcaption></figure>
+  </section>
+
+  <section id="retouches">
+    <span class="sourcil">26 septembre, matin · en ligne depuis 8 h 54</span>
+    <h2>La bille, les pièces, le bloc mauve</h2>
+    <div class="captures deux">
+      <figure><img src="img/v6-plateau.webp" alt="Le plateau avec le bloc Nébuleuse, la bille d'invocation et les pièces adoucies"><figcaption>Le plateau : le bloc « Nébuleuse » (ton mauve), la bille d'invocation, les pièces resserrées.</figcaption></figure>
+      <figure><img src="img/v6-bille.webp" alt="La bille d'invocation : verre clair, galaxie, étoile d'or ; sur des pièces ; à côté du globe de poussière"><figcaption>L'étoile d'invocation devient une bille de verre : une galaxie dedans, l'étoile d'or au cœur, un croissant de lumière net. Sans bague, elle ne se confond pas avec le globe de poussière (bleu, cerclé d'argent).</figcaption></figure>
+    </div>
+    <figure class="large"><img src="img/v6-pieces.webp" alt="Les pièces avant et après"><figcaption>Les pièces, avant (à gauche) et maintenant. La pente d'une pièce ne fait plus les extrêmes (écart de luminosité 0,41 → 0,29) ; son relief garde tout son éclat.</figcaption></figure>
+    <figure class="large"><img src="img/v6-blocs.webp" alt="Le bloc en ivoire, nuit, nébuleuse et jade"><figcaption>Le bloc : ivoire (avant), nuit, nébuleuse (ton choix, en bas à gauche), jade.</figcaption></figure>
+  </section>
+
+  <section id="jeu15">
+    <span class="sourcil">Lot 15 · en ligne depuis le 26/09, 7 h 20</span>
+    <h2>Le bandeau, la barre, les gestes</h2>
+    <p>Captures du jeu sur le PC, telles que le canevas v3 les a dessinées. Les objets gagnés s'envolent vers le bandeau, les pièces filent dans la réserve, et plus aucune fenêtre n'arrête la machine.</p>
+    <div class="captures deux">
+      <figure><img src="img/lot15-plateau.webp" alt="La Nébuleuse : le bandeau, une pierre d'esprit en vol, la réserve, le plateau du jour, la barre du bas"><figcaption>La Nébuleuse : une pierre d'esprit s'envole vers « Pierres ». En bas, la réserve et son anneau, le plateau du jour, la barre Médaillons.</figcaption></figure>
+      <figure><img src="img/lot15-collection.webp" alt="L'Atlas : la collection avec les boutons dorés"><figcaption>L'Atlas : les boutons d'or, épais, et « LVL » sous les cartes. Dans le bandeau, la pierre vient d'arriver (+1).</figcaption></figure>
+    </div>
+    <figure class="large"><img src="img/lot15-niveau.webp" alt="Monter de niveau : la fiche, la poussière qui file, le LVL en or"><figcaption>Monter de niveau : la fiche avec son badge « LVL 3 », la poussière qui file du bouton vers la carte, puis « LVL 4 » qui éclate en or avant de se ranger dans le badge.</figcaption></figure>
+    <figure class="large"><img src="img/lot15-evo-1.webp" alt="Évoluer : la pierre 3D arrive, vibre, la carte devient blanche"><figcaption>Évoluer : la pierre d'esprit en 3D se pose sur la carte, vibre en s'éclairant, puis la carte devient blanche parmi les constellations d'or.</figcaption></figure>
+    <figure class="large"><img src="img/lot15-evo-2.webp" alt="Évoluer : le blanc s'évapore en poussière d'or, la carte au stade 2"><figcaption>Le blanc s'évapore en poussière d'or (liseré d'or sur le front), puis Kitsune apparaît en « Trois queues ».</figcaption></figure>
+  </section>
+
+  <section id="jeu">
+    <span class="sourcil">Lot 14 · en ligne depuis le 25/09, 23 h 58</span>
+    <h2>Les objets en 3D sur le plateau</h2>
+    <p>Captures du jeu sur le PC. Chaque objet est un vrai volume, extrudé à sa silhouette, avec une tranche d'or (d'argent pour la lune et le globe). Il est éclairé en direct comme les pièces : ses reflets glissent de facette en facette quand il penche. Les pièces ont moins de reflets clairs.</p>
+    <div class="captures">
+      <figure><img src="img/plateau-avant.webp" alt="Le plateau avant : ticket, XP et éclat"><figcaption>Avant : le ticket, l'XP, l'éclat.</figcaption></figure>
+      <figure><img src="img/plateau-apres.webp" alt="Le plateau après : pierre de feu, étoile d'invocation, globe de poussière"><figcaption>Maintenant : la pierre de feu au fond, l'étoile et sa ceinture, le globe de poussière.</figcaption></figure>
+      <figure><img src="img/plateau-apres-2.webp" alt="Le même plateau quand le bloc a reculé"><figcaption>Le même tas, le bloc reculé.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="objets">
+    <span class="sourcil">Lot 14 · les objets</span>
+    <h2>Dix objets, une silhouette chacun</h2>
+    <p>Dans la machine, ils seront en 3D comme les pièces : leur épaisseur, leur ombre, leurs reflets qui bougent. Ici, ils sont à plat. Les pièces du jeu auront aussi moins de reflets clairs.</p>
+    <div class="groupe">
+      <span class="sourcil">Pour invoquer et faire monter</span>
+      <div class="objets">
+        <div class="objet large"><div class="img"><img src="img/etoile-invocation.webp" alt="Étoile d'invocation"></div>
+          <div class="texte"><span class="nom">Étoile d'invocation <span class="nouveau">NOUVEAU</span></span><span class="role">Remplace le ticket. L'étoile du rituel, taillée dans un verre de galaxie violet et rose, bordée d'or ; une ceinture d'astéroïdes noirs tourne autour, derrière elle en haut, devant en bas.</span></div></div>
+        <div class="objet large"><div class="img"><img src="img/poussiere-etoile.webp" alt="Poussière d'étoile"></div>
+          <div class="texte"><span class="nom">Poussière d'étoile</span><span class="role">Remplace l'XP. Un globe de verre de nuit où tourne une galaxie de poussière d'or. Un globe tombé en donne 60 ; les pièces n'en donnent plus.</span></div></div>
+      </div>
+    </div>
+    <div class="groupe">
+      <span class="sourcil">Pour faire évoluer · une pierre du type de la carte</span>
+      <div class="objets" id="pierres"></div>
+    </div>
+    <div class="tailles">
+      <div>
+        <div class="plateau" id="plateau"><img class="fond" src="img/ecran-poussoir.webp" alt="Le plateau de la poussette, avec les nouveaux objets posés sur le tas"></div>
+        <p class="legende">À la taille du jeu, posés à plat sur une capture du plateau.</p>
+      </div>
+      <div>
+        <div class="rangee-icones" id="icones"></div>
+        <p class="legende">À la taille du bandeau (30 px) et d'une ligne de texte (22 px).</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="bandeau">
+    <span class="sourcil">Lot 15 · le bandeau et la barre</span>
+    <h2>Le bandeau Constellations, la barre Médaillons</h2>
+    <p>Ton choix. En haut, les compteurs à même le ciel, reliés par un trait de constellation. En bas, le rail gravé et ses médaillons ; l'onglet actif est plus petit qu'avant (54 px au lieu de 62) et se soulève moins, pour laisser de la place sur les petits écrans. Touche les onglets et les compteurs.</p>
+    <div class="duo">
+      <div class="tel-cadre" id="tel-cadre">
+        <div class="tel-boite" id="tel-boite">
+          <div class="tel" id="tel">
+            <img class="ecran" src="img/ecran-poussoir.webp" alt="La poussette, capture du jeu">
+            <div class="hud-fond"></div>
+            <div class="zone-hud" id="hud-tel"></div>
+            <div class="bourse" id="bourse" hidden><span class="sourcil">La bourse de pierres</span><div class="grille" id="bourse-grille"></div></div>
+            <div class="panneau-bas">
+              <div class="reserve">
+                <span class="sourcil">Réserve</span>
+                <div class="ligne-res">
+                  <div class="piece-anneau" id="piece-res"><svg viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="23" class="piste"/><circle cx="25" cy="25" r="23" class="progres" id="res-anneau"/></svg><img src="img/piece.webp" alt=""></div>
+                  <div><span class="chiffre-or grand" id="n-reserve">135</span><span class="sur">/ 150</span></div>
+                </div>
+              </div>
+              <div class="sep-v"></div>
+              <div class="plateau-jour">
+                <span class="sourcil">Plateau du jour</span>
+                <div class="ligne-pj"><span class="chiffre-or grand" id="n-pj">7</span><span class="texte-pj" id="t-pj">objets à gagner<br>aujourd'hui</span></div>
+                <div class="rangee-pj"><div class="pips" id="pips"></div><button class="plus-plateau" id="plus-plateau" type="button" aria-label="Un plateau de plus">+</button></div>
+              </div>
+            </div>
+            <div class="promo">Ici, plus tard :<br>les packs promo</div>
+            <div class="nav-fond"></div>
+            <div class="zone-nav" id="nav-tel"></div>
+            <canvas class="effets" id="effets-tel"></canvas>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="choix" style="margin-top:0">
+          <button class="btn second petit" data-lacher="etoile"><img src="img/etoile-invocation.webp" alt="">Une étoile</button>
+          <button class="btn second petit" data-lacher="poussiere"><img src="img/poussiere-etoile.webp" alt="">Un globe</button>
+          <button class="btn second petit" data-lacher="pierre"><img src="img/pierre-feu.webp" alt="">Une pierre</button>
+          <button class="btn second petit" data-lacher="pieces"><img src="img/piece.webp" alt="">Des pièces</button>
+        </div>
+        <ul class="liste">
+          <li><b>Les objets</b> s'envolent vers leur compteur ; <b>les pièces</b> filent dans la réserve (+1), sans poussière.</li>
+          <li><b>La réserve</b> : l'anneau autour de la pièce se remplit jusqu'à la suivante. Plus de phrase.</li>
+          <li><b>Le plateau du jour</b> remplace « Dernier gain » : les objets qu'il reste à gagner aujourd'hui. À zéro, la machine ne remet plus d'objets jusqu'à minuit ; le « + » achètera un plateau de plus. Pour l'instant : compté et affiché, 12 est provisoire (le point 18 fixera le nombre).</li>
+          <li><b>Les pierres</b> : comptées ensemble ; touche leur compteur pour ouvrir la bourse.</li>
+          <li><b>En dessous</b>, la place des packs promo, vide pour l'instant.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="gestes">
+    <span class="sourcil">Lot 15 · les gestes</span>
+    <h2>Des gestes de jeu vidéo</h2>
+    <div class="gestes">
+      <div class="geste">
+        <div class="tete"><h3>Les boutons</h3><p>Épais, avec leur tranche. Sous le doigt, ils s'enfoncent et s'éclairent ; en revenant, ils rebondissent et lâchent des étincelles. Le téléphone vibre un instant (sur Android). Le bouton éteint tremble et dit pourquoi.</p></div>
+        <div class="boutons-demo">
+          <button class="btn"><img src="img/etoile-invocation.webp" alt="">Invoquer ×1 <span class="cout">1</span></button>
+          <button class="btn"><img src="img/etoile-invocation.webp" alt="">Invoquer ×10 <span class="cout">10</span></button>
+          <button class="btn second">Plein écran</button>
+          <button class="btn eteint" data-pourquoi="Il te manque 1 pierre d'esprit">Évoluer <img src="img/pierre-esprit.webp" alt=""><span class="cout">1</span></button>
+        </div>
+      </div>
+      <div class="geste">
+        <div class="tete"><h3>Monter de niveau</h3><p>La poussière file dans la carte : plus le niveau coûte, plus il en entre (touche plusieurs fois). La carte scintille, et le nouveau niveau éclate en or avant de se ranger au-dessus de la carte.</p></div>
+        <div class="scene" id="scene-niveau">
+          <div class="carte" id="carte-niveau"><img src="img/kitsune-1.webp" alt="Kitsune, stade 1"><div class="badge-lvl" id="badge-lvl"><span class="l">LVL</span><span class="chiffre-or" id="lvl-badge-n">7</span></div></div>
+          <div class="ligne">PV <b id="pv">55</b> · ATT <b id="att">24</b></div>
+          <canvas id="effets-niveau"></canvas>
+        </div>
+        <button class="btn" id="btn-niveau">Monter d'un niveau <img src="img/poussiere-etoile.webp" alt=""><span class="cout" id="cout-niveau">120</span></button>
+      </div>
+      <div class="geste">
+        <div class="tete"><h3>Évoluer</h3><p>En plein écran : la pierre, en 3D, arrive en tournant et se pose sur la carte, vibre, éclate en poussière qui entre dans la carte ; la carte devient blanche, des étoiles filantes et des constellations d'or passent, puis le blanc s'évapore en poussière d'or et dévoile le nouveau stade.</p></div>
+        <div class="apercu-evo"><img src="img/kitsune-1.webp" alt="Kitsune, stade 1"></div>
+        <button class="btn" id="btn-evo">Évoluer <img src="img/pierre-esprit.webp" alt=""><span class="cout">1</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="decider">
+    <span class="sourcil">Ce que tu décides</span>
+    <h2>Avant que je code</h2>
+    <div class="decider">
+      <ol>
+        <li><b>Les billes en vraies sphères</b> (les captures en haut) : je les déploie ?</li>
+      </ol>
+      <p class="legende" style="margin-top:12px">Le coût d'une évolution et le nombre d'objets du plateau du jour se décident à la session sur le jeu lui-même (le point 18).</p>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var calme = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var IMG = function (n) { return "img/" + n + ".webp"; };
+  var PIERRES = [
+    { id: "feu", nom: "Pierre de feu", role: "Le triangle des alchimistes." },
+    { id: "foudre", nom: "Pierre de foudre", role: "L'éclair." },
+    { id: "eau", nom: "Pierre d'eau", role: "La goutte." },
+    { id: "glace", nom: "Pierre de glace", role: "Le cristal à six pans." },
+    { id: "nature", nom: "Pierre de nature", role: "La feuille." },
+    { id: "esprit", nom: "Pierre d'esprit", role: "L'ovale." },
+    { id: "roche", nom: "Pierre de roche", role: "La taille émeraude. Entre dans le jeu avec la roue des types." },
+    { id: "lune", nom: "Pierre de lune", role: "Rare. Remplace n'importe laquelle." }
+  ];
+  var SVG_ETOILE = '<svg class="etoile-svg" viewBox="-12 -12 24 24" aria-hidden="true" width="100%" height="100%"><path fill="#f1d28a" d="M0-11.5L1.05-1.05 11.5 0 1.05 1.05 0 11.5-1.05 1.05-11.5 0-1.05-1.05z"/><path fill="#f1d28a" transform="rotate(45) scale(.5)" d="M0-11.5L1.3-1.3 11.5 0 1.3 1.3 0 11.5-1.3 1.3-11.5 0-1.3-1.3z"/><circle r="1.7" fill="#fffdf6"/></svg>';
+  var CADENAS = '<svg class="cadenas" width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><rect x="1" y="5" width="9" height="6.4" rx="1.4" fill="#8f9994"/><path d="M3 5V3.7a2.5 2.5 0 0 1 5 0V5" fill="none" stroke="#8f9994" stroke-width="1.4"/></svg>';
+
+  function etoile(ctx, x, y, R, a, rot, coul) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0); ctx.globalAlpha = Math.max(0, Math.min(1, a));
+    ctx.fillStyle = coul || "#f6e2b0";
+    for (var k = 0; k < 2; k++) {
+      var r = k === 0 ? R : R * 0.48, w = k === 0 ? R * 0.1 : R * 0.08;
+      ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(w, -w); ctx.lineTo(r, 0); ctx.lineTo(w, w); ctx.lineTo(0, r); ctx.lineTo(-w, w); ctx.lineTo(-r, 0); ctx.lineTo(-w, -w); ctx.closePath(); ctx.fill();
+      ctx.rotate(Math.PI / 4);
+    }
+    ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(0, 0, Math.max(0.9, R * 0.13), 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function graine(s) { return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+  function ciel() {
+    var c = document.getElementById("ciel"), d = window.devicePixelRatio || 1;
+    c.width = innerWidth * d; c.height = innerHeight * d;
+    var ctx = c.getContext("2d"); ctx.scale(d, d);
+    var h = graine(7);
+    for (var i = 0; i < Math.round(innerWidth * innerHeight / 9000); i++) {
+      var x = h() * innerWidth, y = h() * innerHeight, g = h();
+      if (g > 0.965) etoile(ctx, x, y, 4 + h() * 3, 0.55, 0);
+      else { ctx.fillStyle = "rgba(239,233,220," + (0.15 + g * 0.35) + ")"; ctx.fillRect(x, y, g > 0.8 ? 1.6 : 1, g > 0.8 ? 1.6 : 1); }
+    }
+  }
+  ciel(); addEventListener("resize", ciel);
+
+  /* ─── Les objets ─── */
+  var grille = document.getElementById("pierres");
+  PIERRES.forEach(function (p) {
+    var d = document.createElement("div"); d.className = "objet";
+    d.innerHTML = '<div class="img"><img src="' + IMG("pierre-" + p.id) + '" alt="' + p.nom + '"></div><span class="nom">' + p.nom + '</span><span class="role">' + p.role + "</span>";
+    grille.appendChild(d);
+  });
+  var icones = document.getElementById("icones");
+  ["etoile-invocation", "poussiere-etoile"].concat(PIERRES.map(function (p) { return "pierre-" + p.id; })).forEach(function (n) { var i = document.createElement("img"); i.src = IMG(n); i.alt = ""; icones.appendChild(i); });
+  var sep = document.createElement("span"); sep.style.cssText = "width:1px;height:26px;background:var(--filet-2)"; icones.appendChild(sep);
+  ["etoile-invocation", "poussiere-etoile", "pierre-feu", "pierre-eau", "pierre-nature", "pierre-lune"].forEach(function (n) { var i = document.createElement("img"); i.src = IMG(n); i.alt = ""; i.className = "petit"; icones.appendChild(i); });
+  var plateau = document.getElementById("plateau");
+  [["etoile-invocation", 232, 52, 86], ["poussiere-etoile", 147, 139, 78], ["pierre-feu", 459, 283, 70], ["pierre-eau", 356, 214, 62], ["pierre-lune", 566, 136, 64], ["pierre-nature", 70, 262, 60]].forEach(function (o) {
+    var i = document.createElement("img"); i.src = IMG(o[0]); i.alt = ""; i.className = "pose";
+    i.style.left = (o[1] / 639 * 100) + "%"; i.style.top = (o[2] / 350 * 100) + "%"; i.style.width = (o[3] / 639 * 100) + "%";
+    plateau.appendChild(i);
+  });
+  if (!calme) setInterval(function () {
+    var cadres = document.querySelectorAll("#objets .objet .img");
+    var cadre = cadres[Math.floor(Math.random() * cadres.length)];
+    var s = document.createElement("div"); s.className = "scintille"; s.innerHTML = SVG_ETOILE;
+    s.style.left = (35 + Math.random() * 30) + "%"; s.style.top = (30 + Math.random() * 35) + "%";
+    cadre.appendChild(s);
+    s.animate([{ transform: "scale(0) rotate(0deg)", opacity: 0 }, { transform: "scale(1) rotate(25deg)", opacity: 1, offset: 0.45 }, { transform: "scale(0) rotate(45deg)", opacity: 0 }], { duration: 720, easing: "ease-out" }).onfinish = function () { s.remove(); };
+  }, 520);
+
+  /* ─── Le moteur d'effets ─── */
+  var scenes = [];
+  function Scene(canvas, l, h) {
+    this.c = canvas; this.items = []; this.taille(l, h); scenes.push(this);
+  }
+  Scene.prototype.taille = function (l, h) {
+    var d = window.devicePixelRatio || 1; this.l = l; this.h = h;
+    this.c.width = l * d; this.c.height = h * d; this.ctx = this.c.getContext("2d"); this.ctx.setTransform(d, 0, 0, d, 0, 0);
+  };
+  Scene.prototype.ajouter = function (it) { it.t0 = performance.now() + (it.retard || 0); this.items.push(it); return it; };
+  function lisse(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function sortie(t) { return 1 - Math.pow(1 - t, 3); }
+  function bez(a, b, c, t) { var u = 1 - t; return [u * u * a[0] + 2 * u * t * b[0] + t * t * c[0], u * u * a[1] + 2 * u * t * b[1] + t * t * c[1]]; }
+  function bez3(a, b, c, d, t) { var u = 1 - t; return [u*u*u*a[0] + 3*u*u*t*b[0] + 3*u*t*t*c[0] + t*t*t*d[0], u*u*u*a[1] + 3*u*u*t*b[1] + 3*u*t*t*c[1] + t*t*t*d[1]]; }
+  function boucle(maint) {
+    scenes.forEach(function (s) {
+      var ctx = s.ctx; ctx.clearRect(0, 0, s.l, s.h);
+      s.items = s.items.filter(function (it) {
+        var t = (maint - it.t0) / it.duree;
+        if (t < 0) return true;
+        if (t >= 1) { if (it.fin) it.fin(); if (it.el) it.el.remove(); return false; }
+        if (it.type === "etoile") {
+          var k = Math.sin(Math.PI * t); etoile(ctx, it.x, it.y, it.R * (0.3 + 0.7 * k), k, (it.rot || 0) + t * 0.7, it.coul);
+        } else if (it.type === "grain") {
+          var e = (it.ease || lisse)(t);
+          for (var q = 0; q < 4; q++) {
+            var tt = Math.max(0, e - q * 0.035), p = bez(it.a, it.b, it.c, tt);
+            ctx.globalAlpha = (1 - q * 0.24) * Math.min(1, t * 5) * (it.fondu ? 1 - Math.max(0, (t - 0.8) / 0.2) : 1);
+            ctx.fillStyle = q === 0 ? "#fffaf0" : (it.coul || "#e9bf62");
+            ctx.beginPath(); ctx.arc(p[0], p[1], (q === 0 ? 1.9 : 1.4 - q * 0.2) * (it.gros || 1), 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        } else if (it.type === "trait") {
+          var n = it.pts.length, fait = Math.min(1, t / 0.5) * (n - 1), fondu = t > 0.72 ? 1 - (t - 0.72) / 0.28 : 1;
+          ctx.globalAlpha = 0.85 * fondu; ctx.strokeStyle = it.coul || "#efe9dc"; ctx.lineWidth = it.epais || 0.9;
+          ctx.beginPath(); ctx.moveTo(it.pts[0][0], it.pts[0][1]);
+          for (var j = 1; j <= Math.floor(fait); j++) ctx.lineTo(it.pts[j][0], it.pts[j][1]);
+          var r = fait - Math.floor(fait), jj = Math.floor(fait);
+          if (jj < n - 1) ctx.lineTo(it.pts[jj][0] + (it.pts[jj + 1][0] - it.pts[jj][0]) * r, it.pts[jj][1] + (it.pts[jj + 1][1] - it.pts[jj][1]) * r);
+          ctx.stroke(); ctx.globalAlpha = 1;
+          for (var m = 0; m <= Math.min(n - 1, Math.ceil(fait)); m++) etoile(ctx, it.pts[m][0], it.pts[m][1], (m === 0 ? 6 : 4.5) * (it.R || 1), fondu, 0, it.coulEtoile);
+        } else if (it.type === "filante") {
+          var e3 = sortie(t), hx = it.a[0] + (it.b[0] - it.a[0]) * e3, hy = it.a[1] + (it.b[1] - it.a[1]) * e3;
+          var dx = it.b[0] - it.a[0], dy = it.b[1] - it.a[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, q2 = it.queue * Math.min(1, t * 3);
+          var gr = ctx.createLinearGradient(hx, hy, hx - ux * q2, hy - uy * q2);
+          gr.addColorStop(0, "rgba(246,226,176," + (1 - t) + ")"); gr.addColorStop(1, "rgba(246,226,176,0)");
+          ctx.strokeStyle = gr; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx - ux * q2, hy - uy * q2); ctx.stroke();
+          etoile(ctx, hx, hy, 6, 1 - t * 0.6, t * 2);
+        } else if (it.type === "vol") {
+          var e2 = lisse(t), p2 = bez3(it.a, it.b, it.c, it.d, e2), taille = it.taille || 38;
+          var ech = t < 0.2 ? 0.75 + 0.55 * (t / 0.2) : 1.3 - (1.3 - (it.echFin || 0.68)) * ((t - 0.2) / 0.8);
+          it.el.style.transform = "translate(" + (p2[0] - taille / 2) + "px," + (p2[1] - taille / 2) + "px) scale(" + ech + ") rotate(" + (Math.sin(t * 9) * 12 * (1 - t)) + "deg)";
+          if (!calme && !it.sansTrainee && maint - (it.dernier || 0) > 55 && t > 0.15 && t < 0.9) {
+            it.dernier = maint;
+            s.ajouter({ type: "etoile", x: p2[0] + (Math.random() - 0.5) * 10, y: p2[1] + (Math.random() - 0.5) * 10, R: 3 + Math.random() * 2.5, duree: 380 });
+          }
+        } else if (it.type === "chaque") {
+          it.pas(t, ctx);
+        }
+        return true;
+      });
+    });
+    requestAnimationFrame(boucle);
+  }
+  requestAnimationFrame(boucle);
+
+  function rouler(el, de, a, duree) {
+    var t0 = performance.now();
+    function pas(m) {
+      var t = Math.max(0, Math.min(1, (m - t0) / duree)), v = Math.round(de + (a - de) * sortie(t));
+      el.textContent = v.toLocaleString("fr-FR");
+      if (t < 1) requestAnimationFrame(pas);
+    }
+    requestAnimationFrame(pas);
+  }
+  function bondir(el, fort) {
+    if (!el) return;
+    el.animate([{ transform: "scale(1)" }, { transform: "scale(" + (fort || 1.32) + ")", offset: 0.35 }, { transform: "scale(0.94)", offset: 0.7 }, { transform: "scale(1)" }], { duration: 420, easing: "ease-out" });
+  }
+  function etincelles(x, y, l, h, n) {
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement("div"); s.className = "etincelle"; s.innerHTML = SVG_ETOILE;
+      var bord = Math.random() < 0.5;
+      s.style.left = (x + (bord ? Math.random() * l : (Math.random() < 0.5 ? 0 : l))) + "px";
+      s.style.top = (y + (bord ? (Math.random() < 0.5 ? 0 : h) : Math.random() * h)) + "px";
+      document.body.appendChild(s);
+      s.animate([{ transform: "scale(0) rotate(0)", opacity: 0 }, { transform: "scale(1.1) rotate(30deg)", opacity: 1, offset: 0.4 }, { transform: "scale(0) rotate(60deg)", opacity: 0 }], { duration: 520, delay: i * 50, easing: "ease-out", fill: "both" }).onfinish = function (e) { e.target.effect.target.remove(); };
+    }
+  }
+  function bulle(parent, texte, gauche, haut) {
+    var v = parent.querySelector(":scope > .bulle"); if (v) v.remove();
+    var b = document.createElement("div"); b.className = "bulle"; b.textContent = texte;
+    b.style.left = gauche; b.style.top = haut; parent.appendChild(b);
+    b.animate([{ opacity: 0 }, { opacity: 1, offset: 0.12 }, { opacity: 1, offset: 0.85 }, { opacity: 0 }], { duration: 2000 }).onfinish = function () { b.remove(); };
+  }
+  function trembler(el) { el.animate([{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(-3px)" }, { transform: "translateX(0)" }], { duration: 280 }); }
+
+  /* ─── Les boutons de jeu ─── */
+  function bouton(b) {
+    b.addEventListener("pointerdown", function () {
+      if (b.classList.contains("eteint")) return;
+      b.classList.add("enfonce");
+      b.animate([{ transform: "translateY(0)" }, { transform: "translateY(5px)" }], { duration: 70, fill: "forwards" });
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+    });
+    var lacher = function () {
+      if (!b.classList.contains("enfonce")) return;
+      b.classList.remove("enfonce");
+      b.animate([{ transform: "translateY(5px)" }, { transform: "translateY(-2px) scale(1.05)", offset: 0.55 }, { transform: "translateY(0) scale(1)" }], { duration: 280, easing: "ease-out", fill: "forwards" });
+      var r = b.getBoundingClientRect(); etincelles(r.left, r.top, r.width, r.height, 3);
+    };
+    b.addEventListener("pointerup", lacher);
+    b.addEventListener("pointerleave", lacher);
+    b.addEventListener("pointercancel", lacher);
+    if (b.classList.contains("eteint")) b.addEventListener("click", function () { trembler(b); bulle(b.parentElement, b.dataset.pourquoi, "50%", (b.offsetTop - 34) + "px"); });
+  }
+  document.querySelectorAll(".btn").forEach(bouton);
+
+  /* ─── Les données du téléphone ─── */
+  var compte = { etoiles: 12, poussiere: 1249, pierres: { lune: 3 }, reserve: 135, pj: 7 };
+  var PJ_MAX = 12;
+  function totalPierres() { var s = 0; for (var k in compte.pierres) s += compte.pierres[k]; return s; }
+  function fmt(n) { return n.toLocaleString("fr-FR"); }
+  var RES = { etoiles: { img: "etoile-invocation", lib: "ÉTOILES" }, poussiere: { img: "poussiere-etoile", lib: "POUSSIÈRE" }, pierres: { img: "pierre-lune", lib: "PIERRES" } };
+  function valeur(cle) { return cle === "pierres" ? totalPierres() : compte[cle]; }
+
+  /* ─── Les quatre propositions ─── */
+  var PROPS = {
+    A: { nom: "Médaillons", texte: "Chaque compteur est une pastille d'émail, son objet serti dans un médaillon d'or. En bas, un rail gravé comme le bord d'un astrolabe porte cinq médaillons ; l'onglet actif se soulève, grandit, passe au jade, et son nom s'affiche dans un cartouche. Les autres restent muets, comme dans la plupart des jeux." },
+    B: { nom: "Le cœur", texte: "La Nébuleuse est au centre : un grand joyau de nuit, serti d'or, qui dépasse de la barre dans une arche. Sa graduation tourne quand on y est. Les quatre autres menus l'entourent. En haut, la même arche à l'envers : les étoiles au centre dans un cartouche d'or, la poussière et les pierres de chaque côté." },
+    C: { nom: "Émaux", texte: "Des plaques d'émail aux coins coupés, serties d'or, comme des pierres taillées posées sur un rail. L'onglet actif est une plaque de jade plus haute, avec son nom gravé. Le bandeau reprend trois plaques, une par compteur." },
+    D: { nom: "Constellations", texte: "Le plus léger : pas de cadre, le ciel. Un menu éteint est une constellation en pointillés ; quand on le touche, ses étoiles se rejoignent et l'emblème d'or apparaît. En haut, les trois compteurs sont reliés par un trait de constellation." }
+  };
+  var ONGLETS = {
+    nebuleuse: { nom: "Nébuleuse", ouvert: true, ligne: '<path d="M13.4 12.2a1.5 1.5 0 1 1-1.9-1.6 3.4 3.4 0 0 1 3.9 3.2 5.2 5.2 0 0 1-5.4 5 7.2 7.2 0 0 1-6.6-7.8 9 9 0 0 1 9.4-7.4"/><path d="M19 5.5v2.6M17.7 6.8h2.6"/>' },
+    astrolabe: { nom: "Astrolabe", scelle: "Scellé : s'ouvre avec les portails", ligne: '<circle cx="12" cy="12" r="8.5"/><path d="M12 6.2l1.1 4.7 4.7 1.1-4.7 1.1-1.1 4.7-1.1-4.7-4.7-1.1 4.7-1.1z"/>' },
+    atlas: { nom: "Atlas", ouvert: true, ligne: '<rect x="3.5" y="6.5" width="11" height="15" rx="1.8" transform="rotate(-8 9 14)"/><rect x="9.5" y="3" width="11" height="15" rx="1.8"/>' },
+    voyage: { nom: "Voyage", scelle: "Scellé : s'ouvre avec le mode histoire", ligne: '<path d="M2.8 20l6.2-9.4 3.9 5.7 2.6-3.7 5.7 7.4z"/><path d="M6.5 3.8v3.4M4.8 5.5h3.4"/>' },
+    presages: { nom: "Présages", scelle: "Scellé : s'ouvre avec les quêtes du jour", ligne: '<path d="M14.5 4.2a8 8 0 1 0 5 12.6 6.6 6.6 0 1 1-5-12.6z"/><path d="M18.5 4v3M17 5.5h3"/>' }
+  };
+  var ORDRE = ["nebuleuse", "astrolabe", "atlas", "voyage", "presages"];
+  var ORDRE_B = ["astrolabe", "atlas", "nebuleuse", "voyage", "presages"];
+
+  function hud(style, el) {
+    var ordre = style === "B" ? ["poussiere", "etoiles", "pierres"] : ["etoiles", "poussiere", "pierres"];
+    var h = "";
+    if (style === "A") {
+      h = '<div class="hudA">' + ordre.map(function (c) { return '<div class="resA" data-cle="' + c + '"><div class="barre"></div><div class="med"><img class="ico-res" src="' + IMG(RES[c].img) + '" alt=""></div><span class="chiffre-or">' + fmt(valeur(c)) + "</span></div>"; }).join("") + "</div>";
+    } else if (style === "B") {
+      h = '<div class="hudB"><div class="bande"></div>' + ordre.map(function (c, i) {
+        if (i === 1) return '<div class="resB centre" data-cle="' + c + '"><div class="cartouche"></div><div class="contenu"><img class="ico-res" src="' + IMG(RES[c].img) + '" alt=""><span class="chiffre-or">' + fmt(valeur(c)) + "</span></div></div>";
+        return '<div class="resB' + (i === 2 ? " droite" : " gauche") + '" data-cle="' + c + '"><img class="ico-res" src="' + IMG(RES[c].img) + '" alt=""><div><span class="chiffre-or">' + fmt(valeur(c)) + '</span><span class="lib">' + RES[c].lib + "</span></div></div>";
+      }).join("") + "</div>";
+    } else if (style === "C") {
+      h = '<div class="hudC">' + ordre.map(function (c) { return '<div class="plaque resC" data-cle="' + c + '"><div class="email"><img class="ico-res" src="' + IMG(RES[c].img) + '" alt=""><div><span class="chiffre-or">' + fmt(valeur(c)) + '</span><span class="lib">' + RES[c].lib + "</span></div></div></div>"; }).join("") + "</div>";
+    } else {
+      h = '<div class="hudD"><svg class="liens" viewBox="0 0 336 40" preserveAspectRatio="none" aria-hidden="true"><path d="M44 18 L112 6 L156 18 M224 18 L262 30 L268 18" fill="none" stroke="rgba(207,173,110,0.45)" stroke-width="0.8"/><circle cx="112" cy="6" r="1.6" fill="#f1d28a"/><circle cx="262" cy="30" r="1.4" fill="#f1d28a"/></svg>' + ordre.map(function (c) { return '<div class="resD" data-cle="' + c + '"><img class="ico-res" src="' + IMG(RES[c].img) + '" alt=""><div><span class="chiffre-or">' + fmt(valeur(c)) + '</span><span class="lib">' + RES[c].lib + "</span></div></div>"; }).join("") + "</div>";
+    }
+    el.innerHTML = h;
+    el.dataset.style = style;
+  }
+
+  function nav(style, el, actif) {
+    var ordre = style === "B" ? ORDRE_B : ORDRE, h = "";
+    actif = actif || "nebuleuse";
+    var onglet = function (id) {
+      var o = ONGLETS[id], cls = "ong ong" + style + (id === actif ? " actif" : "") + (o.ouvert ? "" : " scelle") + (style === "B" && id === "nebuleuse" ? " coeur" : "");
+      var att = ' class="' + cls + '" type="button" data-id="' + id + '" aria-label="' + o.nom + (o.ouvert ? "" : " (scellé)") + '"';
+      var emb = '<img class="emb" src="' + IMG("nav-" + id) + '" alt="">', et = '<span class="etoile-top">' + SVG_ETOILE + "</span>", cad = o.ouvert ? "" : CADENAS;
+      if (style === "A") return "<button" + att + '><span class="med">' + et + emb + "</span>" + cad + '<span class="lib">' + o.nom.toUpperCase() + "</span></button>";
+      if (style === "B") {
+        if (id === "nebuleuse") return "<button" + att + '><span class="joyau"><svg class="graduation" viewBox="-47 -47 94 94" aria-hidden="true"><circle r="43" fill="none" stroke="rgba(241,210,138,0.55)" stroke-width="3" stroke-dasharray="0.8 6.7"/><circle r="43" fill="none" stroke="rgba(241,210,138,0.9)" stroke-width="5" stroke-dasharray="1.2 66.3"/></svg>' + emb + "</span>" + et + '<span class="lib">' + o.nom + "</span></button>";
+        return "<button" + att + ">" + et + emb + cad + '<span class="lib">' + o.nom + "</span></button>";
+      }
+      if (style === "C") return "<button" + att + '>' + et + '<span class="plaque"><span class="email">' + emb + '<span class="lib">' + o.nom.toUpperCase() + "</span></span></span>" + cad + "</button>";
+      return "<button" + att + '><span class="icone"><svg viewBox="0 0 24 24" aria-hidden="true">' + o.ligne + "</svg>" + emb + "</span>" + cad + '<span class="lib">' + o.nom + "</span></button>";
+    };
+    if (style === "A") h = '<div class="navA"><div class="rang">' + ordre.map(onglet).join("") + "</div></div>";
+    else if (style === "B") h = '<div class="navB"><svg class="arche" viewBox="0 0 360 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 18 H128 C142 18 144 -10 180 -10 C216 -10 218 18 232 18 H360 V80 H0 Z" fill="#0a0e0c"/><path d="M0 18 H128 C142 18 144 -10 180 -10 C216 -10 218 18 232 18 H360" fill="none" stroke="rgba(207,173,110,0.8)" stroke-width="1"/><path d="M0 22 H126 C139 22 143 -6 180 -6 C217 -6 221 22 234 22 H360" fill="none" stroke="rgba(207,173,110,0.3)" stroke-width="1"/></svg><div class="rang">' + ordre.map(onglet).join("") + "</div></div>";
+    else if (style === "C") h = '<div class="navC"><div class="rang">' + ordre.map(onglet).join("") + "</div></div>";
+    else h = '<div class="navD"><div class="rang">' + ordre.map(onglet).join("") + "</div></div>";
+    el.innerHTML = h;
+    el.querySelectorAll(".ong").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.dataset.id;
+        if (!ONGLETS[id].ouvert) { trembler(b); bulle(el, ONGLETS[id].scelle, Math.min(Math.max(b.offsetLeft + b.offsetWidth / 2, 110), el.offsetWidth - 110) + "px", "-30px"); return; }
+        if (b.classList.contains("actif")) return;
+        el.querySelectorAll(".ong").forEach(function (o) { o.classList.remove("actif"); });
+        b.classList.add("actif");
+        var r = (b.querySelector(".med, .joyau, .plaque, .icone") || b).getBoundingClientRect();
+        etincelles(r.left, r.top, r.width, r.height, style === "D" ? 5 : 3);
+        try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+      });
+    });
+  }
+
+  /* ─── Le téléphone ─── */
+  var cadre = document.getElementById("tel-cadre"), boite = document.getElementById("tel-boite");
+  function ajuster() { var k = Math.min(1, cadre.parentElement.clientWidth / 360); boite.style.transform = "scale(" + k + ")"; cadre.style.height = (800 * k) + "px"; }
+  ajuster(); addEventListener("resize", ajuster);
+  var tel = document.getElementById("tel"), hudTel = document.getElementById("hud-tel"), navTel = document.getElementById("nav-tel");
+  var sceneTel = new Scene(document.getElementById("effets-tel"), 360, 800);
+  var styleTel = "A";
+  function dans(el, racine) { var x = 0, y = 0; while (el && el !== racine) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return [x, y]; }
+  function centreDe(el) { var r = el.getBoundingClientRect(), rt = tel.getBoundingClientRect(), k = rt.width / 360; return [(r.left + r.width / 2 - rt.left) / k, (r.top + r.height / 2 - rt.top) / k]; }
+  function mettreStyle() { hud("D", hudTel); nav("A", navTel); brancherPierres(); }
+
+  var bourse = document.getElementById("bourse"), minuterieBourse = 0;
+  function remplirBourse() {
+    var g = document.getElementById("bourse-grille"); g.innerHTML = "";
+    PIERRES.forEach(function (p) {
+      var n = compte.pierres[p.id] || 0, d = document.createElement("div"); d.className = "p" + (n ? "" : " vide");
+      d.innerHTML = '<img src="' + IMG("pierre-" + p.id) + '" alt="' + p.nom + '"><span>' + n + "</span>"; g.appendChild(d);
+    });
+  }
+  function basculerBourse() {
+    bourse.hidden = !bourse.hidden;
+    if (!bourse.hidden) {
+      remplirBourse();
+      bourse.animate([{ opacity: 0, transform: "translateY(-6px) scale(.97)" }, { opacity: 1, transform: "none" }], { duration: 200, easing: "ease-out" });
+      clearTimeout(minuterieBourse); minuterieBourse = setTimeout(function () { bourse.hidden = true; }, 5000);
+    }
+  }
+  function brancherPierres() {
+    var c = hudTel.querySelector('[data-cle="pierres"]');
+    c.style.cursor = "pointer"; c.setAttribute("role", "button"); c.setAttribute("tabindex", "0"); c.setAttribute("aria-label", "Ouvrir la bourse de pierres");
+    c.addEventListener("click", basculerBourse);
+    c.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); basculerBourse(); } });
+    hudTel.querySelectorAll("[data-cle]").forEach(function (x) { var cle = x.dataset.cle; x.querySelector(".chiffre-or").textContent = fmt(valeur(cle)); });
+  }
+  mettreStyle();
+
+  // Le plateau du jour
+  var pips = document.getElementById("pips");
+  var PIP = function (allume) { return '<svg viewBox="-12 -12 24 24" aria-hidden="true"><path fill="' + (allume ? "#f1d28a" : "none") + '" stroke="' + (allume ? "none" : "#4a544f") + '" stroke-width="1.6" d="M0-11L2.4-2.4 11 0 2.4 2.4 0 11-2.4 2.4-11 0-2.4-2.4z"/></svg>'; };
+  function majPlateau(rouleDe) {
+    pips.innerHTML = ""; for (var i = 0; i < PJ_MAX; i++) pips.insertAdjacentHTML("beforeend", PIP(i < compte.pj));
+    var n = document.getElementById("n-pj");
+    if (rouleDe !== undefined) { rouler(n, rouleDe, compte.pj, 400); bondir(n, 1.3); } else n.textContent = compte.pj;
+    document.getElementById("t-pj").innerHTML = compte.pj > 0 ? "objets à gagner<br>aujourd'hui" : "plus d'objets<br>jusqu'à minuit";
+  }
+  majPlateau();
+  document.getElementById("plus-plateau").addEventListener("click", function () {
+    var b = this;
+    bondir(b, 1.25);
+    var avant = compte.pj; compte.pj = PJ_MAX; majPlateau(avant);
+    bulle(tel, "Démo : un plateau de plus (l'achat viendra avec la boutique)", "50%", "448px");
+  });
+  // La réserve : l'anneau se remplit en 3 s, puis +1
+  var anneau = document.getElementById("res-anneau"), t0Res = performance.now();
+  function reserveAjouter(n) {
+    var el = document.getElementById("n-reserve"), avant = compte.reserve;
+    compte.reserve = Math.min(150, compte.reserve + n);
+    rouler(el, avant, compte.reserve, 300); bondir(document.querySelector("#piece-res img"), 1.25);
+  }
+  (function res(m) {
+    var t = ((m - t0Res) / 3000);
+    if (t >= 1) { t0Res = m; t = 0; if (compte.reserve < 150) reserveAjouter(1); }
+    anneau.style.strokeDashoffset = (144.5 * (1 - (compte.reserve >= 150 ? 1 : t))).toFixed(1);
+    requestAnimationFrame(res);
+  })(performance.now());
+
+  function arrivee(cle, gain, nomImage) {
+    var caseEl = hudTel.querySelector('[data-cle="' + cle + '"]');
+    var img = caseEl.querySelector(".ico-res"), chiffre = caseEl.querySelector(".chiffre-or"), c = centreDe(img);
+    if (cle === "pierres" && nomImage) img.src = nomImage;
+    bondir(img);
+    var apres = valeur(cle), avant = apres - gain;
+    rouler(chiffre, avant, apres, 520);
+    if (cle === "pierres" && !bourse.hidden) remplirBourse();
+    for (var i = 0; i < 3; i++) sceneTel.ajouter({ type: "etoile", x: c[0] + (Math.random() - 0.5) * 34, y: c[1] + (Math.random() - 0.5) * 26, R: 4 + Math.random() * 3, duree: 460, retard: i * 70, rot: Math.random() });
+    var cc = centreDe(chiffre);
+    var plus = document.createElement("div"); plus.className = "plus chiffre-or"; plus.textContent = "+" + gain;
+    plus.style.left = (cc[0] + chiffre.offsetWidth / 2 + 4) + "px"; plus.style.top = (cc[1] + 8) + "px";
+    tel.appendChild(plus);
+    plus.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)", offset: 0.25 }, { opacity: 0, transform: "translateY(-12px)" }], { duration: 900, easing: "ease-out" }).onfinish = function () { plus.remove(); };
+  }
+  function lacher(quoi) {
+    if (quoi === "pieces") { pieces(); return; }
+    if (compte.pj <= 0) { bulle(tel, "Plus d'objets aujourd'hui : touche le « + »", "50%", "448px"); return; }
+    var x0 = 50 + Math.random() * 260, y0 = 452, cle, gain, nom;
+    if (quoi === "etoile") { cle = "etoiles"; gain = 1; nom = IMG("etoile-invocation"); compte.etoiles += 1; }
+    else if (quoi === "poussiere") { cle = "poussiere"; gain = 60; nom = IMG("poussiere-etoile"); compte.poussiere += 60; }
+    else { var p = PIERRES[Math.floor(Math.random() * 6)].id; cle = "pierres"; gain = 1; nom = IMG("pierre-" + p); compte.pierres[p] = (compte.pierres[p] || 0) + 1; }
+    var avantPj = compte.pj; compte.pj -= 1; majPlateau(avantPj);
+    var cible = centreDe(hudTel.querySelector('[data-cle="' + cle + '"] .ico-res'));
+    var el = document.createElement("img"); el.src = nom; el.alt = ""; el.className = "volant";
+    el.style.transform = "translate(" + (x0 - 19) + "px," + (y0 - 19) + "px) scale(.75)"; tel.appendChild(el);
+    for (var i = 0; i < 4; i++) sceneTel.ajouter({ type: "etoile", x: x0 + (Math.random() - 0.5) * 40, y: y0 + (Math.random() - 0.5) * 16, R: 4 + Math.random() * 4, duree: 420, retard: i * 60, rot: Math.random() });
+    sceneTel.ajouter({ type: "vol", el: el, duree: calme ? 500 : 1050, a: [x0, y0], b: [x0 + (x0 < 180 ? -30 : 30), y0 - 190], c: [cible[0], cible[1] + 170], d: cible, fin: function () { arrivee(cle, gain, nom); } });
+  }
+  function pieces() {
+    var n = 1 + Math.floor(Math.random() * 3), cible = centreDe(document.querySelector("#piece-res img"));
+    for (var i = 0; i < n; i++) {
+      var x0 = 40 + Math.random() * 280;
+      var el = document.createElement("img"); el.src = IMG("piece"); el.alt = ""; el.className = "volant"; el.style.width = el.style.height = "20px";
+      el.style.transform = "translate(" + (x0 - 10) + "px,448px)"; tel.appendChild(el);
+      sceneTel.ajouter({ type: "vol", el: el, taille: 20, echFin: 0.9, sansTrainee: true, duree: 620, retard: i * 180, a: [x0, 458], b: [x0, 400], c: [cible[0] + 30, cible[1] - 60], d: cible, fin: function () { reserveAjouter(1); } });
+    }
+  }
+  document.querySelectorAll("[data-lacher]").forEach(function (b) { b.addEventListener("click", function () { lacher(b.getAttribute("data-lacher")); auto = performance.now() + 5000; }); });
+  var auto = 0, suite = ["pieces", "pierre", "pieces", "etoile", "pieces", "poussiere", "pieces", "pierre"], rang = 0;
+  if (!calme) setInterval(function () {
+    if (performance.now() > auto && !document.hidden) {
+      var q = suite[rang % suite.length]; rang++;
+      if (q !== "pieces" && compte.pj <= 0) { compte.pj = PJ_MAX; majPlateau(0); }
+      lacher(q);
+    }
+  }, 2300);
+
+  /* ─── Monter de niveau ─── */
+  var sceneNiv = new Scene(document.getElementById("effets-niveau"), 310, 390);
+  var btnNiv = document.getElementById("btn-niveau"), niv = 7, pv = 55, att = 24, cout = 120, occupe = false;
+  btnNiv.addEventListener("click", function () {
+    if (occupe) return; occupe = true;
+    var s = document.getElementById("scene-niveau"), rb = btnNiv.getBoundingClientRect(), rs = s.getBoundingClientRect();
+    var bx = rb.left + rb.width / 2 - rs.left + 30, by = rb.top - rs.top + 30;
+    var nb = Math.round(Math.min(110, Math.max(12, cout / 5))), etale = Math.min(1000, 200 + nb * 8);
+    for (var g = 0; g < nb; g++) sceneNiv.ajouter({ type: "grain", duree: 560 + Math.random() * 160, retard: Math.random() * etale, a: [bx + (Math.random() - 0.5) * 60, by], b: [bx + (Math.random() - 0.5) * 220, by - 120 - Math.random() * 60], c: [155 + (Math.random() - 0.5) * 50, 188 + (Math.random() - 0.5) * 60] });
+    setTimeout(function () {
+      document.getElementById("carte-niveau").animate([{ transform: "scale(1)" }, { transform: "scale(1.05)", offset: 0.3 }, { transform: "scale(1)" }], { duration: 480, easing: "ease-out" });
+      for (var i = 0; i < 9; i++) sceneNiv.ajouter({ type: "etoile", x: 62 + Math.random() * 186, y: 56 + Math.random() * 260, R: 5 + Math.random() * 6, duree: 560, retard: i * 70, rot: Math.random() });
+      niv += 1;
+      var e = document.createElement("div"); e.className = "lvl-eclat";
+      e.innerHTML = '<span class="l chiffre-or">LVL</span><span class="chiffre-or">' + niv + "</span>";
+      s.appendChild(e);
+      var badge = document.getElementById("badge-lvl"), br = badge.getBoundingClientRect(), er = e.getBoundingClientRect();
+      var dx = (br.left + br.width / 2) - (er.left + er.width / 2), dy = (br.top + br.height / 2) - (er.top + er.height / 2);
+      e.animate([
+        { transform: "translate(-50%,-50%) scale(2.6)", opacity: 0 },
+        { transform: "translate(-50%,-50%) scale(0.92)", opacity: 1, offset: 0.14 },
+        { transform: "translate(-50%,-50%) scale(1.04)", opacity: 1, offset: 0.2 },
+        { transform: "translate(-50%,-50%) scale(1)", opacity: 1, offset: 0.62 },
+        { transform: "translate(calc(-50% + " + dx + "px), calc(-50% + " + dy + "px)) scale(0.3)", opacity: 0.2 }
+      ], { duration: 1900, easing: "ease-in-out" }).onfinish = function () {
+        e.remove();
+        document.getElementById("lvl-badge-n").textContent = niv; bondir(badge, 1.25);
+        occupe = false;
+      };
+      for (var j = 0; j < 5; j++) sceneNiv.ajouter({ type: "etoile", x: 155 + (Math.random() - 0.5) * 150, y: 175 + (Math.random() - 0.5) * 70, R: 7 + Math.random() * 5, duree: 600, retard: 120 + j * 60, rot: Math.random() });
+      rouler(document.getElementById("pv"), pv, pv + 3, 700); rouler(document.getElementById("att"), att, att + 1, 700);
+      pv += 3; att += 1; cout = Math.round(cout * 1.5 / 10) * 10; document.getElementById("cout-niveau").textContent = cout;
+    }, etale + 600);
+  });
+
+  /* ─── Évoluer, en plein écran ─── */
+  document.getElementById("btn-evo").addEventListener("click", function () { setTimeout(evolution, 160); });
+
+  // La pierre en 3D : la taille à gradins de la pierre d'esprit (son ovale), sertie d'or. Dans le jeu,
+  // c'est le même volume que la pierre qui tombe dans la machine.
+  function pierre3D(canvas, taillePx) {
+    if (!window.THREE) return null;
+    var T = window.THREE;
+    var rendu = new T.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    rendu.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    rendu.setSize(taillePx, taillePx, false);
+    var scene = new T.Scene(), cam = new T.PerspectiveCamera(30, 1, 0.1, 20);
+    cam.position.set(0, 0, 4.6);
+    scene.add(new T.AmbientLight(0x5a5070, 0.75));
+    var cle = new T.DirectionalLight(0xffffff, 1.15); cle.position.set(-1.2, 1.4, 2.2); scene.add(cle);
+    var contre = new T.DirectionalLight(0xc8b0ff, 0.7); contre.position.set(1.4, -0.9, 1.2); scene.add(contre);
+    var eclat = new T.PointLight(0xffffff, 1.3, 12); scene.add(eclat);
+    var P = []; for (var k = 0; k < 16; k++) P.push([0.64 * Math.cos(2 * Math.PI * k / 16), 0.84 * Math.sin(2 * Math.PI * k / 16)]);
+    function anneau(s, z) { return P.map(function (p) { return [p[0] * s, p[1] * s, z]; }); }
+    var pos = [], col = [], base = [0.56, 0.36, 0.92];
+    function tri(a, b, c, dehors, teinte) {
+      var ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+      var nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+      if (nx * dehors[0] + ny * dehors[1] + nz * dehors[2] < 0) { var t = b; b = c; c = t; }
+      [a, b, c].forEach(function (p) { pos.push(p[0], p[1], p[2]); col.push(teinte[0], teinte[1], teinte[2]); });
+    }
+    function quad(a, b, c, d, dehors, teinte) { tri(a, b, c, dehors, teinte); tri(a, c, d, dehors, teinte); }
+    function hasard() { var f = 0.45 + Math.random() * 0.95; return [Math.min(1, base[0] * f), Math.min(1, base[1] * f), Math.min(1, base[2] * f)]; }
+    var centre = [0, 0, -0.05];
+    function dehorsDe(pts) { var x = 0, y = 0, z = 0; pts.forEach(function (p) { x += p[0]; y += p[1]; z += p[2]; }); return [x / pts.length - centre[0], y / pts.length - centre[1], z / pts.length - centre[2]]; }
+    var G0 = anneau(1, 0), G1 = anneau(1, -0.05), C1 = anneau(0.8, 0.15), TB = anneau(0.52, 0.24), PV = anneau(0.46, -0.34), culet = [0, 0, -0.56];
+    for (var i = 0; i < 16; i++) {
+      var j = (i + 1) % 16;
+      quad(G0[i], G0[j], C1[j], C1[i], dehorsDe([G0[i], G0[j], C1[j], C1[i]]), hasard());
+      quad(C1[i], C1[j], TB[j], TB[i], dehorsDe([C1[i], C1[j], TB[j], TB[i]]), hasard());
+      tri([0, 0, 0.24], TB[i], TB[j], [0, 0, 1], [Math.min(1, base[0] * 1.15), Math.min(1, base[1] * 1.15), Math.min(1, base[2] * 1.08)]);
+      quad(G1[i], G1[j], G0[j], G0[i], dehorsDe([G1[i], G1[j], G0[j], G0[i]]), hasard());
+      quad(PV[i], PV[j], G1[j], G1[i], dehorsDe([PV[i], PV[j], G1[j], G1[i]]), hasard());
+      tri(culet, PV[j], PV[i], dehorsDe([culet, PV[j], PV[i]]), hasard());
+    }
+    var geo = new T.BufferGeometry();
+    geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    geo.setAttribute("color", new T.Float32BufferAttribute(col, 3));
+    geo.computeVertexNormals();
+    var gemme = new T.Mesh(geo, new T.MeshPhongMaterial({ vertexColors: true, flatShading: true, shininess: 160, specular: 0xffffff, emissive: 0x1c0e38 }));
+    // le serti : une bande d'or autour du rondiste
+    pos = []; col = [];
+    var Bh = anneau(1.0, 0.04), Bo = anneau(1.12, 0.04), Bob = anneau(1.12, -0.09), Bb = anneau(1.0, -0.09), dor = [0.85, 0.7, 0.4];
+    for (var i2 = 0; i2 < 16; i2++) {
+      var j2 = (i2 + 1) % 16, m = [(Bo[i2][0] + Bo[j2][0]) / 2, (Bo[i2][1] + Bo[j2][1]) / 2, 0];
+      quad(Bh[i2], Bh[j2], Bo[j2], Bo[i2], [0, 0, 1], dor);
+      quad(Bo[i2], Bo[j2], Bob[j2], Bob[i2], m, dor);
+      quad(Bb[i2], Bb[j2], Bob[j2], Bob[i2], [0, 0, -1], dor);
+      quad(Bh[i2], Bh[j2], Bb[j2], Bb[i2], [-m[0], -m[1], 0], dor);
+    }
+    var geo2 = new T.BufferGeometry();
+    geo2.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    geo2.computeVertexNormals();
+    var serti = new T.Mesh(geo2, new T.MeshPhongMaterial({ color: 0xd9b565, specular: 0xfff0c0, shininess: 80, flatShading: true }));
+    var groupe = new T.Group(); groupe.add(gemme); groupe.add(serti); scene.add(groupe);
+    var etat = { tourne: 1, tremble: 0, vivant: true }, t0 = performance.now(), angle = 0, dernier = t0;
+    (function boucle3D(maint) {
+      if (!etat.vivant) return;
+      var t = (maint - t0) / 1000, dt = Math.min(0.05, (maint - dernier) / 1000); dernier = maint;
+      angle += dt * 6.5 * etat.tourne;
+      groupe.rotation.y = angle + (1 - etat.tourne) * 0.3 * Math.sin(t * 1.4);
+      groupe.rotation.x = 0.35 + 0.25 * etat.tourne + (Math.random() - 0.5) * etat.tremble * 0.16;
+      groupe.rotation.z = (Math.random() - 0.5) * etat.tremble * 0.16;
+      eclat.position.set(2.2 * Math.cos(t * 2.3), 1.8 * Math.sin(t * 1.9), 2.4);
+      rendu.render(scene, cam);
+      requestAnimationFrame(boucle3D);
+    })(performance.now());
+    etat.poser = function () {
+      // l'élan retombe : la pierre finit face à nous, sa table vers le haut
+      var de = angle, vers = Math.round(angle / (2 * Math.PI)) * 2 * Math.PI, d0 = performance.now();
+      etat.tourne = 0;
+      (function freiner(m) { var t = Math.min(1, (m - d0) / 450); angle = de + (vers - de) * sortie(t); if (t < 1 && etat.vivant) requestAnimationFrame(freiner); })(d0);
+    };
+    etat.fin = function () { if (!etat.vivant) return; etat.vivant = false; geo.dispose(); geo2.dispose(); rendu.dispose(); };
+    return etat;
+  }
+
+  // Le voile blanc de la carte : il s'évapore en poussière d'or, du centre vers les bords, en suivant un
+  // bruit doux ; un liseré d'or marque le front.
+  function voileBlanc(canvas, cw, ch) {
+    var k = Math.min(window.devicePixelRatio || 1, 2), L = Math.round(cw * k), Hh = Math.round(ch * k);
+    canvas.width = L; canvas.height = Hh;
+    var ctx = canvas.getContext("2d"), img = ctx.createImageData(L, Hh), px = new Uint32Array(img.data.buffer);
+    var seuil = new Float32Array(L * Hh), masque = new Uint8Array(L * Hh);
+    function grille(n) { var g = []; for (var i = 0; i < (n + 2) * (n + 2); i++) g.push(Math.random()); return g; }
+    var o1 = 6, o2 = 17, g1 = grille(o1), g2 = grille(o2);
+    function doux(g, n, x, y) {
+      var fx = x * n, fy = y * n, ix = Math.floor(fx), iy = Math.floor(fy), tx = fx - ix, ty = fy - iy, w = n + 2;
+      tx = tx * tx * (3 - 2 * tx); ty = ty * ty * (3 - 2 * ty);
+      var a = g[iy * w + ix], b = g[iy * w + ix + 1], c = g[(iy + 1) * w + ix], d = g[(iy + 1) * w + ix + 1];
+      return a + (b - a) * tx + (c - a) * ty + (a - b - c + d) * tx * ty;
+    }
+    var rayon = 0.045 * L, bord = 3 * k, r2 = rayon * rayon, ri2 = (rayon - bord) * (rayon - bord);
+    var mn = 9, mx = -9;
+    for (var y = 0; y < Hh; y++) for (var x = 0; x < L; x++) {
+      var i = y * L + x, u = x / L, v = y / Hh;
+      var dx = Math.max(rayon - x, x - (L - 1 - rayon), 0), dy = Math.max(rayon - y, y - (Hh - 1 - rayon), 0), dd = dx * dx + dy * dy;
+      if (dd > r2) continue;
+      masque[i] = (x < bord || y < bord || x >= L - bord || y >= Hh - bord || (dx > 0 && dy > 0 && dd > ri2)) ? 2 : 1;
+      var dc = Math.hypot(u - 0.5, (v - 0.5) * 1.4) / 0.86;
+      var s = 0.55 * doux(g1, o1, u, v) + 0.2 * doux(g2, o2, u, v) + 0.4 * dc;
+      seuil[i] = s; if (s < mn) mn = s; if (s > mx) mx = s;
+    }
+    for (var q = 0; q < seuil.length; q++) seuil[q] = (seuil[q] - mn) / (mx - mn);
+    var BLANC = 0xFFF6FDFF, OR_VIF = 0xFF8AD2F1, FILET = 0xFF7EC4E3, BANDE = 0.03;
+    function dessiner(T) {
+      for (var i = 0; i < px.length; i++) {
+        var m = masque[i];
+        if (!m) { px[i] = 0; continue; }
+        var s = seuil[i];
+        px[i] = s < T ? 0 : (s < T + BANDE ? OR_VIF : (m === 2 ? FILET : BLANC));
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+    function front(T, n) {
+      var out = [], essais = 0;
+      while (out.length < n && essais < 900) {
+        essais++;
+        var i = (Math.random() * px.length) | 0;
+        if (masque[i] && seuil[i] >= T && seuil[i] < T + BANDE) out.push([(i % L) / k, Math.floor(i / L) / k]);
+      }
+      return out;
+    }
+    dessiner(-1);
+    return { dessiner: dessiner, front: front };
+  }
+
+  function evolution() {
+    var W = innerWidth, H = innerHeight;
+    var cw = Math.min(300, W * 0.66, (H - 190) / 1.4), ch = cw * 1.4, cx = W / 2, cy = H / 2 - 6, tp = Math.round(cw * 0.66);
+    var ov = document.createElement("div"); ov.className = "evo-plein"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Évolution de Kitsune");
+    ov.innerHTML = '<canvas class="fond-effets"></canvas><div class="evo-titre" style="top:' + (cy - ch / 2 - 66) + 'px"><span class="sourcil">Évolution</span><span class="nom">Kitsune</span></div>' +
+      '<div class="evo-carte" style="left:' + (cx - cw / 2) + "px;top:" + (cy - ch / 2) + "px;width:" + cw + "px;height:" + ch + 'px"><img class="st1" src="' + IMG("kitsune-1") + '" alt=""><img class="st2" src="' + IMG("kitsune-2") + '" alt="Kitsune, stade 2"><canvas class="blanc"></canvas></div>' +
+      '<canvas class="evo-pierre" style="width:' + tp + "px;height:" + tp + "px;left:" + (cx - tp / 2) + "px;top:" + (cy - tp / 2) + 'px;opacity:0"></canvas><div class="evo-legende">Touche l\'écran pour passer</div>';
+    document.body.appendChild(ov);
+    var canvas = ov.querySelector("canvas.fond-effets"); canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    var sc = new Scene(canvas, W, H);
+    var carte = ov.querySelector(".evo-carte"), blanc = ov.querySelector(".blanc"), st1 = ov.querySelector(".st1"), st2 = ov.querySelector(".st2"), pierre = ov.querySelector(".evo-pierre"), titre = ov.querySelector(".evo-titre"), leg = ov.querySelector(".evo-legende");
+    var gemme = pierre3D(pierre, tp);
+    if (!gemme) {
+      // sans WebGL : la pierre en image
+      var im = document.createElement("img"); im.src = IMG("pierre-esprit"); im.alt = ""; im.className = "evo-pierre"; im.style.cssText = pierre.style.cssText;
+      pierre.replaceWith(im); pierre = im;
+    }
+    var voile = voileBlanc(blanc, cw, ch);
+    var passe = false, fini = false, attentes = [];
+    function attendre(ms) { return new Promise(function (r) { if (passe) return r(); var id = setTimeout(r, ms); attentes.push(function () { clearTimeout(id); r(); }); }); }
+    function finir() {
+      passe = true; attentes.forEach(function (f) { f(); }); sc.items = [];
+      [blanc, carte, pierre].forEach(function (el) { el.getAnimations().forEach(function (an) { an.cancel(); }); });
+      pierre.style.opacity = 0; if (gemme) gemme.fin();
+      blanc.style.opacity = 0; st1.style.opacity = 0; st2.style.opacity = 1; carte.style.transform = "";
+      titre.style.opacity = 1; titre.querySelector(".nom").textContent = "Kitsune · Trois queues";
+      leg.textContent = "Touche l'écran pour fermer"; fini = true;
+    }
+    ov.addEventListener("click", function () {
+      if (fini) { ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220 }).onfinish = function () { if (gemme) gemme.fin(); scenes.splice(scenes.indexOf(sc), 1); ov.remove(); }; }
+      else finir();
+    });
+    document.addEventListener("keydown", function esc(e) { if (e.key === "Escape") { document.removeEventListener("keydown", esc); if (!fini) finir(); ov.click(); } });
+
+    (async function () {
+      ov.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260 });
+      carte.animate([{ transform: "scale(0.9)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }], { duration: 420, easing: "cubic-bezier(.34,1.56,.64,1)" });
+      titre.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, fill: "forwards" });
+      await attendre(500); if (passe) return;
+      // 1. la pierre arrive en tournant et se pose au centre de la carte
+      pierre.style.opacity = 1;
+      pierre.animate([{ transform: "translateY(" + (H * 0.55) + "px) scale(0.55)" }, { transform: "translateY(-16px) scale(1.15)", offset: 0.75 }, { transform: "translateY(0) scale(1)" }], { duration: 820, easing: "cubic-bezier(.3,.7,.3,1)" });
+      await attendre(600); if (passe) return;
+      if (gemme) gemme.poser();
+      await attendre(220); if (passe) return;
+      carte.animate([{ transform: "scale(1)" }, { transform: "scale(0.975)" }, { transform: "scale(1)" }], { duration: 220 });
+      for (var i = 0; i < 5; i++) sc.ajouter({ type: "etoile", x: cx + (Math.random() - 0.5) * cw * 0.7, y: cy + (Math.random() - 0.5) * cw * 0.7, R: 7 + Math.random() * 5, duree: 480, retard: i * 50 });
+      // 2. elle reste deux secondes et vibre de plus en plus fort
+      sc.ajouter({ type: "chaque", duree: 2000, pas: function (t) {
+        if (passe) return;
+        var a = 0.4 + 7 * t * t;
+        if (gemme) gemme.tremble = t * t;
+        pierre.style.transform = "translate(" + ((Math.random() - 0.5) * 2 * a).toFixed(1) + "px," + ((Math.random() - 0.5) * 2 * a).toFixed(1) + "px) scale(" + (1 + 0.08 * t) + ")";
+        pierre.style.filter = "brightness(" + (1 + 0.8 * t) + ")";
+        carte.style.transform = "translate(" + ((Math.random() - 0.5) * a * 0.3).toFixed(1) + "px,0)";
+        if (Math.random() < 0.08 + 0.35 * t) { var an = Math.random() * Math.PI * 2, d = cw * (0.32 + 0.2 * Math.random()); sc.ajouter({ type: "etoile", x: cx + Math.cos(an) * d, y: cy + Math.sin(an) * d, R: 3 + Math.random() * 4, duree: 360, rot: Math.random() }); }
+      } });
+      await attendre(2000); if (passe) return;
+      carte.style.transform = "";
+      // 3. elle éclate en poussière, qui tourbillonne et entre dans la carte
+      pierre.style.opacity = 0; if (gemme) gemme.fin();
+      var couls = ["#b99cff", "#efe4ff", "#f1d28a", "#d7c3ff"];
+      for (var g = 0; g < 170; g++) {
+        var an2 = Math.random() * Math.PI * 2, d2 = cw * (0.35 + Math.random() * 0.55), tour = an2 + 1.6;
+        sc.ajouter({ type: "grain", coul: couls[g % 4], gros: 0.8 + Math.random() * 0.8, duree: 800 + Math.random() * 450, retard: Math.random() * 120, ease: sortie,
+          a: [cx + (Math.random() - 0.5) * 16, cy + (Math.random() - 0.5) * 16], b: [cx + Math.cos(an2) * d2 * 1.5, cy + Math.sin(an2) * d2 * 1.5], c: [cx + Math.cos(tour) * cw * 0.1, cy + Math.sin(tour) * cw * 0.1], fondu: true });
+      }
+      for (var j = 0; j < 8; j++) sc.ajouter({ type: "etoile", x: cx + (Math.random() - 0.5) * cw * 0.5, y: cy + (Math.random() - 0.5) * cw * 0.5, R: 10 + Math.random() * 8, duree: 520, retard: j * 30, rot: Math.random() });
+      await attendre(420); if (passe) return;
+      // 4. la carte devient blanche ; étoiles filantes et constellations d'or
+      blanc.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 650, fill: "forwards" });
+      carte.animate([{ transform: "scale(1)" }, { transform: "scale(1.04)" }], { duration: 650, fill: "forwards", easing: "ease-out" });
+      for (var f = 0; f < 9; f++) {
+        var y1 = cy - ch * 0.7 + Math.random() * ch * 1.1, x1 = cx - W * 0.5 - 40;
+        sc.ajouter({ type: "filante", a: [x1 + Math.random() * 60, y1], b: [cx + W * 0.5 + 40, y1 + 90 + Math.random() * 120], queue: 110 + Math.random() * 60, duree: 900 + Math.random() * 400, retard: 250 + f * 190 });
+      }
+      var bords = [[-0.78, -0.42], [0.8, -0.3], [-0.82, 0.3], [0.78, 0.42], [0, -0.66], [-0.1, 0.68]];
+      bords.forEach(function (b, i) {
+        var ox = cx + b[0] * (cw / 2 + 60), oy = cy + b[1] * ch, pts = [];
+        for (var q = 0; q < 4 + (i % 2); q++) pts.push([ox + (Math.random() - 0.5) * 90, oy + (Math.random() - 0.5) * 80]);
+        pts.sort(function (p, q2) { return p[0] - q2[0]; });
+        sc.ajouter({ type: "trait", pts: pts, coul: "#e8c877", coulEtoile: "#f1d28a", epais: 1.1, R: 1.1, duree: 2100, retard: 200 + i * 150 });
+      });
+      await attendre(700); if (passe) return;
+      // sous le blanc, la carte a déjà changé de stade
+      st1.style.opacity = 0; st2.style.opacity = 1;
+      await attendre(1200); if (passe) return;
+      // 5. le blanc s'évapore en poussière d'or et dévoile la carte
+      var ech = 1.04;
+      sc.ajouter({ type: "chaque", duree: 1800, pas: function (t) {
+        if (passe) return;
+        var T = -0.04 + 1.1 * lisse(t);
+        voile.dessiner(T);
+        voile.front(T, 16).forEach(function (p) {
+          var sx = cx + (p[0] - cw / 2) * ech, sy = cy + (p[1] - ch / 2) * ech, dx = (Math.random() - 0.5);
+          sc.ajouter({ type: "grain", coul: Math.random() < 0.7 ? "#f1d28a" : "#fff3cf", gros: 0.6 + Math.random() * 0.7, duree: 700 + Math.random() * 500, ease: sortie, fondu: true,
+            a: [sx, sy], b: [sx + dx * 40, sy - 24 - Math.random() * 30], c: [sx + dx * 90, sy - 60 - Math.random() * 70] });
+        });
+      } });
+      await attendre(1800); if (passe) return;
+      blanc.style.opacity = 0;
+      carte.animate([{ transform: "scale(1.04)" }, { transform: "scale(1)" }], { duration: 500, fill: "forwards", easing: "ease-out" });
+      titre.querySelector(".nom").textContent = "Kitsune · Trois queues";
+      bondir(titre.querySelector(".nom"), 1.12);
+      await attendre(600);
+      leg.textContent = "Touche l'écran pour fermer"; fini = true;
+    })();
+  }
+})();
+</script>

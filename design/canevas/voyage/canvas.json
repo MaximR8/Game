@@ -1,0 +1,940 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AvantCombat.dc.html": {
+      "h": 844,
+      "title": "3 · Avant le combat",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Carre.dc.html": {
+      "h": 844,
+      "title": "4 · Le Carré en jeu",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Chapitre.dc.html": {
+      "h": 844,
+      "title": "2 · Un chapitre",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Classe.dc.html": {
+      "h": 844,
+      "title": "7 · Voyage : le Classé",
+      "w": 390,
+      "x": 2820,
+      "y": 0
+    },
+    "Duel.dc.html": {
+      "h": 844,
+      "title": "6 · Voyage : le Duel",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "Jeu01.dc.html": {
+      "h": 867,
+      "title": "Jeu · Le Voyage (étape 1)",
+      "w": 390,
+      "x": 0,
+      "y": 1100
+    },
+    "Jeu02.dc.html": {
+      "h": 867,
+      "title": "Jeu · Le combat commence",
+      "w": 390,
+      "x": 470,
+      "y": 1100
+    },
+    "Jeu03.dc.html": {
+      "h": 867,
+      "title": "Jeu · Une carte choisie",
+      "w": 390,
+      "x": 940,
+      "y": 1100
+    },
+    "Jeu04.dc.html": {
+      "h": 867,
+      "title": "Jeu · Les chiffres s'affrontent",
+      "w": 390,
+      "x": 1410,
+      "y": 1100
+    },
+    "Jeu05.dc.html": {
+      "h": 867,
+      "title": "Jeu · Le retournement (mi-course)",
+      "w": 390,
+      "x": 1880,
+      "y": 1100
+    },
+    "Jeu06.dc.html": {
+      "h": 867,
+      "title": "Jeu · La fin",
+      "w": 390,
+      "x": 2350,
+      "y": 1100
+    },
+    "Jeu07.dc.html": {
+      "h": 510,
+      "title": "Jeu · En taille réelle",
+      "w": 540,
+      "x": 2820,
+      "y": 1100
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "title": "1 · Voyage : l'Aventure",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Parfait.dc.html": {
+      "h": 844,
+      "title": "5 · Victoire parfaite",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "Tuto01.dc.html": {
+      "h": 867,
+      "title": "Guide · 1 Touche cette carte",
+      "w": 390,
+      "x": 0,
+      "y": 2220
+    },
+    "Tuto02.dc.html": {
+      "h": 867,
+      "title": "Guide · 2 Pose-la au centre",
+      "w": 390,
+      "x": 470,
+      "y": 2220
+    },
+    "Tuto03.dc.html": {
+      "h": 867,
+      "title": "Guide · 3 Pose-la au-dessus",
+      "w": 390,
+      "x": 940,
+      "y": 2220
+    },
+    "Tuto04.dc.html": {
+      "h": 867,
+      "title": "Guide · 4 Elle est à toi",
+      "w": 390,
+      "x": 1410,
+      "y": 2220
+    },
+    "Glisse01.dc.html": {
+      "h": 867,
+      "title": "Guide · 1 Glisse cette carte",
+      "w": 390,
+      "x": 0,
+      "y": 3480
+    },
+    "Glisse02.dc.html": {
+      "h": 867,
+      "title": "Guide · 2 Au-dessus du centre",
+      "w": 390,
+      "x": 470,
+      "y": 3480
+    },
+    "Glisse03.dc.html": {
+      "h": 867,
+      "title": "Guide · Lâchée à côté : elle revient",
+      "w": 390,
+      "x": 940,
+      "y": 3480
+    },
+    "Glisse04.dc.html": {
+      "h": 867,
+      "title": "Jeu · La case visée brille",
+      "w": 390,
+      "x": 1410,
+      "y": 3480
+    },
+    "Aventure01.dc.html": {
+      "h": 867,
+      "title": "Aventure · 1 Le Voyage",
+      "w": 390,
+      "x": 0,
+      "y": 4740
+    },
+    "Aventure02.dc.html": {
+      "h": 867,
+      "title": "Aventure · 2 Une terre, sa constellation",
+      "w": 390,
+      "x": 470,
+      "y": 4740
+    },
+    "Aventure03.dc.html": {
+      "h": 867,
+      "title": "Aventure · 3 Un coffre s'ouvre",
+      "w": 390,
+      "x": 940,
+      "y": 4740
+    },
+    "Aventure04.dc.html": {
+      "h": 867,
+      "title": "Aventure · 4 Avant le combat",
+      "w": 390,
+      "x": 1410,
+      "y": 4740
+    },
+    "Aventure05.dc.html": {
+      "h": 867,
+      "title": "Aventure · 5 Avant le boss (Quetzalcoatl)",
+      "w": 390,
+      "x": 1880,
+      "y": 4740
+    },
+    "Aventure06.dc.html": {
+      "h": 867,
+      "title": "Aventure · 6 La fin : les ★",
+      "w": 390,
+      "x": 2350,
+      "y": 4740
+    },
+    "Aventure07.dc.html": {
+      "h": 867,
+      "title": "Aventure · 7 La victoire parfaite",
+      "w": 390,
+      "x": 2820,
+      "y": 4740
+    },
+    "Aventure08.dc.html": {
+      "h": 867,
+      "title": "Aventure · 8 Le boss battu : +3 étoiles",
+      "w": 390,
+      "x": 3290,
+      "y": 4740
+    },
+    "Aventure09.dc.html": {
+      "h": 867,
+      "title": "Aventure · 9 La terre, après",
+      "w": 390,
+      "x": 3760,
+      "y": 4740
+    },
+    "Decks01.dc.html": {
+      "h": 867,
+      "title": "Mes decks · la liste",
+      "w": 390,
+      "x": 0,
+      "y": 6000
+    },
+    "Decks02.dc.html": {
+      "h": 867,
+      "title": "Mes decks · l'éditeur",
+      "w": 390,
+      "x": 470,
+      "y": 6000
+    },
+    "Decks03.dc.html": {
+      "h": 867,
+      "title": "Mes decks · régler une carte",
+      "w": 390,
+      "x": 940,
+      "y": 6000
+    },
+    "Carte01.dc.html": {
+      "h": 730,
+      "title": "Avant · normale et full art se confondent",
+      "w": 540,
+      "x": 0,
+      "y": 7260
+    },
+    "Carte02.dc.html": {
+      "h": 730,
+      "title": "Après · la fenêtre, et le full art qui la casse",
+      "w": 540,
+      "x": 620,
+      "y": 7260
+    },
+    "Carte03.dc.html": {
+      "h": 867,
+      "title": "Le Carré · les chiffres face à face",
+      "w": 390,
+      "x": 1240,
+      "y": 7260
+    },
+    "Carte04.dc.html": {
+      "h": 270,
+      "title": "La main, en taille réelle",
+      "w": 540,
+      "x": 1710,
+      "y": 7260
+    },
+    "Carte05.dc.html": {
+      "h": 867,
+      "title": "L'Atlas · la même carte",
+      "w": 390,
+      "x": 2330,
+      "y": 7260
+    },
+    "Carte06.dc.html": {
+      "h": 867,
+      "title": "En grand · un full art",
+      "w": 390,
+      "x": 2800,
+      "y": 7260
+    },
+    "Carte07.dc.html": {
+      "h": 867,
+      "title": "En grand · une élémentaire (feu)",
+      "w": 390,
+      "x": 3270,
+      "y": 7260
+    },
+    "Carte08.dc.html": {
+      "h": 867,
+      "title": "L'invocation ×10",
+      "w": 390,
+      "x": 3740,
+      "y": 7260
+    },
+    "Carte09.dc.html": {
+      "h": 620,
+      "title": "Prismatique et full art · avant (haut) / après (bas)",
+      "w": 490,
+      "x": 0,
+      "y": 8480
+    },
+    "Carte10.dc.html": {
+      "h": 250,
+      "title": "Dans l'invocation ×10 · le full art passe devant",
+      "w": 540,
+      "x": 570,
+      "y": 8480
+    },
+    "Carte11.dc.html": {
+      "h": 867,
+      "title": "3D · la carte s'incline sous le doigt",
+      "w": 390,
+      "x": 0,
+      "y": 9460
+    },
+    "Carte12.dc.html": {
+      "h": 867,
+      "title": "3D · le demi-tour",
+      "w": 390,
+      "x": 470,
+      "y": 9460
+    },
+    "Carte13.dc.html": {
+      "h": 867,
+      "title": "Le dos · la légende et le pouvoir",
+      "w": 390,
+      "x": 940,
+      "y": 9460
+    },
+    "Carte14.dc.html": {
+      "h": 867,
+      "title": "Le dos · une carte sans pouvoir",
+      "w": 390,
+      "x": 1410,
+      "y": 9460
+    },
+    "Carte15.dc.html": {
+      "h": 867,
+      "title": "Full art · le nom en arc-en-ciel (il défile)",
+      "w": 390,
+      "x": 1880,
+      "y": 9460
+    },
+    "Carte16.dc.html": {
+      "h": 867,
+      "title": "L'Atlas · la rangée des sbires",
+      "w": 390,
+      "x": 0,
+      "y": 10720
+    },
+    "Carte17.dc.html": {
+      "h": 867,
+      "title": "Un sbire en grand (Homme de feuilles, full art)",
+      "w": 390,
+      "x": 470,
+      "y": 10720
+    },
+    "Carte18.dc.html": {
+      "h": 867,
+      "title": "Son dos · sa légende",
+      "w": 390,
+      "x": 940,
+      "y": 10720
+    },
+    "Carte19.dc.html": {
+      "h": 867,
+      "title": "Les probabilités · la carte, puis sa variante",
+      "w": 390,
+      "x": 1410,
+      "y": 10720
+    },
+    "Carte20.dc.html": {
+      "h": 465,
+      "title": "Prismatique · 27/09 (haut) / 28/09 (bas), entre l'élémentaire et le full art",
+      "w": 540,
+      "x": 0,
+      "y": 11980
+    },
+    "Carte21.dc.html": {
+      "h": 867,
+      "title": "Saint Georges prismatique : le cadre irisé, le nom irisé",
+      "w": 390,
+      "x": 620,
+      "y": 11980
+    },
+    "Carte22.dc.html": {
+      "h": 867,
+      "title": "Saint Georges · la légende de Mons",
+      "w": 390,
+      "x": 1090,
+      "y": 11980
+    },
+    "Carte23.dc.html": {
+      "h": 867,
+      "title": "Le Golem · « XVIe », plus de boîte",
+      "w": 390,
+      "x": 1560,
+      "y": 11980
+    },
+    "Carte24.dc.html": {
+      "h": 400,
+      "title": "Le Voyage · les ★ s'affichent (police de secours)",
+      "w": 540,
+      "x": 2030,
+      "y": 11980
+    },
+    "Accueil01.dc.html": {
+      "h": 867,
+      "title": "Accueil · 1 Le cadeau du jour",
+      "w": 390,
+      "x": 0,
+      "y": 13230
+    },
+    "Accueil02.dc.html": {
+      "h": 867,
+      "title": "Accueil · 2 « Ton premier pack t'attend »",
+      "w": 390,
+      "x": 470,
+      "y": 13230
+    },
+    "Accueil03.dc.html": {
+      "h": 867,
+      "title": "Accueil · 3 « Il est offert : ouvre-le ! »",
+      "w": 390,
+      "x": 940,
+      "y": 13230
+    },
+    "Accueil04.dc.html": {
+      "h": 867,
+      "title": "Accueil · 4 Le pack s'ouvre (5 différentes, 3 héros au moins)",
+      "w": 390,
+      "x": 1410,
+      "y": 13230
+    },
+    "Accueil05.dc.html": {
+      "h": 867,
+      "title": "Accueil · 5 « À toi de jouer ! »",
+      "w": 390,
+      "x": 1880,
+      "y": 13230
+    },
+    "Accueil06.dc.html": {
+      "h": 867,
+      "title": "Accueil · 6 « Ton premier combat »",
+      "w": 390,
+      "x": 2350,
+      "y": 13230
+    },
+    "Accueil07.dc.html": {
+      "h": 867,
+      "title": "Accueil · 7 Le combat guidé prend le relais",
+      "w": 390,
+      "x": 2820,
+      "y": 13230
+    },
+    "Arene01.dc.html": {
+      "h": 867,
+      "title": "Voyage · les onglets ; Duel et Classé scellés (la bulle dit qui battre)",
+      "w": 390,
+      "x": 0,
+      "y": 14480
+    },
+    "Arene02.dc.html": {
+      "h": 867,
+      "title": "Duel · ta cote, la poussière du jour, ton deck",
+      "w": 390,
+      "x": 470,
+      "y": 14480
+    },
+    "Arene03.dc.html": {
+      "h": 867,
+      "title": "Duel · en combat : sa cote sous son nom",
+      "w": 390,
+      "x": 940,
+      "y": 14480
+    },
+    "Arene04.dc.html": {
+      "h": 867,
+      "title": "Duel · la fin : la cote bouge, +30 poussière",
+      "w": 390,
+      "x": 1410,
+      "y": 14480
+    },
+    "Arene05.dc.html": {
+      "h": 867,
+      "title": "Duel · tes derniers duels",
+      "w": 390,
+      "x": 1880,
+      "y": 14480
+    },
+    "Arene06.dc.html": {
+      "h": 867,
+      "title": "Classé · Aurore I, 80/100, l'échelle des rangs",
+      "w": 390,
+      "x": 2350,
+      "y": 14480
+    },
+    "Arene07.dc.html": {
+      "h": 867,
+      "title": "Classé · en combat : la marche jouée sous son nom",
+      "w": 390,
+      "x": 2820,
+      "y": 14480
+    },
+    "Arene08.dc.html": {
+      "h": 867,
+      "title": "Classé · gagné : « Tu passes Éclipse III ! »",
+      "w": 390,
+      "x": 3290,
+      "y": 14480
+    },
+    "Arene09.dc.html": {
+      "h": 867,
+      "title": "« Quitter » en classé : deux touches (c'est une défaite)",
+      "w": 390,
+      "x": 3760,
+      "y": 14480
+    },
+    "Arene10.dc.html": {
+      "h": 867,
+      "title": "La saison finie : ton meilleur rang, ta récompense",
+      "w": 390,
+      "x": 4230,
+      "y": 14480
+    },
+    "Arene11.dc.html": {
+      "h": 867,
+      "title": "Après « Recevoir » : +2 étoiles, +300, un rang de moins",
+      "w": 390,
+      "x": 4700,
+      "y": 14480
+    },
+    "Arene12.dc.html": {
+      "h": 202,
+      "title": "Les 6 emblèmes des rangs (la fabrique) : Météore → Zénith",
+      "w": 780,
+      "x": 5170,
+      "y": 14480
+    },
+    "Journee01.dc.html": {
+      "h": 867,
+      "title": "Nébuleuse · le plateau du jour : 12 objets connus d'avance",
+      "w": 390,
+      "x": 0,
+      "y": 15730
+    },
+    "Journee02.dc.html": {
+      "h": 867,
+      "title": "Entamé : ce qu'on a gagné s'éteint (l'étoile ne revient pas)",
+      "w": 390,
+      "x": 470,
+      "y": 15730
+    },
+    "Journee03.dc.html": {
+      "h": 867,
+      "title": "Vidé : « Revient demain », plus aucun objet sur le plateau",
+      "w": 390,
+      "x": 940,
+      "y": 15730
+    },
+    "Journee04.dc.html": {
+      "h": 867,
+      "title": "Présages · les 3 défis du jour (le point sur l'onglet)",
+      "w": 390,
+      "x": 1410,
+      "y": 15730
+    },
+    "Journee05.dc.html": {
+      "h": 867,
+      "title": "« Recevoir » : les pièces s'envolent vers la Nébuleuse",
+      "w": 390,
+      "x": 1880,
+      "y": 15730
+    },
+    "Journee06.dc.html": {
+      "h": 867,
+      "title": "Reçu ; le bonus des trois : une pierre de lune",
+      "w": 390,
+      "x": 2350,
+      "y": 15730
+    },
+    "Journee07.dc.html": {
+      "h": 867,
+      "title": "Le défi de la semaine : 5 jours → 3 étoiles, 200 pièces",
+      "w": 390,
+      "x": 2820,
+      "y": 15730
+    },
+    "Journee08.dc.html": {
+      "h": 867,
+      "title": "Sans pièce : « les Présages en donnent »",
+      "w": 390,
+      "x": 3290,
+      "y": 15730
+    },
+    "Collection01.dc.html": {
+      "h": 867,
+      "title": "Atlas · les éclats, au-dessus de la grille",
+      "w": 390,
+      "x": 0,
+      "y": 16980
+    },
+    "Collection02.dc.html": {
+      "h": 867,
+      "title": "Une carte qu'on n'a pas : « Obtenir · 900 éclats »",
+      "w": 390,
+      "x": 470,
+      "y": 16980
+    },
+    "Collection03.dc.html": {
+      "h": 867,
+      "title": "Une touche : « Sûr ? » (rien n'est payé)",
+      "w": 390,
+      "x": 940,
+      "y": 16980
+    },
+    "Collection04.dc.html": {
+      "h": 867,
+      "title": "Obtenue : les variantes qui manquent, leur prix (Full art : chance)",
+      "w": 390,
+      "x": 1410,
+      "y": 16980
+    },
+    "Collection05.dc.html": {
+      "h": 867,
+      "title": "Niveau maximum ; le stade III : LVL 10 et 2 pierres",
+      "w": 390,
+      "x": 1880,
+      "y": 16980
+    },
+    "Collection06.dc.html": {
+      "h": 867,
+      "title": "Les probabilités : les mêmes, et « jamais en double »",
+      "w": 390,
+      "x": 2350,
+      "y": 16980
+    },
+    "Collection07.dc.html": {
+      "h": 867,
+      "title": "Une invocation : « +5 éclats »",
+      "w": 390,
+      "x": 2820,
+      "y": 16980
+    },
+    "Collection08.dc.html": {
+      "h": 867,
+      "title": "Une ×10 : « +55 éclats » (un doublon en donne plus)",
+      "w": 390,
+      "x": 3290,
+      "y": 16980
+    },
+    "Rangs01.dc.html": {
+      "h": 867,
+      "title": "Atlas · rangé par rang : les Légendes d'abord (2 sur 8), le rang en couleur sur chaque carte",
+      "w": 390,
+      "x": 0,
+      "y": 18230
+    },
+    "Rangs02.dc.html": {
+      "h": 867,
+      "title": "Révélation · au retournement : « LÉGENDE », en or",
+      "w": 390,
+      "x": 470,
+      "y": 18230
+    },
+    "Rangs03.dc.html": {
+      "h": 867,
+      "title": "Révélation · un Héros : « HÉROS »",
+      "w": 390,
+      "x": 940,
+      "y": 18230
+    },
+    "Rangs04.dc.html": {
+      "h": 867,
+      "title": "×10 · une Légende vient au centre, sous son rang",
+      "w": 390,
+      "x": 1410,
+      "y": 18230
+    },
+    "Rangs05.dc.html": {
+      "h": 867,
+      "title": "×10 · la fin : « 1 Légende · 1 Mythe », une pastille sur chacune",
+      "w": 390,
+      "x": 1880,
+      "y": 18230
+    },
+    "Rangs06.dc.html": {
+      "h": 867,
+      "title": "La carte en grand : « LÉGENDE » dans son bandeau",
+      "w": 390,
+      "x": 2350,
+      "y": 18230
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-26T23:30:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "guide": {
+      "kind": "title1",
+      "maxW": 3360,
+      "text": "Le premier combat, guidé : on apprend en jouant",
+      "w": 240,
+      "x": 0,
+      "y": 2080
+    },
+    "jeu": {
+      "kind": "title1",
+      "maxW": 3360,
+      "text": "Dans le vrai jeu — étape 1 : le Carré des astres (captures du 27/09, 1080 × 2400)",
+      "w": 240,
+      "x": 0,
+      "y": 844
+    },
+    "titre": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Les maquettes HTML du 26/09 — la structure est validée, le look refusé",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "glisse": {
+      "kind": "title1",
+      "maxW": 1800,
+      "w": 240,
+      "x": 0,
+      "y": 3230,
+      "text": "Le glisser-déposer (27/09, en ligne) : la carte suit le doigt, la case visée brille"
+    },
+    "aventure": {
+      "kind": "title1",
+      "maxW": 4150,
+      "w": 240,
+      "x": 0,
+      "y": 4480,
+      "text": "Étape 2 — l'Aventure dans le vrai jeu (en ligne le 27/09, 15 h 36)"
+    },
+    "decks": {
+      "kind": "title1",
+      "maxW": 1400,
+      "w": 240,
+      "x": 0,
+      "y": 5740,
+      "text": "Mes decks (en ligne le 27/09, 18 h 22)"
+    },
+    "carte": {
+      "kind": "title1",
+      "maxW": 4130,
+      "w": 240,
+      "x": 0,
+      "y": 7000,
+      "text": "La carte du Carré, v6 — en ligne le 27/09, 21 h 53 : les chiffres sur le cadre, le full art casse la fenêtre"
+    },
+    "prisma": {
+      "kind": "title1",
+      "maxW": 1110,
+      "w": 240,
+      "x": 0,
+      "y": 8220,
+      "text": "Le prismatique plus discret, le nom arc-en-ciel au full art (en ligne le 27/09, 22 h 24)"
+    },
+    "c3d": {
+      "kind": "title1",
+      "maxW": 2270,
+      "w": 240,
+      "x": 0,
+      "y": 9200,
+      "text": "La carte en 3D : on la tourne du doigt, son dos dit sa légende (en ligne le 27/09, 22 h 24)"
+    },
+    "sbires": {
+      "kind": "title1",
+      "maxW": 1800,
+      "w": 240,
+      "x": 0,
+      "y": 10460,
+      "text": "Les sbires dans les invocations, les rangs des héros (en ligne le 27/09, 23 h 58)"
+    },
+    "prisma2": {
+      "kind": "title1",
+      "maxW": 2570,
+      "w": 240,
+      "x": 0,
+      "y": 11720,
+      "text": "Le prismatique irisé, les étoiles lisibles, Saint Georges (en ligne le 28/09, 0 h 11)"
+    },
+    "accueil": {
+      "kind": "title1",
+      "maxW": 3200,
+      "w": 240,
+      "x": 0,
+      "y": 12970,
+      "text": "Le premier pack offert, guidé — le tout premier lancement (en ligne le 28/09, 8 h 36)"
+    },
+    "arene": {
+      "kind": "title1",
+      "maxW": 5950,
+      "w": 240,
+      "x": 0,
+      "y": 14220,
+      "text": "Étape 3 — le Duel et le Classé dans le vrai jeu (en ligne le 28/09, 14 h 53)"
+    },
+    "journee": {
+      "kind": "title1",
+      "maxW": 3680,
+      "w": 240,
+      "x": 0,
+      "y": 15470,
+      "text": "⑧ lot A — la journée : le plateau du jour, les pièces des défis, les Présages (en ligne le 28/09, 16 h 40)"
+    },
+    "collection": {
+      "kind": "title1",
+      "maxW": 3680,
+      "w": 240,
+      "x": 0,
+      "y": 16720,
+      "text": "⑧ lot B — la collection : les éclats, « Obtenir », jamais de Full art en double, l'évolution plus longue (en ligne le 28/09, 18 h 48)"
+    },
+    "rangs": {
+      "kind": "title1",
+      "maxW": 2750,
+      "w": 240,
+      "x": 0,
+      "y": 17970,
+      "text": "Le rang se voit (Héros, Mythe, Légende) ; l'ouverture sans saccade (captures du 28/09, à valider)"
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Chapitre.dc.html",
+    "AvantCombat.dc.html",
+    "Carre.dc.html",
+    "Parfait.dc.html",
+    "Duel.dc.html",
+    "Classe.dc.html",
+    "Jeu01.dc.html",
+    "Jeu02.dc.html",
+    "Jeu03.dc.html",
+    "Jeu04.dc.html",
+    "Jeu05.dc.html",
+    "Jeu06.dc.html",
+    "Jeu07.dc.html",
+    "Tuto01.dc.html",
+    "Tuto02.dc.html",
+    "Tuto03.dc.html",
+    "Tuto04.dc.html",
+    "Glisse01.dc.html",
+    "Glisse02.dc.html",
+    "Glisse03.dc.html",
+    "Glisse04.dc.html",
+    "Aventure01.dc.html",
+    "Aventure02.dc.html",
+    "Aventure03.dc.html",
+    "Aventure04.dc.html",
+    "Aventure05.dc.html",
+    "Aventure06.dc.html",
+    "Aventure07.dc.html",
+    "Aventure08.dc.html",
+    "Aventure09.dc.html",
+    "Decks01.dc.html",
+    "Decks02.dc.html",
+    "Decks03.dc.html",
+    "Carte01.dc.html",
+    "Carte02.dc.html",
+    "Carte03.dc.html",
+    "Carte04.dc.html",
+    "Carte05.dc.html",
+    "Carte06.dc.html",
+    "Carte07.dc.html",
+    "Carte08.dc.html",
+    "Carte09.dc.html",
+    "Carte10.dc.html",
+    "Carte11.dc.html",
+    "Carte12.dc.html",
+    "Carte13.dc.html",
+    "Carte14.dc.html",
+    "Carte15.dc.html",
+    "Carte16.dc.html",
+    "Carte17.dc.html",
+    "Carte18.dc.html",
+    "Carte19.dc.html",
+    "Carte20.dc.html",
+    "Carte21.dc.html",
+    "Carte22.dc.html",
+    "Carte23.dc.html",
+    "Carte24.dc.html",
+    "Accueil01.dc.html",
+    "Accueil02.dc.html",
+    "Accueil03.dc.html",
+    "Accueil04.dc.html",
+    "Accueil05.dc.html",
+    "Accueil06.dc.html",
+    "Accueil07.dc.html",
+    "Arene01.dc.html",
+    "Arene02.dc.html",
+    "Arene03.dc.html",
+    "Arene04.dc.html",
+    "Arene05.dc.html",
+    "Arene06.dc.html",
+    "Arene07.dc.html",
+    "Arene08.dc.html",
+    "Arene09.dc.html",
+    "Arene10.dc.html",
+    "Arene11.dc.html",
+    "Arene12.dc.html",
+    "Journee01.dc.html",
+    "Journee02.dc.html",
+    "Journee03.dc.html",
+    "Journee04.dc.html",
+    "Journee05.dc.html",
+    "Journee06.dc.html",
+    "Journee07.dc.html",
+    "Journee08.dc.html",
+    "Collection01.dc.html",
+    "Collection02.dc.html",
+    "Collection03.dc.html",
+    "Collection04.dc.html",
+    "Collection05.dc.html",
+    "Collection06.dc.html",
+    "Collection07.dc.html",
+    "Collection08.dc.html",
+    "Rangs01.dc.html",
+    "Rangs02.dc.html",
+    "Rangs03.dc.html",
+    "Rangs04.dc.html",
+    "Rangs05.dc.html",
+    "Rangs06.dc.html"
+  ],
+  "pages": [],
+  "title": "Le Voyage — maquettes"
+}

@@ -1,0 +1,7 @@
+/* 2 · Le Palet des légendes */
+.pl-rang{display:flex;align-items:center;gap:4px;flex:none;min-height:40px;padding-inline:2px}
+.pl-rang .carte{width:30px}
+.pl-lib{font:600 14px var(--ui);color:var(--toi);margin-right:6px;white-space:nowrap}
+.pl-lib.lui{color:var(--lui)}
+.pl-cadre{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden}
+.pl-canvas{touch-action:none;display:block}

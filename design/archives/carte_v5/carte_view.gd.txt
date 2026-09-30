@@ -1,0 +1,992 @@
+class_name CarteView
+extends Control
+
+# ─────────────────────────────────────────────────────────────
+# UNE CARTE — la même que la maquette « Six Variantes » (v5).
+#
+# 🔴 Le CADRE est du CODE, l'illustration est générée : le cadre
+# porte l'identité du jeu, la variante n'est qu'une matière.
+# Tout se mesure en « u » = 1 % de la largeur (les cqw de la
+# maquette) : la carte est la même en miniature et en grand.
+# ─────────────────────────────────────────────────────────────
+
+signal touchee
+
+const SH_CADRE := preload("res://cartes/shaders/cadre.gdshader")
+const SH_ART := preload("res://cartes/shaders/art.gdshader")
+const SH_REFLET := preload("res://cartes/shaders/reflet.gdshader")
+const SH_NOM := preload("res://cartes/shaders/nom_irise.gdshader")
+const SH_BORD_ARC := preload("res://cartes/shaders/bord_arc.gdshader")
+const TEX_COIN := preload("res://cartes/svg/coin.svg")
+const TEX_EMBLEME := preload("res://cartes/svg/embleme.svg")
+const TEX_PAILLETTES := preload("res://cartes/paillettes.png")
+
+const LAITON := Color(0.769, 0.627, 0.384)
+
+# La lumière au repos parcourt ces quatre points en dix secondes
+# (x, y de la lumière, et sa force) — la même boucle que la maquette.
+const REPOS := [
+	Vector3(0.30, 0.28, 0.55), Vector3(0.82, 0.18, 0.95),
+	Vector3(0.70, 0.66, 0.60), Vector3(0.18, 0.80, 0.95),
+]
+
+var h: Dictionary = {}
+var stade := 1
+var variante := "base"
+var largeur := 486.0
+var recto := true
+var interactif := false   # vue en grand : la lumière suit le doigt
+# Le Carré des astres (FEATURES ②, 27/09) : ni ultime, ni PV/ATT, ni pays ni ruban — ce qui
+# venait de La Poussée. L'illustration descend jusqu'en bas ; les chiffres du Carré sont posés
+# par-dessus (carre/carte_carre.gd). Les six variantes restent les mêmes.
+var combat := false
+var lumiere := Vector2(0.3, 0.28)
+var force := 0.55
+
+var _u := 4.86
+var _pal: Dictionary = {}
+var _R: Dictionary = {}
+var _cadre: ColorRect
+var _art: TextureRect
+var _reflet: ColorRect
+var _nom: Label
+var _recto: Array = []
+var _verso: Array = []
+var _t := 0.0
+var _suivi := false
+var _dos: Dictionary = {}
+var _fx_sous: Node2D     # sous le contenu de la carte : ce que seule la bande du cadre montre
+var _fx: CarteFx         # par-dessus tout : particules, éclairs, brume
+var _verif := 0.0
+var _appui := Vector2.ZERO
+var _glisse := 0.0
+
+static var _polices := {}
+static var _degrades := {}
+
+
+# ─────────────────────────────────────────────────────────────
+# Les polices : Castoro, comme tout le jeu (le look « Conte mystique ») —
+# le romain pour les noms et les chiffres, l'italique pour les ultimes, le
+# Titling (des capitales dessinées pour ça) pour les petites mentions.
+# ─────────────────────────────────────────────────────────────
+
+static func police(role: String, espacement: int = 0) -> Font:
+	var cle := "%s_%d" % [role, espacement]
+	if _polices.has(cle):
+		return _polices[cle]
+	var fv := FontVariation.new()
+	var graisse := 0
+	match role:
+		"titre":
+			fv.base_font = load("res://polices/Castoro.ttf")
+			graisse = 600
+		"italique":
+			fv.base_font = load("res://polices/Castoro-Italic.ttf")
+			graisse = 500
+		"gras":
+			fv.base_font = load("res://polices/CastoroTitling-Regular.ttf")
+		"fort":
+			fv.base_font = load("res://polices/Castoro.ttf")
+			graisse = 700
+		_:
+			fv.base_font = load("res://polices/Castoro.ttf")
+	if graisse > 0:
+		var ts := TextServerManager.get_primary_interface()
+		fv.variation_opentype = {ts.name_to_tag("wght"): graisse}
+	fv.spacing_glyph = espacement
+	_polices[cle] = fv
+	return fv
+
+
+# ─────────────────────────────────────────────────────────────
+# Les matières : une palette par variante (et par type, pour l'élémentaire)
+# ─────────────────────────────────────────────────────────────
+
+static func palette(v: String, type_id: String) -> Dictionary:
+	var ty: Dictionary = GS.TYPES[type_id]
+	var e: Color = ty["elt"]
+	var ec: Color = ty["clair"]
+	var es: Color = ty["sombre"]
+	var p := {
+		"angle": 160.0, "radial": false, "echelle": 1.0, "spectre": 0.0, "brume": 0.0,
+		"brume_col": Color(0.72, 0.74, 0.78),
+		"cadre": [[0.0, Color("#2c2931")], [1.0, Color("#1c1a20")]],
+		"gravure": Color(LAITON, 0.10),
+		"fond": Color("#16141a"), "plaque": Color("#24222a"), "keyline": Color(LAITON, 0.42),
+		"coin": Color(LAITON, 0.85), "encre": Color("#ece6dc"), "sourd": Color("#9c94a0"),
+		"ult": Color(0.925, 0.902, 0.863, 0.05),
+		"med_bord": [Color("#b8955a"), Color("#6d5630")], "med_fond": [Color("#25222a"), Color("#17151a")],
+		"gemme": [Color("#6a6470"), Color("#3b3740")], "gemme_lueur": Color(0, 0, 0, 0),
+		"lueur": Color(0, 0, 0, 0), "lueur_u": 5.0, "balayage": Color(0, 0, 0, 0), "eclat": 0.06,
+		"art": {}, "holo": 0.0, "nom_irise": false,
+		"arc": 0.0, "plein": false,
+	}
+	match v:
+		"or":
+			p["angle"] = 125.0
+			p["cadre"] = [[0.0, Color("#6f5220")], [0.20, Color("#d7b86e")], [0.38, Color("#8c6a2d")],
+				[0.55, Color("#f2dd9f")], [0.72, Color("#9a7634")], [0.88, Color("#cfa95f")], [1.0, Color("#7a5a24")]]
+			p["gravure"] = Color(1.0, 0.933, 0.745, 0.20)
+			p["fond"] = Color("#1b1710")
+			p["plaque"] = Color("#372b13")
+			p["keyline"] = Color(0.949, 0.867, 0.624, 0.72)
+			p["coin"] = Color("#fff0c2")
+			p["encre"] = Color("#f6e8c2")
+			p["sourd"] = Color("#c9b384")
+			p["ult"] = Color(0.949, 0.867, 0.624, 0.08)
+			p["med_bord"] = [Color("#fbe7a8"), Color("#a57f35")]
+			p["med_fond"] = [Color("#2a2110"), Color("#171208")]
+			p["gemme"] = [Color("#ffe39a"), Color("#d49a2a")]
+			p["gemme_lueur"] = Color(1.0, 0.824, 0.431, 0.8)
+			p["balayage"] = Color(1.0, 0.95, 0.80, 0.30)
+			p["art"] = {"sepia": 0.22, "saturation": 1.08}
+		"ombre":
+			# Graphite et fumée : une ombre n'a pas de couleur. (Violette jusqu'au 23/09 :
+			# elle se confondait avec l'élémentaire esprit.)
+			p["radial"] = true
+			p["cadre"] = [[0.0, Color("#2b2d33")], [0.62, Color("#0a0a0c")], [1.0, Color("#0a0a0c")]]
+			p["gravure"] = Color(0.78, 0.8, 0.85, 0.09)
+			p["fond"] = Color("#0c0c0e")
+			p["plaque"] = Color("#18191c")
+			p["keyline"] = Color(0.75, 0.77, 0.82, 0.5)
+			p["coin"] = Color("#b9bec8")
+			p["encre"] = Color("#e6e7ea")
+			p["sourd"] = Color("#8d9099")
+			p["ult"] = Color(0.78, 0.8, 0.85, 0.07)
+			p["med_bord"] = [Color("#cfd3db"), Color("#34363c")]
+			p["med_fond"] = [Color("#18191c"), Color("#0b0b0d")]
+			p["gemme"] = [Color("#e9ebef"), Color("#44474e")]
+			p["gemme_lueur"] = Color(0.85, 0.87, 0.92, 0.6)
+			p["lueur"] = Color(0.62, 0.64, 0.7, 0.18)
+			p["lueur_u"] = 6.0
+			p["brume"] = 0.7
+			p["art"] = {"gris": 0.72, "luminosite": 0.74, "contraste": 1.2, "vignette": 0.85}
+		"elem":
+			p["angle"] = 150.0
+			p["cadre"] = [[0.0, es], [0.42, e], [0.72, es], [1.0, ec]]
+			p["gravure"] = Color(1, 1, 1, 0.10)
+			var noir := Color("#0d0c10")
+			p["fond"] = es.lerp(noir, 0.45)
+			p["plaque"] = e.lerp(Color("#1a1820"), 0.62).lerp(es.lerp(noir, 0.30), 0.5)
+			p["keyline"] = Color(ec, 0.7)
+			p["coin"] = ec
+			p["encre"] = Color("#f4f1ea")
+			p["sourd"] = ec.lerp(Color("#8a8490"), 0.35)
+			p["ult"] = Color(e, 0.14)
+			p["med_bord"] = [ec, es]
+			p["med_fond"] = [es.lerp(Color("#15131a"), 0.4), Color("#0f0e12")]
+			p["gemme"] = [ec, e]
+			p["gemme_lueur"] = e
+			p["lueur"] = Color(e, 0.4)
+		"prisme":
+			p["angle"] = 125.0
+			p["echelle"] = 2.6
+			p["spectre"] = 0.8
+			p["cadre"] = [[0.0, Color("#aab2be")], [0.14, Color("#f4f6f9")], [0.30, Color("#8a929f")],
+				[0.46, Color("#eef1f5")], [0.62, Color("#959dab")], [0.78, Color("#f7f9fb")], [1.0, Color("#a1a9b6")]]
+			p["gravure"] = Color(1, 1, 1, 0.16)
+			p["fond"] = Color("#111217")
+			p["plaque"] = Color("#1d2027")
+			p["keyline"] = Color(0.941, 0.957, 1.0, 0.8)
+			p["coin"] = Color.WHITE
+			p["encre"] = Color("#f5f7fb")
+			p["sourd"] = Color("#b9bfcb")
+			p["ult"] = Color(0.047, 0.051, 0.071, 0.74)
+			p["med_bord"] = [Color("#ffb0c0"), Color("#8ad8ff")]
+			p["med_fond"] = [Color("#1d2027"), Color("#111317")]
+			p["gemme"] = [Color("#ff8a8a"), Color("#8af0ff")]
+			p["gemme_lueur"] = Color(0.784, 0.863, 1.0, 0.9)
+			p["lueur"] = Color(0.745, 0.824, 1.0, 0.35)
+			p["eclat"] = 0.10
+			p["holo"] = 1.0
+			p["nom_irise"] = true
+		"full":
+			# Le full art : l'illustration peinte couvre toute la carte, les textes
+			# sont posés sur du verre sombre, un arc-en-ciel tourne sur le bord
+			# (la maquette v2, « géniaux » — Maxim).
+			p["plein"] = true
+			p["arc"] = 1.0
+			p["gravure"] = Color(0, 0, 0, 0)
+			p["fond"] = Color(0, 0, 0, 0)
+			p["plaque"] = Color(0.04, 0.03, 0.055, 0.5)
+			p["keyline"] = Color(1, 1, 1, 0.28)
+			p["coin"] = Color(1, 1, 1, 0.9)
+			p["encre"] = Color.WHITE
+			p["sourd"] = Color(1, 1, 1, 0.82)
+			p["ult"] = Color(0.04, 0.03, 0.055, 0.56)
+			p["med_bord"] = [Color(1, 1, 1, 0.9), Color(1, 1, 1, 0.35)]
+			p["med_fond"] = [Color(0.047, 0.04, 0.063, 0.62), Color(0.047, 0.04, 0.063, 0.62)]
+			p["gemme"] = [Color.WHITE, Color("#bfd6ff")]
+			p["gemme_lueur"] = Color(1, 1, 1, 0.95)
+			p["lueur"] = Color(1, 1, 1, 0.28)
+			p["lueur_u"] = 6.0
+			p["eclat"] = 0.10
+		"dos":
+			p["cadre"] = [[0.0, Color("#15131a")], [1.0, Color("#15131a")]]
+			p["gravure"] = Color(0, 0, 0, 0)
+	return p
+
+
+# Le dos trahit un peu la variante : on devine ce qu'on a tiré avant de retourner
+# la carte. La base garde le dos de la maquette ; les autres y ajoutent une touche.
+static func dos(v: String, type_id: String) -> Dictionary:
+	var d := {"laiton": LAITON, "embleme": LAITON, "lueur": Color(0, 0, 0, 0), "lueur_u": 5.0,
+		"brume": 0.0, "brume_col": Color(0.72, 0.74, 0.78), "balayage": Color(0, 0, 0, 0), "irise": false}
+	match v:
+		"or":
+			d["laiton"] = Color("#e8c877")
+			d["embleme"] = Color("#ffe39a")
+			d["lueur"] = Color(1.0, 0.8, 0.4, 0.22)
+			d["balayage"] = Color(1.0, 0.92, 0.7, 0.35)
+		"ombre":
+			d["laiton"] = Color("#9ea3ad")
+			d["embleme"] = Color("#c9cdd5")
+			d["lueur"] = Color(0.62, 0.64, 0.7, 0.22)
+			d["lueur_u"] = 6.0
+			d["brume"] = 0.8
+		"elem":
+			# le halo de l'élémentaire, qui déborde un peu sur les côtés, à la couleur du type
+			var ty: Dictionary = GS.TYPES[type_id]
+			d["lueur"] = Color(ty["elt"], 0.5)
+			d["embleme"] = LAITON.lerp(ty["clair"], 0.35)
+		"prisme":
+			d["laiton"] = Color("#e8ecf2")
+			d["embleme"] = Color("#f5f7fb")
+			d["lueur"] = Color(0.745, 0.824, 1.0, 0.4)
+			d["irise"] = true
+		"full":
+			# le plus rare : un dos blanc, irisé, qui rayonne
+			d["laiton"] = Color("#f5f7fb")
+			d["embleme"] = Color.WHITE
+			d["lueur"] = Color(1, 1, 1, 0.5)
+			d["lueur_u"] = 7.0
+			d["balayage"] = Color(1, 1, 1, 0.4)
+			d["irise"] = true
+	return d
+
+
+static func _degrade(cle: String, arrets: Array) -> GradientTexture1D:
+	if _degrades.has(cle):
+		return _degrades[cle]
+	var g := Gradient.new()
+	var o := PackedFloat32Array()
+	var c := PackedColorArray()
+	for a in arrets:
+		o.append(float(a[0]))
+		c.append(a[1])
+	g.offsets = o
+	g.colors = c
+	var tex := GradientTexture1D.new()
+	tex.gradient = g
+	tex.width = 256
+	_degrades[cle] = tex
+	return tex
+
+
+# ─────────────────────────────────────────────────────────────
+# Construction
+# ─────────────────────────────────────────────────────────────
+
+func configurer(p_h: Dictionary, p_stade: int, p_variante: String, p_largeur: float, p_recto: bool = true) -> void:
+	h = p_h
+	stade = p_stade
+	variante = p_variante
+	largeur = p_largeur
+	recto = p_recto
+	_u = largeur / 100.0
+	size = Vector2(largeur, largeur * 1.4)
+	custom_minimum_size = size
+	pivot_offset = size * 0.5
+	mouse_filter = Control.MOUSE_FILTER_STOP if interactif else Control.MOUSE_FILTER_PASS
+	for c in get_children():
+		remove_child(c)
+		c.queue_free()
+	_recto.clear()
+	_verso.clear()
+	_pal = palette(variante, str(h["type"]))
+	_dos = dos(variante, str(h["type"]))
+	_mise_en_page()
+	_construire_cadre()
+	_fx_sous = Node2D.new()
+	add_child(_fx_sous)
+	_construire_recto()
+	_construire_verso()
+	_fx = CarteFx.new()
+	add_child(_fx)
+	_fx.configurer(_nature_fx(), size, _R["image"], 3.8 * _u, _fx_sous)
+	_reflet = ColorRect.new()
+	_reflet.size = size
+	_reflet.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var mr := ShaderMaterial.new()
+	mr.shader = SH_REFLET
+	mr.set_shader_parameter("taille", size)
+	mr.set_shader_parameter("rayon", 4.6 * _u)
+	mr.set_shader_parameter("eclat", _pal["eclat"])
+	mr.set_shader_parameter("balayage", _pal["balayage"])
+	_reflet.material = mr
+	add_child(_reflet)
+	montrer_recto(recto)
+	_appliquer_lumiere()
+
+
+func montrer_recto(v: bool) -> void:
+	recto = v
+	for n in _recto:
+		n.visible = v
+	for n in _verso:
+		n.visible = not v
+	var mc := _cadre.material as ShaderMaterial
+	var pal: Dictionary = _pal if v else palette("dos", "aucun")
+	mc.set_shader_parameter("degrade", _degrade((variante + str(h["type"])) if v else "dos", pal["cadre"]))
+	mc.set_shader_parameter("angle_deg", pal["angle"])
+	mc.set_shader_parameter("radial", pal["radial"])
+	mc.set_shader_parameter("echelle", pal["echelle"])
+	mc.set_shader_parameter("gravure_col", pal["gravure"])
+	mc.set_shader_parameter("lueur_col", pal["lueur"] if v else _dos["lueur"])
+	mc.set_shader_parameter("lueur_taille", float(pal["lueur_u"] if v else _dos["lueur_u"]) * _u)
+	mc.set_shader_parameter("brume", pal["brume"] if v else _dos["brume"])
+	mc.set_shader_parameter("brume_col", pal["brume_col"] if v else _dos["brume_col"])
+	mc.set_shader_parameter("spectre", pal["spectre"] if v else 0.0)
+	if _reflet != null:
+		(_reflet.material as ShaderMaterial).set_shader_parameter("balayage", pal["balayage"] if v else _dos["balayage"])
+	if _fx != null:
+		_fx.set_face(v)
+
+
+# Quels effets vivent sur cette carte.
+func _nature_fx() -> String:
+	match variante:
+		"ombre":
+			return "ombre"
+		"prisme":
+			return "prisme"
+		"full":
+			return "full"
+		"elem":
+			return "" if str(h["type"]) == "aucun" else str(h["type"])
+	return ""
+
+
+func _mise_en_page() -> void:
+	var u := _u
+	var hh := 140.0 * u
+	var x0 := 6.8 * u
+	var lw := 86.4 * u
+	_R["contenu"] = Rect2(3.8 * u, 3.8 * u, 92.4 * u, 132.4 * u)
+	_R["plaque"] = Rect2(x0, x0, lw, 15.9 * u)
+	var pied_y := hh - x0 - 13.6 * u
+	_R["pied"] = Rect2(x0, pied_y, lw, 13.6 * u)
+	var ult_y := pied_y - 1.8 * u - 13.0 * u
+	_R["ult"] = Rect2(x0, ult_y, lw, 13.0 * u)
+	var art_y := x0 + 15.9 * u + 1.8 * u
+	var art_bas := ult_y - 5.65 * u
+	if combat:
+		art_bas = hh - x0
+		_R["ult"] = Rect2(x0, hh + 50.0 * u, lw, 0.0)
+		_R["pied"] = Rect2(x0, hh + 50.0 * u, lw, 0.0)
+	_R["art"] = Rect2(x0, art_y, lw, art_bas - art_y)
+	_R["ruban_y"] = art_bas + 1.8 * u - 4.6 * u
+	_R["medaillon"] = Vector2(x0 + lw - 2.0 * u - 4.7 * u, x0 + 15.9 * u * 0.5)
+	# l'image : dans sa fenêtre, ou sur toute la carte (full art)
+	_R["image"] = Rect2(Vector2.ZERO, Vector2(100.0 * u, hh)) if bool(_pal["plein"]) else _R["art"]
+
+
+func _construire_cadre() -> void:
+	var m := 8.0 * _u
+	_cadre = ColorRect.new()
+	_cadre.position = Vector2(-m, -m)
+	_cadre.size = size + Vector2(2 * m, 2 * m)
+	_cadre.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var mc := ShaderMaterial.new()
+	mc.shader = SH_CADRE
+	mc.set_shader_parameter("taille", size)
+	mc.set_shader_parameter("marge", m)
+	mc.set_shader_parameter("rayon", 4.6 * _u)
+	mc.set_shader_parameter("centre_degrade", size * 0.5)
+	mc.set_shader_parameter("gravure_pas", 1.1 * _u)
+	mc.set_shader_parameter("gravure_trait", 0.28 * _u)
+	mc.set_shader_parameter("lueur_taille", float(_pal["lueur_u"]) * _u)
+	mc.set_shader_parameter("ombre_dy", 3.0 * _u)
+	mc.set_shader_parameter("ombre_flou", 7.0 * _u)
+	_cadre.material = mc
+	add_child(_cadre)
+
+
+func _noeud_dessin(f: Callable, pour_recto: bool) -> Control:
+	var c := Control.new()
+	c.size = size
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	c.draw.connect(f.bind(c))
+	add_child(c)
+	(_recto if pour_recto else _verso).append(c)
+	return c
+
+
+func _label(texte: String, role: String, taille_u: float, col: Color, rect: Rect2,
+		align := HORIZONTAL_ALIGNMENT_LEFT, espacement_em := 0.0) -> Label:
+	var s := maxi(6, int(round(taille_u * _u)))
+	var l := Label.new()
+	l.text = texte
+	l.add_theme_font_override("font", police(role, int(round(espacement_em * s))))
+	l.add_theme_font_size_override("font_size", s)
+	l.add_theme_color_override("font_color", col)
+	l.position = rect.position
+	l.size = rect.size
+	l.horizontal_alignment = align
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.clip_text = true
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(l)
+	_recto.append(l)
+	return l
+
+
+func _largeur_texte(texte: String, role: String, taille_u: float, espacement_em := 0.0) -> float:
+	var s := maxi(6, int(round(taille_u * _u)))
+	return police(role, int(round(espacement_em * s))).get_string_size(texte, HORIZONTAL_ALIGNMENT_LEFT, -1, s).x
+
+
+# La taille (en u) qui fait tenir le texte dans la largeur donnée, sans jamais
+# dépasser la taille voulue : un nom long rapetisse au lieu d'être coupé.
+func _taille_pour(texte: String, role: String, taille_u: float, largeur: float, espacement_em := 0.0) -> float:
+	var w := _largeur_texte(texte, role, taille_u, espacement_em)
+	return taille_u if w <= largeur else taille_u * largeur / w * 0.98
+
+
+func _construire_recto() -> void:
+	var pal := _pal
+	# 🔴 Le full art peint l'image SOUS tout le reste (verre, textes, médaillons) :
+	#    posée après le fond, elle les recouvrait.
+	if pal["plein"]:
+		_ajouter_image()
+	_noeud_dessin(_dessiner_fond, true)
+	if not pal["plein"]:
+		_ajouter_image()
+	_construire_textes()
+
+
+# L'illustration, recadrée : l'image couvre sa fenêtre (ou la carte entière, en
+# full art), et « cadrage » dit quelle hauteur on garde (la tête est haut dans
+# ces peintures).
+func _ajouter_image() -> void:
+	var u := _u
+	var pal := _pal
+	var ar: Rect2 = _R["image"]
+	var plein: bool = pal["plein"]
+	_art = TextureRect.new()
+	_art.position = ar.position
+	_art.size = ar.size
+	_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_art.stretch_mode = TextureRect.STRETCH_SCALE
+	_art.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if h.get("sbire", false):
+		_art.free()
+		_art = null
+		_image_sbire(ar)
+		return
+	var chemin := "res://cartes/%s-%d.jpg" % [h["id"], stade]
+	# 🔴 Une petite carte (la grille, le ×10) prend la vignette (480 × 600) : l'illustration
+	#    pleine (800 × 1000) coûtait 25 à 85 ms à charger par carte, et 4 Mo de mémoire.
+	var vignette := "res://cartes/min/%s-%d.jpg" % [h["id"], stade]
+	if largeur <= 520.0 and ResourceLoader.exists(vignette):
+		chemin = vignette
+	if ResourceLoader.exists(chemin):
+		_art.texture = load(chemin)
+	else:
+		push_error("Illustration manquante : %s" % chemin)
+	var ma := ShaderMaterial.new()
+	ma.shader = SH_ART
+	ma.set_shader_parameter("taille", ar.size)
+	ma.set_shader_parameter("rayon", (4.6 if plein else 1.6) * u)
+	ma.set_shader_parameter("region", _region(ar.size))
+	for k in (pal["art"] as Dictionary).keys():
+		ma.set_shader_parameter(k, pal["art"][k])
+	ma.set_shader_parameter("holo", pal["holo"])
+	ma.set_shader_parameter("paillettes", TEX_PAILLETTES)
+	ma.set_shader_parameter("arc", pal["arc"])
+	ma.set_shader_parameter("pas_raies", 1.6 * u)
+	_art.material = ma
+	add_child(_art)
+	_recto.append(_art)
+	if plein:
+		# l'arc-en-ciel qui tourne sur le bord
+		var bord := ColorRect.new()
+		bord.size = size
+		bord.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var mb := ShaderMaterial.new()
+		mb.shader = SH_BORD_ARC
+		mb.set_shader_parameter("taille", size)
+		mb.set_shader_parameter("rayon", 4.6 * u)
+		mb.set_shader_parameter("largeur", 2.4 * u)
+		bord.material = mb
+		add_child(bord)
+		_recto.append(bord)
+
+
+func _construire_textes() -> void:
+	var u := _u
+	var pal := _pal
+	# Par-dessus l'illustration : son liseré, les rivets, le ruban — le rôle seul.
+	var ruban_txt := str(h["role"]).to_upper()
+	var t_ruban := _taille_pour(ruban_txt, "gras", 3.1, 72.0 * u, 0.16)
+	var ruban_w := _largeur_texte(ruban_txt, "gras", t_ruban, 0.16) + 8.0 * u
+	_R["ruban"] = Rect2(size.x * 0.5 - ruban_w * 0.5, _R["ruban_y"], ruban_w, 6.65 * u)
+	_noeud_dessin(_dessiner_dessus, true)
+
+	# Les textes
+	var pl: Rect2 = _R["plaque"]
+	var place := pl.size.x - 16.0 * u
+	_nom = _label(str(h["nom"]), "titre", _taille_pour(str(h["nom"]), "titre", 6.8, place), pal["encre"],
+		Rect2(pl.position.x + 2.6 * u, pl.position.y + 0.8 * u, place, 8.6 * u))
+	if pal["nom_irise"]:
+		var mn := ShaderMaterial.new()
+		mn.shader = SH_NOM
+		_nom.material = mn
+	var formes: Array = h["formes"]
+	var forme_txt := str(formes[stade - 1]).to_upper()
+	# la forme laisse la place des pastilles du stade, derrière elle
+	var t_forme := _taille_pour(forme_txt, "gras", 3.3, place - (formes.size() * 2.6 + 1.6) * u, 0.1)
+	_R["forme_w"] = _largeur_texte(forme_txt, "gras", t_forme, 0.1)
+	_label(forme_txt, "gras", t_forme, pal["sourd"],
+		Rect2(pl.position.x + 2.6 * u, pl.position.y + 9.27 * u, place, 4.95 * u), HORIZONTAL_ALIGNMENT_LEFT, 0.1)
+	var rb: Rect2 = _R["ruban"]
+	if not combat:
+		_label(ruban_txt, "gras", t_ruban, pal["encre"], rb, HORIZONTAL_ALIGNMENT_CENTER, 0.16)
+		_construire_ult_et_pied()
+
+	# L'icône du type, dans son médaillon
+	var ic := TextureRect.new()
+	ic.texture = load("res://cartes/svg/type-%s.svg" % h["type"])
+	ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ic.stretch_mode = TextureRect.STRETCH_SCALE
+	ic.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	ic.size = Vector2(5.4 * u, 5.4 * u)
+	ic.position = (_R["medaillon"] as Vector2) - ic.size * 0.5
+	ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(ic)
+	_recto.append(ic)
+
+	_coins(pal["coin"], true)
+
+
+func _construire_ult_et_pied() -> void:
+	var u := _u
+	var pal := _pal
+	var ul: Rect2 = _R["ult"]
+	var rt := RichTextLabel.new()
+	rt.bbcode_enabled = true
+	rt.scroll_active = false
+	rt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rt.position = ul.position + Vector2(2.4 * u, 1.6 * u)
+	rt.size = ul.size - Vector2(4.8 * u, 2.6 * u)
+	var s_ult := maxi(6, int(round(3.6 * u)))
+	rt.add_theme_font_override("normal_font", police("moyen"))
+	rt.add_theme_font_override("italics_font", police("italique"))
+	rt.add_theme_font_size_override("normal_font_size", s_ult)
+	rt.add_theme_font_size_override("italics_font_size", s_ult)
+	rt.add_theme_color_override("default_color", pal["encre"])
+	rt.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rt.text = "[i]%s[/i] — %s" % [h["ult_nom"], h["ult"]]
+	add_child(rt)
+	_recto.append(rt)
+
+	# Les chiffres
+	var pd: Rect2 = _R["pied"]
+	var bou := Rect2(pd.position, Vector2(13.0 * u, pd.size.y))
+	var los := Rect2(Vector2(pd.end.x - 13.0 * u, pd.position.y), Vector2(13.0 * u, pd.size.y))
+	for paire in [[bou, str(h["pv"]), "PV"], [los, str(h["att"]), "ATT"]]:
+		var r: Rect2 = paire[0]
+		_label(paire[1], "fort", 5.8, pal["encre"], Rect2(r.position.x, r.position.y + 1.6 * u, r.size.x, 7.6 * u), HORIZONTAL_ALIGNMENT_CENTER)
+		_label(paire[2], "gras", 2.4, pal["sourd"], Rect2(r.position.x, r.position.y + 8.3 * u, r.size.x, 3.2 * u), HORIZONTAL_ALIGNMENT_CENTER, 0.14)
+	# Le pays, en petit, au-dessus du numéro
+	_label(str(h["pays"]).to_upper(), "gras", 2.5, pal["sourd"],
+		Rect2(pd.position.x + 13.0 * u, pd.position.y + 2.0 * u, pd.size.x - 26.0 * u, 3.4 * u), HORIZONTAL_ALIGNMENT_CENTER, 0.18)
+	var num_txt := "%s / 120 · " % h["num"]
+	var marque := str(GS.variante(variante)["nom"]).to_upper()
+	var w_num := _largeur_texte(num_txt, "gras", 2.8, 0.14)
+	var w_mar := _largeur_texte(marque, "gras", 2.8, 0.14)
+	var total := 2.8 * u + 1.2 * u + w_num + w_mar
+	var x := size.x * 0.5 - total * 0.5 + 4.0 * u
+	_R["gemme"] = Vector2(x, pd.position.y + 8.0 * u)
+	x += 2.8 * u
+	_label(num_txt, "gras", 2.8, pal["sourd"], Rect2(x, pd.position.y + 5.8 * u, w_num + 2.0, 4.4 * u), HORIZONTAL_ALIGNMENT_LEFT, 0.14)
+	_label(marque, "gras", 2.8, pal["encre"], Rect2(x + w_num, pd.position.y + 5.8 * u, w_mar + 2.0, 4.4 * u), HORIZONTAL_ALIGNMENT_LEFT, 0.14)
+
+
+func _coins(col: Color, pour_recto: bool) -> void:
+	var u := _u
+	# le full art a des coins plus fins, plus près du bord
+	var plein: bool = pour_recto and bool(_pal["plein"])
+	var t := (11.0 if plein else 15.0) * u
+	var marge := (1.0 if plein else 1.3) * u
+	var places := [
+		[Vector2(marge, marge), false, false],
+		[Vector2(size.x - marge - t, marge), true, false],
+		[Vector2(marge, size.y - marge - t), false, true],
+		[Vector2(size.x - marge - t, size.y - marge - t), true, true],
+	]
+	for pl in places:
+		var c := TextureRect.new()
+		c.texture = TEX_COIN
+		c.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		c.stretch_mode = TextureRect.STRETCH_SCALE
+		c.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		c.size = Vector2(t, t)
+		c.position = pl[0]
+		c.flip_h = pl[1]
+		c.flip_v = pl[2]
+		c.modulate = col
+		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(c)
+		(_recto if pour_recto else _verso).append(c)
+
+
+func _construire_verso() -> void:
+	_noeud_dessin(_dessiner_dos, false)
+	var ros := Control.new()
+	var ins := 4.1 * _u
+	ros.position = Vector2(ins, ins)
+	ros.size = size - Vector2(2 * ins, 2 * ins)
+	ros.clip_contents = true
+	ros.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ros.draw.connect(_dessiner_rosace.bind(ros))
+	add_child(ros)
+	_verso.append(ros)
+	var em := TextureRect.new()
+	em.texture = TEX_EMBLEME
+	em.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	em.stretch_mode = TextureRect.STRETCH_SCALE
+	em.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	em.size = Vector2(46.0 * _u, 46.0 * _u)
+	em.position = size * 0.5 - em.size * 0.5
+	em.modulate = _dos["embleme"]
+	em.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(em)
+	_verso.append(em)
+	_coins(Color(_dos["laiton"], 0.85), false)
+
+
+# Un sbire (le Carré, 27/09) n'a pas encore d'illustration : sa fenêtre montre sa pierre
+# élémentaire (rendue par la fabrique), posée sur le fond sombre de son type.
+func _image_sbire(ar: Rect2) -> void:
+	var ty: Dictionary = GS.TYPES[h["type"]]
+	var fond := TextureRect.new()
+	var g := Gradient.new()
+	g.offsets = PackedFloat32Array([0.0, 0.55, 1.0])
+	g.colors = PackedColorArray([(ty["elt"] as Color).darkened(0.35), (ty["sombre"] as Color), Color("#09090d")])
+	var gt := GradientTexture2D.new()
+	gt.gradient = g
+	gt.fill = GradientTexture2D.FILL_RADIAL
+	gt.fill_from = Vector2(0.5, 0.42)
+	gt.fill_to = Vector2(1.05, 0.95)
+	gt.width = 128
+	gt.height = 128
+	fond.texture = gt
+	fond.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	fond.stretch_mode = TextureRect.STRETCH_SCALE
+	fond.position = ar.position
+	fond.size = ar.size
+	fond.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fond)
+	_recto.append(fond)
+	var gem := TextureRect.new()
+	gem.texture = load("res://objets/pierre-%s.png" % h["type"])
+	gem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	gem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	gem.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	var cote := minf(ar.size.x, ar.size.y) * 0.62
+	gem.size = Vector2(cote, cote)
+	gem.position = ar.position + ar.size * 0.5 - gem.size * 0.5
+	gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(gem)
+	_recto.append(gem)
+
+
+# La région de l'image montrée dans la fenêtre : « couvrir », puis le cadrage.
+func _region(fenetre: Vector2) -> Vector4:
+	if _art.texture == null:
+		return Vector4(0, 0, 1, 1)
+	var img := Vector2(_art.texture.get_size())
+	var echelle := maxf(fenetre.x / img.x, fenetre.y / img.y)
+	var vis := fenetre / echelle
+	var cad: Array = h.get("cadrage", [])
+	var pos := float(cad[stade - 1]) if stade - 1 < cad.size() else 0.4
+	var x0 := (img.x - vis.x) * 0.5
+	var y0 := (img.y - vis.y) * pos
+	return Vector4(x0 / img.x, y0 / img.y, vis.x / img.x, vis.y / img.y)
+
+
+# ─────────────────────────────────────────────────────────────
+# Le dessin
+# ─────────────────────────────────────────────────────────────
+
+func _boite(fond: Color, rayon: float, bord: float = 0.0, col_bord := Color(0, 0, 0, 0), centre := true) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = fond
+	s.draw_center = centre
+	s.set_corner_radius_all(int(round(rayon)))
+	s.set_border_width_all(int(round(bord)))
+	s.border_color = col_bord
+	s.anti_aliasing = true
+	return s
+
+
+func _poly(c: Control, rect: Rect2, points: Array, haut: Color, bas: Color) -> void:
+	var pts := PackedVector2Array()
+	var cols := PackedColorArray()
+	for p in points:
+		var v := rect.position + Vector2(p.x * rect.size.x, p.y * rect.size.y)
+		pts.append(v)
+		cols.append(haut.lerp(bas, p.y))
+	c.draw_polygon(pts, cols)
+
+
+func _medaille(c: Control, rect: Rect2, forme: Array) -> void:
+	var u := _u
+	var mb: Array = _pal["med_bord"]
+	var mf: Array = _pal["med_fond"]
+	_poly(c, rect, forme, mb[0], mb[1])
+	var k := 0.55 * u
+	var inner := Rect2(rect.position + Vector2(k, k * 1.1), rect.size - Vector2(2 * k, 2.2 * k))
+	_poly(c, inner, forme, mf[0], mf[1])
+
+
+func _dessiner_fond(c: Control) -> void:
+	var u := _u
+	var pal := _pal
+	var ct: Rect2 = _R["contenu"]
+	var plein: bool = pal["plein"]
+	if not plein:
+		c.draw_style_box(_boite(pal["fond"], 3.0 * u, 0.3 * u, pal["keyline"]), ct)
+		c.draw_style_box(_boite(Color(0, 0, 0, 0), 2.7 * u, 0.6 * u, Color(0, 0, 0, 0.25), false), ct.grow(-0.3 * u))
+
+	var pl: Rect2 = _R["plaque"]
+	if plein:
+		# du verre : un fond sombre translucide, cerclé d'un filet blanc
+		c.draw_style_box(_boite(pal["plaque"], 1.8 * u, 0.25 * u, pal["keyline"]), pl)
+	else:
+		c.draw_style_box(_boite(pal["keyline"], 2.1 * u), pl.grow(0.3 * u))
+		c.draw_style_box(_boite(pal["plaque"], 1.8 * u), pl)
+	c.draw_line(pl.position + Vector2(1.8 * u, 0.25 * u), Vector2(pl.end.x - 1.8 * u, pl.position.y + 0.25 * u), Color(1, 1, 1, 0.10), 0.3 * u)
+
+	# Les pips du stade, derrière le nom de la forme
+	var formes: Array = h["formes"]
+	var px := pl.position.x + 2.6 * u + float(_R.get("forme_w", 0.0)) + 1.6 * u
+	var py := pl.position.y + 11.75 * u
+	for i in formes.size():
+		var centre := Vector2(px + 0.9 * u + i * 2.6 * u, py)
+		if i < stade:
+			c.draw_circle(centre, 0.9 * u, pal["sourd"], true, -1.0, true)
+		else:
+			c.draw_circle(centre, 0.75 * u, pal["sourd"], false, 0.3 * u, true)
+
+	# Le médaillon du type : un dégradé rond, deux anneaux, un halo
+	var ty: Dictionary = GS.TYPES[h["type"]]
+	var mc: Vector2 = _R["medaillon"]
+	var r := 4.7 * u
+	for i in 5:
+		c.draw_circle(mc, r + 3.0 * u - i * 0.6 * u, Color(ty["elt"], 0.05), true, -1.0, true)
+	c.draw_circle(mc, r + 0.85 * u, pal["keyline"], true, -1.0, true)
+	c.draw_circle(mc, r + 0.45 * u, Color(0, 0, 0, 0.45), true, -1.0, true)
+	var reflet := mc + Vector2(-0.3 * r, -0.4 * r)
+	for i in 12:
+		var t := i / 11.0
+		var col: Color = (ty["sombre"] as Color).lerp(ty["elt"], minf(1.0, t / 0.45)) if t < 0.45 else (ty["elt"] as Color).lerp(ty["clair"], (t - 0.45) / 0.55)
+		c.draw_circle(mc.lerp(reflet, t), r * (1.0 - t * 0.82), col, true, -1.0, true)
+
+	if combat:
+		return
+	c.draw_style_box(_boite(pal["ult"], 1.4 * u, 0.25 * u, Color(1, 1, 1, 0.05)), _R["ult"])
+
+	# PV et ATT : un écu et un losange
+	var pd: Rect2 = _R["pied"]
+	_medaille(c, Rect2(pd.position, Vector2(13.0 * u, pd.size.y)),
+		[Vector2(0.5, 0.0), Vector2(1.0, 0.14), Vector2(1.0, 0.58), Vector2(0.5, 1.0), Vector2(0.0, 0.58), Vector2(0.0, 0.14)])
+	_medaille(c, Rect2(Vector2(pd.end.x - 13.0 * u, pd.position.y), Vector2(13.0 * u, pd.size.y)),
+		[Vector2(0.5, 0.0), Vector2(1.0, 0.5), Vector2(0.5, 1.0), Vector2(0.0, 0.5)])
+
+	# La gemme de la variante
+	var g: Vector2 = _R["gemme"]
+	var gl: Color = pal["gemme_lueur"]
+	if gl.a > 0.0:
+		for i in 4:
+			c.draw_circle(g, 2.4 * u - i * 0.4 * u, Color(gl, gl.a * 0.12), true, -1.0, true)
+	var gc: Array = pal["gemme"]
+	var d := 1.4 * u
+	c.draw_polygon(PackedVector2Array([g + Vector2(0, -d - 0.4 * u), g + Vector2(d + 0.4 * u, 0), g + Vector2(0, d + 0.4 * u), g + Vector2(-d - 0.4 * u, 0)]),
+		PackedColorArray([Color(0, 0, 0, 0.4), Color(0, 0, 0, 0.4), Color(0, 0, 0, 0.4), Color(0, 0, 0, 0.4)]))
+	c.draw_polygon(PackedVector2Array([g + Vector2(0, -d), g + Vector2(d, 0), g + Vector2(0, d), g + Vector2(-d, 0)]),
+		PackedColorArray([gc[0], gc[0].lerp(gc[1], 0.5), gc[1], gc[0].lerp(gc[1], 0.5)]))
+
+
+func _dessiner_dessus(c: Control) -> void:
+	var u := _u
+	var pal := _pal
+	var ar: Rect2 = _R["art"]
+	if pal["plein"]:
+		c.draw_style_box(_boite(Color(0, 0, 0, 0), 4.3 * u, 0.55 * u, Color(1, 1, 1, 0.38), false),
+			Rect2(Vector2.ZERO, size).grow(-0.3 * u))
+	else:
+		c.draw_style_box(_boite(Color(0, 0, 0, 0), 1.6 * u, 0.35 * u, pal["keyline"], false), ar)
+		c.draw_style_box(_boite(Color(0, 0, 0, 0), 1.3 * u, 0.65 * u, Color(0, 0, 0, 0.22), false), ar.grow(-0.35 * u))
+		for coin in [Vector2(0, 0), Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)]:
+			var p := ar.position + Vector2(2.3 * u + coin.x * (ar.size.x - 4.6 * u), 2.3 * u + coin.y * (ar.size.y - 4.6 * u))
+			c.draw_circle(p, 0.9 * u, Color(0, 0, 0, 0.5), true, -1.0, true)
+			c.draw_circle(p, 0.75 * u, pal["coin"], true, -1.0, true)
+			c.draw_circle(p + Vector2(-0.25, -0.3) * u, 0.3 * u, Color(1, 1, 1, 0.55), true, -1.0, true)
+	if combat:
+		return
+	var rb: Rect2 = _R["ruban"]
+	var sb := _boite(pal["plaque"], 0.8 * u, 0.3 * u, pal["keyline"])
+	sb.shadow_color = Color(0, 0, 0, 0.45)
+	sb.shadow_size = int(round(1.6 * u))
+	sb.shadow_offset = Vector2(0, 0.8 * u)
+	c.draw_style_box(sb, rb)
+
+
+func _dessiner_dos(c: Control) -> void:
+	var u := _u
+	var r := Rect2(Vector2.ZERO, size)
+	var l: Color = _dos["laiton"]
+	c.draw_style_box(_boite(Color("#15131a"), 4.6 * u, 0.3 * u, Color(l, 0.5)), r)
+	c.draw_style_box(_boite(Color(0, 0, 0, 0), 4.3 * u, 3.5 * u, Color("#1d1a22"), false), r.grow(-0.3 * u))
+	c.draw_style_box(_boite(Color(0, 0, 0, 0), 3.0 * u, 0.3 * u, Color(l, 0.45), false), r.grow(-3.8 * u))
+	if _dos["irise"]:
+		# le prismatique : un liseré irisé tout autour
+		var chemin := _chemin_arrondi(r.grow(-3.95 * u), 3.0 * u)
+		var cols := PackedColorArray()
+		for i in chemin.size():
+			cols.append(Color.from_hsv(float(i) / chemin.size(), 0.5, 1.0, 0.9))
+		c.draw_polyline_colors(chemin, cols, 0.45 * u, true)
+
+
+func _chemin_arrondi(r: Rect2, rayon: float) -> PackedVector2Array:
+	var pts := PackedVector2Array()
+	var centres := [Vector2(r.end.x - rayon, r.position.y + rayon), Vector2(r.end.x - rayon, r.end.y - rayon),
+		Vector2(r.position.x + rayon, r.end.y - rayon), Vector2(r.position.x + rayon, r.position.y + rayon)]
+	for i in 4:
+		for j in 9:
+			var a := -PI * 0.5 + i * PI * 0.5 + j * PI / 16.0
+			pts.append((centres[i] as Vector2) + Vector2(cos(a), sin(a)) * rayon)
+	pts.append(pts[0])
+	return pts
+
+
+func _dessiner_rosace(c: Control) -> void:
+	var u := _u
+	var s := c.size
+	var centre := s * 0.5
+	c.draw_style_box(_boite(Color("#121016"), 3.0 * u), Rect2(Vector2.ZERO, s))
+	# le fond : plus clair au centre, qui s'assombrit vers les bords (anneaux superposés)
+	var rmax := s.length() * 0.5
+	for i in 16:
+		var t := i / 15.0
+		c.draw_circle(centre, rmax * 0.72 * (1.0 - t), Color("#121016").lerp(Color("#221e28"), t), true, -1.0, true)
+	var rayon := 2.6 * u
+	while rayon < rmax:
+		c.draw_arc(centre, rayon, 0.0, TAU, 96, Color(_dos["laiton"], 0.13), 0.3 * u, true)
+		rayon += 2.6 * u
+	for i in 72:
+		var a := i * TAU / 72.0
+		c.draw_line(centre, centre + Vector2(cos(a), sin(a)) * rmax, Color(_dos["laiton"], 0.14), 0.25 * u, true)
+
+
+# ─────────────────────────────────────────────────────────────
+# La lumière : au repos elle tourne, en grand elle suit le doigt
+# ─────────────────────────────────────────────────────────────
+
+func _process(delta: float) -> void:
+	_verif -= delta
+	if _verif <= 0.0:
+		_verif = 0.25
+		_maj_effets_visibles()
+	if not is_visible_in_tree() or _suivi:
+		return
+	_t = fmod(_t + delta, 10.0)
+	var ph := _t / 2.5
+	var i := int(ph) % 4
+	var f := ph - floorf(ph)
+	f = f * f * (3.0 - 2.0 * f)
+	var a: Vector3 = REPOS[i]
+	var b: Vector3 = REPOS[(i + 1) % 4]
+	var v := a.lerp(b, f)
+	lumiere = Vector2(v.x, v.y)
+	force = v.z
+	_appliquer_lumiere()
+
+
+func _appliquer_lumiere() -> void:
+	if _cadre == null:
+		return
+	var mc := _cadre.material as ShaderMaterial
+	mc.set_shader_parameter("lumiere", lumiere)
+	if float(_pal["echelle"]) != 1.0 and recto:
+		# le chrome du prismatique : ses reflets glissent à l'opposé de la lumière
+		mc.set_shader_parameter("centre_degrade", Vector2(size.x * (-0.3 + 1.6 * lumiere.x), size.y * (-0.3 + 1.6 * lumiere.y)))
+		mc.set_shader_parameter("spectre", 0.6 + 0.4 * force)
+	if _art != null:
+		var ma := _art.material as ShaderMaterial
+		ma.set_shader_parameter("lumiere", lumiere)
+		ma.set_shader_parameter("force", force)
+	if _reflet != null:
+		(_reflet.material as ShaderMaterial).set_shader_parameter("lumiere", lumiere)
+	if _nom != null and _nom.material != null:
+		(_nom.material as ShaderMaterial).set_shader_parameter("lumiere", lumiere)
+
+
+func _gui_input(ev: InputEvent) -> void:
+	var appui := false
+	var relache := false
+	var pos := Vector2.ZERO
+	var bouton := ev as InputEventMouseButton
+	var mouvement := ev as InputEventMouseMotion
+	if bouton != null and bouton.button_index == MOUSE_BUTTON_LEFT:
+		appui = bouton.pressed
+		relache = not bouton.pressed
+		pos = bouton.position
+	elif mouvement != null and (mouvement.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+		pos = mouvement.position
+		_glisse = maxf(_glisse, pos.distance_to(_appui))
+		if interactif:
+			_suivre(pos)
+		return
+	else:
+		return
+	if appui:
+		_appui = pos
+		_glisse = 0.0
+		if interactif:
+			_suivre(pos)
+	elif relache:
+		_suivi = false
+		if _glisse < 24.0:
+			touchee.emit()
+
+
+func _suivre(pos: Vector2) -> void:
+	_suivi = true
+	lumiere = Vector2(clampf(pos.x / size.x, 0.0, 1.0), clampf(pos.y / size.y, 0.0, 1.0))
+	force = clampf(lumiere.distance_to(Vector2(0.5, 0.5)) / 0.62, 0.0, 1.0)
+	_appliquer_lumiere()
+
+
+# Les effets ne tournent que sur une carte à l'écran : une grille pleine de cartes
+# animées, défilée ou cachée, ne coûte rien au téléphone.
+func _maj_effets_visibles() -> void:
+	if _fx == null:
+		return
+	var vu := is_visible_in_tree() and _zone_visible().intersects(get_global_rect().grow(8.0 * _u))
+	var mode := Node.PROCESS_MODE_INHERIT if vu else Node.PROCESS_MODE_DISABLED
+	if _fx.process_mode != mode:
+		_fx.process_mode = mode
+
+
+func _zone_visible() -> Rect2:
+	var n := get_parent()
+	while n != null:
+		if n is ScrollContainer:
+			return (n as Control).get_global_rect()
+		n = n.get_parent()
+	return get_viewport_rect()

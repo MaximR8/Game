@@ -1,0 +1,128 @@
+/* ——— Stratégie avant le combat : le socle ——— */
+.sp-haut{flex:none}
+.sp-adv{font-size:13px;color:var(--mauve-clair);text-align:center;text-wrap:balance}
+.sp-msg{min-height:36px;font:600 14px/1.25 var(--ui);color:var(--ivoire);text-align:center;display:flex;align-items:center;justify-content:center;text-wrap:balance}
+.sp-corps{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.sp-bas{flex:none;display:flex;flex-direction:column;gap:6px}
+.sp-go{align-items:center;text-align:center;padding:12px}
+.sp-go b{font-size:17px}
+.sp-bloc{background:rgba(24,20,40,.8);border:1px solid var(--trait);border-radius:11px;padding:7px;display:flex;flex-direction:column;gap:6px}
+.sp-tit{font:600 13px var(--ui);color:var(--or-vif);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sp-tit small{font-weight:500;color:var(--sourd);font-size:12px}
+.sp-reserve{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:5px}
+.sp-hero{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 2px;border-radius:9px;border:1px solid var(--trait);background:var(--nuit2)}
+.sp-hero .carte{width:44px}
+.sp-hero b{font:600 11px/1.1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.sp-hero span{font-size:9.5px;color:var(--sourd)}
+.sp-hero.pris{border-color:var(--or-vif);background:#2d2350}
+.sp-hero em{position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--or-vif);color:var(--sur-or);font:700 11px/18px var(--ui);font-style:normal}
+.sp-sel{font:600 12.5px var(--ui);color:var(--ivoire);background:#231c40;border:1px solid #4a3d78;border-radius:8px;padding:5px 6px;max-width:100%}
+.sp-ligne{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px}
+.sp-ligne .carte{width:34px}
+.sp-ligne b{font:600 13px var(--ui);min-width:70px}
+.sp-res{border-radius:12px;padding:8px 10px;background:rgba(24,20,40,.92);border:1px solid var(--lui)}
+.sp-res.gagne{border-color:var(--toi)}
+.sp-res h3{margin:0 0 4px;font:700 20px var(--titre)}
+.sp-res.gagne h3{color:var(--toi)} .sp-res.perdu h3{color:var(--lui)}
+.sp-recit{margin:0;padding-left:18px;font-size:13px;color:var(--ivoire);display:flex;flex-direction:column;gap:2px}
+.sp-choix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.sp-vs{font:600 11px var(--ui);color:var(--pale);text-transform:uppercase;letter-spacing:.14em;text-align:center}
+.sp-rang{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.sp-rang .cr2{width:78px}
+/* une grille générique (échiquier, figure, éléments, carte, repaire) */
+.sp-grille{display:grid;gap:3px;align-self:center;width:min(100%,360px)}
+.sp-cell{aspect-ratio:1;border-radius:6px;background:rgba(15,12,24,.6);border:1px solid #2a2342;position:relative;display:grid;place-items:center;overflow:visible;padding:0;min-width:0}
+.sp-cell.j{background:rgba(127,208,176,.07)} .sp-cell.a{background:rgba(229,154,138,.07)}
+.sp-cell.ok{border-color:var(--or-vif);background:rgba(58,44,102,.5)}
+.sp-cell.ciblable{border:2px solid var(--toi);background:rgba(127,208,176,.2)}
+.sp-pion{position:absolute;inset:6%;border-radius:50%;overflow:hidden;border:2px solid var(--toi);background:#111}
+.sp-pion.a{border-color:var(--lui)}
+.sp-pion img{width:100%;height:100%;object-fit:cover}
+.sp-pion.ko{opacity:.25}
+.sp-pion.chef{box-shadow:0 0 0 2px var(--or-vif)}
+.sp-pv{position:absolute;left:8%;right:8%;bottom:-2px;height:4px;border-radius:2px;background:#2a2340;overflow:hidden;z-index:2}
+.sp-pv i{display:block;height:100%;background:var(--toi)}
+.sp-pv.a i{background:var(--lui)}
+.sp-tag{position:absolute;top:-4px;right:-3px;z-index:3;font:700 9px/1 var(--ui);color:var(--sur-or);background:var(--or-vif);border-radius:4px;padding:2px 3px}
+.sp-leg{font-size:11.5px;color:var(--sourd);text-align:center;text-wrap:balance}
+/* S1 · Relais */
+.rl-camp{display:flex;flex-direction:column;gap:6px;align-items:center}
+.rl-file{display:flex;gap:5px;justify-content:center}
+.rl-mini{width:38px}
+.rl-mini.ici{box-shadow:0 0 0 2px var(--or-vif)}
+.rl-scene .cr2{width:108px}
+.rl-n{font:700 14px var(--titre);color:var(--or-vif);font-style:normal;min-width:14px}
+/* S2 · Trois Temps */
+.tt3-bandeau{display:none}
+.tt3-post{display:flex;align-items:center;justify-content:center;gap:10px;font:700 15px var(--ui)}
+.tt3-post b{font:700 13px var(--titre);color:var(--or-vif);text-transform:uppercase;letter-spacing:.08em}
+.tt3-post .a{color:var(--lui)} .tt3-post .j{color:var(--toi)}
+.tt3-plan{display:flex;gap:10px;justify-content:center;font:600 13px var(--ui);color:var(--lui);flex-wrap:wrap}
+/* S3 · Figure céleste */
+.fg-grille{position:relative;width:min(100%,250px)}
+.fg-liens{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:1}
+.fg-liens line{stroke:var(--or-vif);stroke-width:3;vector-effect:non-scaling-stroke;stroke-linecap:round;opacity:.85}
+.fg-fig{color:var(--or-vif)}
+/* S4 · Consignes */
+.cs4-eq{display:flex;flex-direction:column;gap:4px}
+.cs4-lib{min-width:44px}
+.cs4-cons{display:flex;flex-direction:column;font-size:11.5px;color:var(--sourd);flex-basis:100%;padding-left:42px}
+/* S5 · Partition */
+.pa-table{display:grid;gap:2px;width:100%}
+.pa-num{font:600 10px var(--ui);color:var(--pale);text-align:center}
+.pa-num.ici{color:var(--or-vif)}
+.pa-lib{font:600 11px/1.1 var(--ui);color:var(--toi);text-align:left;background:none;border:none;padding:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pa-lib.a{color:var(--lui)}
+.pa-lib.sel{color:var(--or-vif);text-decoration:underline}
+.pa-c{aspect-ratio:1;border-radius:4px;border:1px solid #2e2748;background:rgba(15,12,24,.6);font:700 11px var(--ui);color:#fff;display:grid;place-items:center;padding:0;min-width:0}
+.pa-c.boss.act{background:rgba(229,154,138,.35);border-color:var(--lui)}
+.pa-c.pris{background:rgba(122,92,200,.45);border-color:var(--mauve-clair)}
+.pa-c.debut{background:var(--mauve);border-color:var(--or-vif)}
+.pa-c.ici{box-shadow:0 0 0 2px var(--or-vif)}
+.pa-aide{color:var(--or-vif)}
+/* S6 · Échiquier */
+.ec-grille{width:min(100%,330px)}
+.ec-grille .sp-cell:nth-child(12n+1),.ec-grille .sp-cell:nth-child(12n+3),.ec-grille .sp-cell:nth-child(12n+5),.ec-grille .sp-cell:nth-child(12n+8),.ec-grille .sp-cell:nth-child(12n+10),.ec-grille .sp-cell:nth-child(12n+12){filter:brightness(1.35)}
+/* S7 · Ordres */
+.or-carte{width:min(100%,300px)}
+.or-plaine{background:rgba(40,34,60,.55)}
+.or-foret{background:rgba(70,110,60,.55)}
+.or-colline{background:rgba(140,110,70,.5)}
+.or-riviere{background:rgba(47,149,173,.45)}
+.or-autel{background:rgba(58,44,102,.7)}
+.or-carte .depart{box-shadow:inset 0 0 0 1px rgba(127,208,176,.4)}
+.or-etoile{position:absolute;inset:18%;width:64%;height:64%;fill:#6f6886}
+.or-autel.mj .or-etoile{fill:var(--toi)} .or-autel.ma .or-etoile{fill:var(--lui)}
+/* S8 · Mécanique */
+.me-grille{width:min(100%,190px)}
+.me-grille .sp-tag{font-size:11px;padding:2px 3px}
+.me-on{border:2px solid var(--or-vif);background:rgba(241,210,138,.25)}
+.me-gel{background:rgba(143,195,222,.35)}
+.me-piege{background:rgba(160,40,30,.3)}
+.me-x{position:absolute;left:3px;top:1px;color:#ff9a8a;font:700 12px var(--ui)}
+.me-pv{position:relative;height:16px;border-radius:8px;background:#2a2340;overflow:hidden;width:min(100%,260px);align-self:center}
+.me-pv i{display:block;height:100%;background:var(--toi)}
+.me-pv.a i{background:var(--lui)}
+.me-pv span{position:absolute;inset:0;text-align:center;font:700 11px/16px var(--ui);color:#fff;text-shadow:0 1px 1px #000}
+.me-apercu{color:var(--or-vif)}
+/* S9 · Éléments */
+.el-grille{width:min(100%,320px)}
+.el-foret{background:rgba(70,120,60,.7)}
+.el-eau{background:rgba(47,149,173,.7)}
+.el-glace{background:rgba(200,230,245,.55)}
+.el-feu{background:rgba(224,116,58,.85)}
+.el-roche{background:rgba(120,115,110,.9)}
+.el-pas{position:absolute;left:2px;top:1px;font:700 10px var(--ui);color:var(--toi);text-shadow:0 1px 1px #000;z-index:4}
+.el-pas.a{color:var(--lui);left:auto;right:2px}
+.el-pas.sel{color:var(--or-vif)}
+.sp-hero.sel{box-shadow:0 0 0 2px var(--mauve-clair)}
+/* S10 · Repaire */
+.rp-carte{width:min(100%,240px)}
+.rp-voie{background:rgba(60,50,90,.6)}
+.rp-mur{background:rgba(10,8,16,.85);border-color:#161222}
+.rp-coeur{background:rgba(160,40,30,.4);border:1px solid var(--lui)}
+.rp-coeur svg{width:70%;height:70%;fill:var(--lui)}
+.rp-piege{position:absolute;right:3px;top:1px;font:700 12px var(--ui);color:#fff;z-index:4}
+.rp-piege.gel{color:#bfe3f2} .rp-piege.feu{color:#ffb38a} .rp-piege.filet{color:var(--or-vif)}
+/* S11 · Carte du ciel */
+.cc-grille{width:min(100%,280px)}

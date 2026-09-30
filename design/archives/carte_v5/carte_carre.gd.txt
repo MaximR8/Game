@@ -1,0 +1,187 @@
+class_name CarteCarre
+extends Control
+
+# ─────────────────────────────────────────────────────────────
+# UNE CARTE DU CARRÉ (FEATURES ②, 27/09) : la carte de l'Atlas (ses six variantes, ses
+# effets) en mode combat, et par-dessus ses quatre chiffres, sertis dans des pierres
+# d'émail (jade : les tiennes, carmin : les siennes), et l'emblème d'or de son pouvoir.
+# Tout vient de la fabrique (design/objets/render_carre.py) : rien n'est dessiné à la main.
+#
+# La carte se construit toujours à 280 px de large (sa taille sur le plateau) ; dans les
+# mains, on la réduit (scale) — elle garde ainsi la même netteté en volant vers sa case.
+# ─────────────────────────────────────────────────────────────
+
+const LARGEUR := 280.0
+const U := LARGEUR / 100.0
+const TAILLE := Vector2(LARGEUR, LARGEUR * 1.4)
+# Le centre de chaque pierre : haut, droite, bas, gauche (en « u », 1 % de la largeur).
+const PIERRES := [Vector2(50.0, 33.0), Vector2(84.0, 80.0), Vector2(50.0, 124.0), Vector2(16.0, 80.0)]
+const PIERRE_U := 20.0
+const POUVOIR_POS := Vector2(84.0, 124.0)
+const POUVOIR_U := 17.0
+const IVOIRE := Color("#efe9dc")
+const PLUS := Color("#ffd873")
+const MOINS := Color("#ff9d8a")
+
+var carte: Dictionary = {}        # {id, s, v}
+var camp := "j"
+var vue: CarteView
+var _dessus: Control
+var _pierres: Array = []          # TextureRect
+var _nombres: Array = []          # Label
+var _pouvoir: Control
+
+
+func configurer(p_carte: Dictionary, p_camp: String) -> void:
+	carte = p_carte
+	camp = p_camp
+	size = TAILLE
+	pivot_offset = TAILLE * 0.5
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vue = CarteView.new()
+	vue.combat = true
+	add_child(vue)
+	var id := str(carte["id"])
+	vue.configurer(MoteurCarre.heros_carte(id), forme_de(carte), str(carte.get("v", "base")), LARGEUR, true)
+	vue.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_dessus = Control.new()
+	_dessus.size = TAILLE
+	_dessus.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_dessus)
+	var police := CarteView.police("fort")
+	for k in 4:
+		var t := TextureRect.new()
+		t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		t.stretch_mode = TextureRect.STRETCH_SCALE
+		t.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		t.size = Vector2(PIERRE_U, PIERRE_U) * U
+		t.position = (PIERRES[k] as Vector2) * U - t.size * 0.5
+		t.pivot_offset = t.size * 0.5
+		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_dessus.add_child(t)
+		_pierres.append(t)
+		var l := Label.new()
+		l.add_theme_font_override("font", police)
+		l.add_theme_font_size_override("font_size", int(round(12.5 * U)))
+		l.add_theme_color_override("font_color", IVOIRE)
+		l.add_theme_color_override("font_outline_color", Color("#0b0a10"))
+		l.add_theme_constant_override("outline_size", int(round(2.2 * U)))
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		l.size = t.size
+		l.position = Vector2(0, -0.6 * U)
+		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		t.add_child(l)
+		_nombres.append(l)
+	if MoteurCarre.POUVOIRS.has(id):
+		_pouvoir = Control.new()
+		_pouvoir.size = Vector2(POUVOIR_U, POUVOIR_U) * U
+		_pouvoir.position = POUVOIR_POS * U - _pouvoir.size * 0.5
+		_pouvoir.pivot_offset = _pouvoir.size * 0.5
+		_pouvoir.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_dessus.add_child(_pouvoir)
+		_image(_pouvoir, "res://interface/medaillon-sombre.png", Rect2(Vector2.ZERO, _pouvoir.size))
+		var e := _pouvoir.size.x * 0.62
+		_image(_pouvoir, "res://carre/pouvoir-%s.png" % MoteurCarre.POUVOIRS[id]["g"], Rect2((_pouvoir.size - Vector2(e, e)) * 0.5, Vector2(e, e)))
+	maj_chiffres(MoteurCarre.chiffres_de(id, int(carte["s"])))
+	mettre_camp(camp)
+
+
+# La forme dessinée d'une carte (le numéro de son illustration).
+# 🔴 Un héros à une seule forme (Korrigan, Ifrit, Anansi) se bat comme un stade III, mais n'a qu'UNE
+#    illustration : on dessine sa forme, pas son stade de combat (sinon : image manquante, et le dessin
+#    de la carte plantait — trouvé par tests/test_aventure, 27/09).
+static func forme_de(carte: Dictionary) -> int:
+	var id := str(carte["id"])
+	return mini(MoteurCarre.stade_eff(id, int(carte["s"])), int(MoteurCarre.fiche(id)["stades"]))
+
+
+func _image(parent: Control, chemin: String, r: Rect2) -> TextureRect:
+	var t := TextureRect.new()
+	t.texture = Style.texture(chemin)
+	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t.stretch_mode = TextureRect.STRETCH_SCALE
+	t.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	t.position = r.position
+	t.size = r.size
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(t)
+	return t
+
+
+# Les chiffres montrés ; comparés à ceux de la carte nue : plus haut en or, plus bas en rouge pâle.
+func maj_chiffres(vals: Array) -> void:
+	var base := MoteurCarre.chiffres_de(str(carte["id"]), int(carte["s"]))
+	for k in 4:
+		var l: Label = _nombres[k]
+		l.text = str(vals[k])
+		var c := IVOIRE
+		if int(vals[k]) > int(base[k]):
+			c = PLUS
+		elif int(vals[k]) < int(base[k]):
+			c = MOINS
+		l.add_theme_color_override("font_color", c)
+
+
+func mettre_camp(c: String) -> void:
+	camp = c
+	var tex := Style.texture("res://carre/chiffre-%s.png" % ("jade" if c == "j" else "rose"))
+	for t in _pierres:
+		(t as TextureRect).texture = tex
+
+
+# Le centre d'une pierre, dans le repère de l'écran.
+func centre_pierre(cote: int) -> Vector2:
+	return get_global_transform() * ((PIERRES[cote] as Vector2) * U)
+
+
+func centre_pouvoir() -> Vector2:
+	return get_global_transform() * (POUVOIR_POS * U)
+
+
+# Le chiffre qui se bat : il enfle (celui qui gagne), ou tremble (celui qui perd).
+func pulser_chiffre(cote: int, gagne: bool) -> void:
+	var t: TextureRect = _pierres[cote]
+	var tw := t.create_tween()
+	if gagne:
+		tw.tween_property(t, "scale", Vector2(1.5, 1.5), 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(t, "scale", Vector2.ONE, 0.32).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	else:
+		var x0 := t.position.x
+		for dx in [-5.0, 5.0, -3.0, 0.0]:
+			tw.tween_property(t, "position:x", x0 + dx, 0.05)
+
+
+func pulser_pouvoir() -> void:
+	if _pouvoir == null:
+		return
+	var tw := _pouvoir.create_tween()
+	tw.tween_property(_pouvoir, "scale", Vector2(1.6, 1.6), 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_pouvoir, "scale", Vector2.ONE, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# LE RETOURNEMENT : la carte se soulève, fait un tour complet sur elle-même — on voit son dos
+# à mi-course — et retombe à la couleur de son nouveau camp. `au_dos` est appelé quand le dos
+# est visible (pour changer la couleur de la case au même instant).
+func retourner(nouveau: String, au_dos := Callable()) -> void:
+	var y0 := position.y
+	var s0 := scale.y
+	var tw := create_tween()
+	tw.tween_property(self, "position:y", y0 - 14.0, 0.10).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(self, "scale", Vector2(s0 * 1.07, s0 * 1.07), 0.10)
+	tw.tween_property(self, "scale:x", 0.0, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func():
+		vue.montrer_recto(false)
+		_dessus.visible = false
+		if au_dos.is_valid():
+			au_dos.call())
+	tw.tween_property(self, "scale:x", s0 * 1.07, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "scale:x", 0.0, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.tween_callback(func():
+		vue.montrer_recto(true)
+		_dessus.visible = true
+		mettre_camp(nouveau))
+	tw.tween_property(self, "scale:x", s0 * 1.07, 0.13).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "scale", Vector2(s0, s0), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(self, "position:y", y0, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tw.finished

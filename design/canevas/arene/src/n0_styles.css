@@ -1,0 +1,109 @@
+/* ——— Les huit concepts ——— */
+.cr2.petit .cr2-chiffres{white-space:normal;line-height:1.15}
+/* territoires (1, 4, 7) */
+.ch-pres{flex:none;text-align:center;font:600 13.5px var(--ui);color:var(--mauve-clair)}
+.ch-terres,.ri-terres{flex:1;min-height:0;align-items:stretch}
+.ch-terre{display:flex;flex-direction:column;gap:4px;background:rgba(24,20,40,.55);border:1px solid var(--trait);border-radius:11px;padding:4px;min-width:0}
+.ch-camp{flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px;align-content:start;min-height:56px}
+.ch-terre>.ch-camp:first-child{align-content:end}
+.ch-nom{border-radius:8px;background:linear-gradient(180deg,#2d2350,#1f1938);border:1px solid var(--or-filet);text-align:center;padding:4px 2px;display:flex;flex-direction:column;gap:1px;cursor:pointer}
+.ch-nom b{font:700 12.5px/1.1 var(--titre)}
+.ch-nom span{font:600 11px var(--ui);color:var(--pale)}
+.ch-nom span.j{color:var(--toi)} .ch-nom span.a{color:var(--lui)}
+.ch-nom.ciblable{box-shadow:0 0 0 3px var(--toi);background:rgba(127,208,176,.25)}
+/* 2 · Mythe contre Mythe */
+.my-eq{flex:none;display:flex;flex-direction:column;gap:4px}
+.my-rang{display:flex;gap:8px;justify-content:center;align-items:flex-end;min-height:30px;position:relative;padding-left:16px}
+.my-rang .cr2{width:92px}
+.my-rang.arriere .cr2{width:78px}
+.my-lib{position:absolute;left:0;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center;font:600 9.5px var(--ui);color:var(--pale);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;width:14px}
+.my-eveil{height:4px;border-radius:2px;background:#2a2340;overflow:hidden}
+.my-eveil i{display:block;height:100%;background:var(--mauve-clair);transition:width .25s}
+.my-draft{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.my-offre{display:flex;gap:6px;align-items:flex-start;text-align:left;padding:5px;border-radius:10px;border:1px solid var(--trait);background:var(--nuit2)}
+.my-offre .carte{width:46px}
+.my-offre.pris{border-color:var(--or-vif);background:#2d2350;box-shadow:0 0 0 1px var(--or-vif)}
+.my-otxt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.my-otxt b{font:600 12.5px/1.1 var(--ui)}
+.my-otxt span{font-size:11px;line-height:1.2;color:var(--sourd)}
+.my-syn{background:rgba(24,20,40,.8);border:1px solid var(--trait);border-radius:10px;padding:8px;font-size:12.5px;color:var(--sourd);display:flex;flex-direction:column;gap:3px}
+.my-syn b{color:var(--or-vif);font-weight:600}
+.my-syn .ok{color:var(--toi)}
+/* 3 · Guerre des Royaumes */
+.gr-sanct{flex:none;display:flex;align-items:center;gap:8px;font-size:12.5px;padding:4px 8px;border-radius:10px;background:rgba(24,20,40,.85);border:1px solid var(--trait)}
+.gr-sanct b{font:600 13px var(--ui);white-space:nowrap}
+.gr-sanct.a b{color:var(--lui)} .gr-sanct.j b{color:var(--toi)}
+.gr-pv{flex:1;height:9px;border-radius:5px;background:#2a2340;overflow:hidden}
+.gr-pv i{display:block;height:100%;background:var(--toi);transition:width .3s}
+.gr-sanct.a .gr-pv i{background:var(--lui)}
+.gr-mainA{color:var(--pale);font-size:11px;white-space:nowrap}
+.gr-grille{flex:1;min-height:250px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:4px}
+.gr-case{border-radius:8px;border:1px dashed #2e2748;background:rgba(15,12,24,.5);display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;padding:2px}
+.gr-case.maisonJ{background:rgba(127,208,176,.08)} .gr-case.maisonA{background:rgba(229,154,138,.08)}
+.gr-case.ciblable{border:2px solid var(--toi);background:rgba(127,208,176,.22)}
+.gr-case .cr2{display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:4px;align-items:center;padding:1px}
+.gr-case .cr2 .carte{grid-row:span 4;width:34px}
+.gr-case .cr2-nom{text-align:left;font-size:11px}
+.gr-case .cr2-chiffres,.gr-case .cr2-statuts{text-align:left;font-size:9.5px}
+.gr-case .cr2-plan{font-size:8px;padding:1px 0}
+.gr-case .cr2-stade{font-size:9px;min-width:14px;height:14px;line-height:14px;padding:0 2px}
+.gr-main{display:flex;gap:5px;overflow-x:auto;flex:none;padding-top:8px}
+.gr-main .carte{width:48px;cursor:pointer;transition:transform .15s}
+.gr-cl{position:absolute;left:0;right:0;bottom:0;font:700 9px var(--ui);text-align:center;background:rgba(10,8,16,.88);padding:1px 0}
+/* 4 · Le Rituel */
+.ri-rites{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.ri-bloc{border-radius:9px;padding:4px 5px;background:rgba(24,20,40,.88);border:1px solid var(--trait);display:flex;flex-direction:column;gap:2px;font-size:10.5px;min-width:0}
+.ri-bloc.a{border-color:rgba(229,154,138,.45)} .ri-bloc.j{border-color:rgba(127,208,176,.45)} .ri-bloc.ko{opacity:.4}
+.ri-tete{display:flex;align-items:center;gap:5px;min-width:0}
+.ri-tete .carte{width:24px}
+.ri-tete b{font:600 12px var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri-cd{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:4px;color:var(--sourd);line-height:1.15}
+.ri-cd em{font-style:normal;font-weight:700;color:var(--ivoire);font-variant-numeric:tabular-nums}
+.ri-bar{grid-column:span 2;height:3px;border-radius:2px;background:#2a2340;overflow:hidden;margin-top:1px}
+.ri-bar i{display:block;height:100%;background:var(--mauve-clair)}
+.ri-cd.fait{color:var(--toi)} .ri-cd.fait .ri-bar i{background:var(--toi)}
+.ri-ess{color:var(--or-vif);font-weight:600}
+/* 5 · Destins croisés, 6, 8 */
+.de-jauge{flex:none;display:flex;flex-direction:column;gap:3px;padding:5px 8px;border-radius:10px;background:rgba(24,20,40,.85);border:1px solid var(--trait)}
+.de-lig{display:flex;align-items:baseline;gap:8px;font-size:12.5px}
+.de-lig b{font:600 13px var(--ui)}
+.de-jauge.j b{color:var(--toi)} .de-jauge.a b{color:var(--lui)}
+.de-val{font:700 16px var(--titre);color:var(--or-vif)}
+.de-pal{margin-left:auto;color:var(--sourd);font-size:11.5px;text-align:right}
+.de-cases{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.de-cases i{height:12px;border-radius:3px;background:#2a2340}
+.de-cases i.palier{box-shadow:inset 0 0 0 1px var(--or-filet)}
+.de-cases i.plein{background:linear-gradient(180deg,#cdb8ff,#7a5cc8)}
+.de-eq{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;flex:none}
+.de-eq .cr2{max-width:108px;justify-self:center}
+.ce-style{flex:none;text-align:center;font-size:13px;color:var(--mauve-clair)}
+.ce-xp{display:flex;flex-direction:column;gap:2px;font-size:10px;color:var(--or-vif);text-align:center}
+.ce-bar{height:4px;border-radius:2px;background:#2a2340;overflow:hidden}
+.ce-bar i{display:block;height:100%;background:var(--or-vif)}
+.ce-xp em{font-style:normal;color:var(--toi)}
+/* 6 · Chasse au monstre */
+.ca-boss{flex:none;display:flex;gap:10px;align-items:stretch;background:rgba(58,24,20,.55);border:1px solid rgba(229,154,138,.4);border-radius:12px;padding:8px}
+.ca-img{width:84px;align-self:center}
+.ca-parts{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.ca-part{border-radius:9px;padding:5px 7px;background:rgba(24,20,40,.88);border:1px solid var(--trait);display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.ca-part b{font:600 13px var(--ui)}
+.ca-part span{font-size:11px;color:var(--sourd);line-height:1.15}
+.ca-part em{font-style:normal;font-size:10.5px;color:var(--mauve-clair)}
+.ca-part .cr2-pv i{background:var(--lui)}
+.ca-part.ko{opacity:.4}
+.ca-part.ciblable{box-shadow:0 0 0 3px var(--toi);background:rgba(127,208,176,.18)}
+.ca-int{flex:none;display:flex;flex-direction:column;gap:2px;padding:6px 10px;border-radius:10px;background:#3a1f2a;border:1px solid var(--lui);font-size:13px}
+.ca-int b{color:#ffd9d0;font-weight:600} .ca-int span{color:var(--ivoire)}
+/* 7 · Reliques */
+.rq-rel{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.rq-une{border-radius:9px;padding:5px;background:rgba(24,20,40,.88);border:1px solid var(--or-filet);display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;font-size:10.5px}
+.rq-une svg{width:18px;height:18px;fill:var(--or-vif)}
+.rq-une b{font:700 12.5px var(--titre)}
+.rq-une span{color:var(--sourd);line-height:1.15}
+.rq-une em{font-style:normal;font-weight:600;color:var(--pale)}
+.rq-une.j{border-color:var(--toi)} .rq-une.j em{color:var(--toi)}
+.rq-une.a{border-color:var(--lui)} .rq-une.a em{color:var(--lui)}
+.rq-tenir{grid-column:1/-1;text-align:center;font-size:12.5px;color:var(--mauve-clair)}
+.rq-porte{font:700 9.5px var(--ui);color:var(--sur-or);background:var(--or-vif);border-radius:4px;text-align:center;padding:1px 2px}
+.ch-camp .cr2 .carte{width:82%;align-self:center}
+.ch-terres,.ri-terres{overflow-y:auto}

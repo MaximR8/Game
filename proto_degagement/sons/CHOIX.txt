@@ -1,0 +1,2 @@
+Les sons du jeu viennent de : A=PA8 · B=B1 · C=PA7 · D=D3 · E=E2 · F=F5 · G=G4 · H=H3 · I=I1 · J=J3 · M=M1 · N=N1 · O=O1 · P=P2 · Q=Q3 · R=R1 · S=S1 · T=T3 · U=U1 · V=V1 · W=W2 · X=X1 · Y=Y2 · Z=Z2 (F : la Nébuleuse) · autres écrans=CA8
+(design/sons/preparer_jeu.py ; sources CC0 : design/sons/sources/LICENCES.md)

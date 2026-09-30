@@ -1,0 +1,26 @@
+/* 1 · Le Carré des astres */
+.cr-main{display:flex;justify-content:center;gap:6px;flex:none}
+.cr-a .carte{width:46px}
+.cr-j{padding-top:10px}
+.cr-j .carte{width:62px;cursor:pointer;transition:transform .15s}
+.cr-plateau{align-self:center;width:min(100%,300px);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:6px;border-radius:14px;background:rgba(24,20,40,.72);border:1px solid var(--or-filet);flex:none}
+.cr-case{aspect-ratio:4/5;border-radius:9px;border:1px dashed #3a3257;background:rgba(15,12,24,.55);padding:0;display:grid;place-items:center;position:relative}
+.cr-case .carte{width:100%;height:100%}
+.cr-case.cr-libre{border:2px solid var(--or-vif);background:rgba(58,44,102,.45)}
+.cr-terre{border:1px solid var(--t);background:color-mix(in srgb,var(--t) 14%,#120e1c)}
+.cr-terre svg{width:34%;height:auto;fill:var(--t)}
+.cr-terre span{position:absolute;bottom:9%;left:0;right:0;text-align:center;font:600 12px var(--ui);color:var(--t)}
+.cr-n{position:absolute;min-width:18px;height:18px;padding:0 3px;border-radius:5px;background:rgba(10,8,16,.9);font:700 13px/18px var(--ui);text-align:center;color:#fff;font-variant-numeric:tabular-nums;z-index:2}
+.cr-h{top:3px;left:50%;transform:translateX(-50%)}
+.cr-b{bottom:3px;left:50%;transform:translateX(-50%)}
+.cr-g{left:3px;top:50%;transform:translateY(-50%)}
+.cr-d{right:3px;top:50%;transform:translateY(-50%)}
+.cr-j .cr-b{bottom:17px}
+.cr-n.plus{color:var(--toi)}
+.cr-a .cr-n{min-width:14px;height:14px;font-size:10px;line-height:14px;padding:0 2px}
+.carte.cj{border-color:var(--toi);box-shadow:0 0 0 2px var(--toi)}
+.carte.ca{border-color:var(--lui);box-shadow:0 0 0 2px var(--lui)}
+.carte.cj::before,.carte.ca::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}
+.carte.cj::before{background:linear-gradient(180deg,rgba(127,208,176,.05) 30%,rgba(127,208,176,.5))}
+.carte.ca::before{background:linear-gradient(180deg,rgba(229,154,138,.05) 30%,rgba(229,154,138,.5))}
+.cr-pose{animation:entre .3s ease-out}
