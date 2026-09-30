@@ -30,3 +30,6 @@ design/sons/sources/**
 design/sons/secs/
 design/canevas/sons/ecoute/
 /Cartes/
+
+# l'app Android fabriquée (APK, AAB)
+/android/
