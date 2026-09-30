@@ -1,7 +1,7 @@
 # La Poussette — ce qui ne part PAS dans le dépôt (github.com/MaximR8/Game, privé).
 
 # ⛔ LES SECRETS — jamais dans le dépôt (docs/ops/INFRA.md § Les secrets)
-certs/
+/certs/
 portier/secret/
 codes_cadeaux/registre.json
 *.p8
@@ -16,7 +16,7 @@ proto_degagement/.godot/
 *.tmp
 
 # ce qui se refait : les exports, les outils
-web/
+/web/
 Godot_*.exe
 outils/navigateur/node_modules/
 __pycache__/
@@ -29,4 +29,4 @@ design/sons/sources/**
 !design/sons/sources/*/_sons.json
 design/sons/secs/
 design/canevas/sons/ecoute/
-Cartes/
+/Cartes/
