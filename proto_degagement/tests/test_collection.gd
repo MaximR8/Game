@@ -119,30 +119,30 @@ func _obtenir() -> void:
 	GS.eclats = 0
 	var legende := str(GS.ids_du_rang("legende")[0])
 	var sbire := str(GS.ids_du_rang("sbire")[0])
-	_ok("les prix : sbire 60, Héros 200 (Or 400), Légende 900 (prismatique 9 000)",
-		GS.prix(sbire, "base") == 60 and GS.prix("korrigan", "base") == 200 and GS.prix("korrigan", "or") == 400
-		and GS.prix(legende, "base") == 900 and GS.prix(legende, "prisme") == 9000)
+	_ok("les prix (30/09, ×2,5) : sbire 150, Héros 500 (Or 1 000), Légende 2 200 (prismatique 22 000)",
+		GS.prix(sbire, "base") == 150 and GS.prix("korrigan", "base") == 500 and GS.prix("korrigan", "or") == 1000
+		and GS.prix(legende, "base") == 2200 and GS.prix(legende, "prisme") == 22000)
 	_ok("le Full art ne s'achète pas ; une carte inconnue non plus", GS.prix(legende, "full") == -1 and GS.prix("inconnu", "base") == -1)
 	_ok("sans éclats : refusé", not GS.peut_obtenir(legende, "base") and GS.obtenir(legende, "base").is_empty() and not GS.cartes.has(legende))
-	GS.eclats = 1000
+	GS.eclats = 2300
 	var r := GS.obtenir(legende, "base")
-	_ok("900 éclats : la Légende entre dans la collection, il en reste 100", not r.is_empty() and r["nouvelle"] and GS.cartes.has(legende)
+	_ok("2 200 éclats : la Légende entre dans la collection, il en reste 100", not r.is_empty() and r["nouvelle"] and GS.cartes.has(legende)
 		and GS.eclats == 100)
 	_ok("déjà là : refusé", not GS.peut_obtenir(legende, "base") and GS.obtenir(legende, "base").is_empty() and GS.eclats == 100)
 	GS.eclats = 99999
 	_ok("le Full art, même riche : refusé", GS.obtenir(legende, "full").is_empty() and GS.eclats == 99999)
 	r = GS.obtenir(legende, "prisme")
 	_ok("une variante : le prismatique rejoint la carte, et passe devant", not r.is_empty() and GS.possede(legende, "prisme")
-		and GS.cartes[legende]["variante"] == "prisme" and GS.eclats == 99999 - 9000)
+		and GS.cartes[legende]["variante"] == "prisme" and GS.eclats == 99999 - 22000)
 
 
 func _niveaux() -> void:
 	GS.cartes = {"thor": _carte("thor", ["base"], 1, 9), "chinchin": _carte("chinchin", ["base"])}
 	GS.poussiere = 5000
-	_ok("un niveau coûte 100 × le niveau", GS.cout_niveau("thor") == 900)
+	_ok("un niveau coûte 250 × le niveau (30/09)", GS.cout_niveau("thor") == 2250)
 	_ok("le plafond : 10 pour Thor, 1 pour un sbire", GS.niveau_max("thor") == 10 and GS.niveau_max("chinchin") == 1)
-	_ok("du niveau 9 au 10 : oui", GS.monter_niveau("thor") and int(GS.cartes["thor"]["niveau"]) == 10 and GS.poussiere == 4100)
-	_ok("au-delà du 10 : non, même avec la poussière", not GS.peut_monter("thor") and not GS.monter_niveau("thor") and GS.poussiere == 4100)
+	_ok("du niveau 9 au 10 : oui", GS.monter_niveau("thor") and int(GS.cartes["thor"]["niveau"]) == 10 and GS.poussiere == 2750)
+	_ok("au-delà du 10 : non, même avec la poussière", not GS.peut_monter("thor") and not GS.monter_niveau("thor") and GS.poussiere == 2750)
 	_ok("un sbire : pas de niveau", not GS.peut_monter("chinchin"))
 	var un_seul := ""
 	for h in GS.HEROS:

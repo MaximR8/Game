@@ -606,6 +606,8 @@ PALETTES_BILLE = {
     # le voile : fond, nuée principale, nuée secondaire, accent ; la teinte des reflets
     "etoile": (("#140d34", "#6a30b4", "#d0589a", "#3456c0"), (0.80, 0.70, 1.0)),
     "poussiere": (("#040b28", "#1b3c9c", "#2c7cc6", "#1a6a96"), (0.66, 0.82, 1.0)),
+    # (30/09) le cœur d'étoile : ce que laisse la Supernova — une bille d'or et d'ambre, un soleil au centre
+    "coeur": (("#2a1204", "#b8620e", "#f2b440", "#d9523e"), (1.0, 0.84, 0.58)),
 }
 
 
@@ -641,7 +643,7 @@ def voile_bille(contenu, W=1024):
     (26/09 — Maxim : « ça fait encore un peu effet image plate »). Une nébuleuse et ses étoiles."""
     H = W // 2
     (fond, c1, c2, c3), _ = PALETTES_BILLE[contenu]
-    graine = 70 if contenu == "etoile" else 90
+    graine = {"etoile": 70, "coeur": 110}.get(contenu, 90)
 
     def sans_couture(a):
         # fondu avec une copie décalée d'une demi-largeur : les deux bords se raccordent
@@ -687,8 +689,10 @@ def voile_bille(contenu, W=1024):
 def coeur_bille(contenu, T=512, ss=2):
     """L'objet au centre, seul (RGBA) : l'étoile d'or éclairée, ou un tourbillon de poussière d'or."""
     N, u, v = grille(T, ss)
-    if contenu == "etoile":
-        d_et, _ = polygone_sdf(u, v, etoile_contour(0.96, 0.62, 0.30))
+    if contenu in ("etoile", "coeur"):
+        # le cœur d'étoile : un soleil à huit branches égales, plus trapu (l'étoile d'invocation en a quatre longues)
+        forme = etoile_contour(0.96, 0.62, 0.30) if contenu == "etoile" else etoile_contour(0.90, 0.90, 0.46)
+        d_et, _ = polygone_sdf(u, v, forme)
         t_et = np.clip(-d_et, 0, None)
         h_et = 0.9 * np.minimum(t_et, 0.2)
         n_et = normales(h_et, N)
@@ -911,7 +915,7 @@ def emblemes(S=256):
     SORTIE = garde
 
 
-UNIVERS = ["etoile-invocation", "poussiere-etoile"] + ["pierre-%s" % t for t in PIERRES] + ["pierre-lune"]
+UNIVERS = ["etoile-invocation", "poussiere-etoile", "coeur-etoile"] + ["pierre-%s" % t for t in PIERRES] + ["pierre-lune"]
 
 
 def univers(S=512):
@@ -926,6 +930,8 @@ def univers(S=512):
         etoile_invocation("etoile-invocation.png", S)
     if veut("poussiere-etoile"):
         poussiere_etoile("poussiere-etoile.png", S)
+    if veut("coeur-etoile"):
+        bille_univers("coeur-etoile.png", "coeur", S)
     for t in PIERRES:
         if veut("pierre-" + t):
             pierre("pierre-%s.png" % t, t, S)

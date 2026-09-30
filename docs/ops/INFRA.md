@@ -325,6 +325,8 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
   `grep -i keystore proto_degagement/export_presets.cfg` → vide).
 - Pour le Play Store : un **AAB** (il faudra la fabrication Gradle de Godot) ; l'APK sert aux essais (installation directe).
 
+- **La Supernova** (30/09) : `tests/test_supernova.tscn` (headless) ; `tests/capture_supernova.tscn` (en fenêtre, l'animation).
+
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 
 Le projet (`_NOUVEAU_PROJET`) est un dépôt Git depuis le 30/09 — pour Codemagic (l'app iPhone) et pour l'historique.

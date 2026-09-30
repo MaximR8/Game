@@ -12,6 +12,44 @@
 
 ---
 
+## ✅ **La Supernova ; le cœur d'étoile ; les coûts relevés** — **EN PROD** *(30/09/2026, 23 h 57 ; l'APK Android 0.2 à 23 h 59)*
+
+**En clair.** Les pièces tombées dans les fentes remplissent une **jauge** : la frise de lunes sous « La Poussette »
+s'allume, une lune après l'autre. Neuf lunes : la **SUPERNOVA** — un flash, le mot en énorme, en lettres d'or, qu'un éclat
+de lumière traverse, une gerbe d'étoiles nettes ; puis 30 s où la machine s'emballe : le poussoir deux fois plus vite, une
+pluie de 36 pièces offertes sur le bloc, tout ce qui tombe devant compte double (« ×2 ») ; le mot se range en haut et compte
+les secondes. À la fin, un **cœur d'étoile** (une bille d'or et d'ambre, un soleil au centre) tombe au milieu du plateau :
+poussé jusqu'au bord, il est gagné. Trois cœurs allumeront une Nouvelle machine (la suite ; le « + » du plateau du jour
+le dit). Et **les coûts relevés** : les cartes en éclats ×2,5 (héros 500, légende 2 200), un niveau 250 × le niveau,
+évoluer 3 pierres (stade II) puis 10 (stade III).
+
+🔴 **POURQUOI** — DECISIONS 30/09 (l'économie ; Maxim : *« Supernova c'est top, on affiche le mot en gros dans l'animation avec
+des effets de lumière dessus »* ; *« augmenter les coûts… les pierres de manière drastique »*).
+
+· `pusher_screen.gd` § la Supernova : `JAUGE_SUPERNOVA` 150 (au banc : une toutes les ~10 min de jeu soutenu), `_nourrir_jauge`
+  (les fentes), `declencher_supernova`, `_tic_supernova` (la pluie, le temps), `_fin_supernova` (le cœur), `_dessiner_jauge`
+  (la frise), le « ×2 » dans `_sur_gain` ; le cœur est un objet de la machine, pas du plateau du jour (`LOTS`).
+  `supernova_fx.gd` : l'animation (le reflet ne passe que sur les lettres : `clip_children`). `Son.supernova`. `GS` :
+  `jauge_supernova`, `coeurs` (sauvegardés, et donc aussi sur le serveur). L'objet : `design/objets/render_objets.py`
+  (`"coeur"` dans les billes ; ⚠️ relancer tout `--univers` réécrit les pierres autrement : on n'a ajouté QUE le cœur).
+· Les outils de test : un bouton « Supernova » (la voir tout de suite).
+· Les coûts : `GS.PRIX_RANG`, `POUSSIERE_PAR_NIVEAU`, `PIERRES_EVOLUTION` ; tests mis à jour.
+
+**Tests faits** : `test_supernova` (12 : la jauge et la frise, le déclenchement, le poussoir ×2, le son, la pluie, le ×2, le cœur
+à la fin, compté, sauvegardé, hors du plateau du jour) ; `capture_supernova` (vu : le mot qui jaillit, le reflet, le mot rangé,
+la pluie) ; `sim_poussoir` (2 × 10 min : une Supernova, un cœur ; le rendement sur la partie, 72-74 %) ; `test_collection`,
+`test_objets` (les nouveaux coûts), `test_son`, `test_journee`, `test_codes`, `capture_collection`, `capture_accueil`,
+`capture_journee`, `capture_menu` : OK. Déployé : `index.pck` servi à 23 h 57, healthcheck `200` ; l'APK 0.2 (versionCode 2 :
+s'installe par-dessus la 0.1).
+
+**Pas testé** : sur le téléphone.
+
+### ✅ À tester
+- [ ] Outils (appui long sur l'onglet Nébuleuse) → « Supernova » : le mot, la lumière, la pluie, le ×2, le cœur à la fin
+- [ ] En jouant : la frise de lunes se remplit avec les pièces des fentes
+
+---
+
 ## 🧪 **La première app Android (APK d'essai) : be.poizot.poussette 0.1** — *fabriquée le 30/09/2026, pas publiée*
 
 **En clair.** Le jeu existe maintenant en **vraie app Android** (70 Mo), fabriquée sur le PC de Maxim, signée avec la clé du

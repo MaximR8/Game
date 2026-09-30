@@ -48,21 +48,21 @@ func _ready() -> void:
 	gs2.lire_sauvegarde({"v": 4, "eclats": "x"}, false)
 	_verifier(gs2.eclats == 0, "des éclats illisibles : 0")
 
-	# 3. L'évolution (28/09, ⑧ lot B) : le stade II au niveau 5 avec 1 pierre, le stade III au niveau 10 avec 2 ; celles de
-	#    son type d'abord, la lune complète ; le refus ET le passage.
-	gs.pierres = {"esprit": 1, "lune": 2}
+	# 3. L'évolution (28/09, ⑧ lot B ; 30/09 : 3 et 10 pierres) : le stade II au niveau 5 avec 3 pierres, le stade III au
+	#    niveau 10 avec 10 ; celles de son type d'abord, la lune complète ; le refus ET le passage.
+	gs.pierres = {"esprit": 3, "lune": 2}
 	gs.cartes["kitsune"]["niveau"] = 4
 	_verifier(not gs.peut_evoluer("kitsune"), "niveau 4 : pas encore le stade II (il faut le niveau 5)")
 	gs.cartes["kitsune"]["niveau"] = 5
-	_verifier(gs.pierre_pour_evoluer("kitsune") == "esprit" and gs.plan_evolution("kitsune") == {"esprit": 1},
+	_verifier(gs.pierre_pour_evoluer("kitsune") == "esprit" and gs.plan_evolution("kitsune") == {"esprit": 3},
 		"Kitsune (esprit) prend d'abord une pierre d'esprit : %s" % str(gs.plan_evolution("kitsune")))
 	_verifier(gs.evoluer("kitsune") and int(gs.cartes["kitsune"]["stade"]) == 2 and gs.nb_pierres("esprit") == 0 and gs.nb_pierres("lune") == 2,
 		"évolue au stade II : %s" % str(gs.pierres))
-	_verifier(gs.pierre_demandee("kitsune") == "2 pierres d'esprit", "le stade III : « %s »" % gs.pierre_demandee("kitsune"))
+	_verifier(gs.pierre_demandee("kitsune") == "10 pierres d'esprit", "le stade III : « %s »" % gs.pierre_demandee("kitsune"))
 	_verifier(not gs.peut_evoluer("kitsune"), "niveau 5 : pas encore le stade III (il faut le niveau 10)")
 	gs.cartes["kitsune"]["niveau"] = 10
-	gs.pierres = {"esprit": 1, "lune": 1}
-	_verifier(gs.plan_evolution("kitsune") == {"esprit": 1, "lune": 1}, "1 d'esprit + 1 de lune : %s" % str(gs.plan_evolution("kitsune")))
+	gs.pierres = {"esprit": 6, "lune": 4}
+	_verifier(gs.plan_evolution("kitsune") == {"esprit": 6, "lune": 4}, "6 d'esprit + 4 de lune : %s" % str(gs.plan_evolution("kitsune")))
 	_verifier(gs.evoluer("kitsune") and int(gs.cartes["kitsune"]["stade"]) == 3 and gs.total_pierres() == 0,
 		"évolue au stade III, et prend les deux : %s" % str(gs.pierres))
 	gs.cartes["kitsune"]["stade"] = 1
@@ -72,17 +72,17 @@ func _ready() -> void:
 	_verifier(not gs.peut_evoluer("kitsune"), "cinq pierres de feu ne font pas évoluer Kitsune")
 	gs.cartes["georges"]["niveau"] = 99
 	_verifier(not gs.peut_evoluer("georges"), "Saint Georges (sans type) : pas avec du feu")
-	gs.pierres = {"lune": 1}
+	gs.pierres = {"lune": 3}
 	_verifier(gs.evoluer("georges") and gs.total_pierres() == 0, "Saint Georges : avec la lune")
-	_verifier(gs.pierre_demandee("kitsune") == "1 pierre d'esprit", "le bouton dit : « %s »" % gs.pierre_demandee("kitsune"))
-	_verifier(gs.pierre_demandee("georges") == "2 pierres de lune", "Saint Georges, au stade II, pour le III : « %s »" % gs.pierre_demandee("georges"))
+	_verifier(gs.pierre_demandee("kitsune") == "3 pierres d'esprit", "le bouton dit : « %s »" % gs.pierre_demandee("kitsune"))
+	_verifier(gs.pierre_demandee("georges") == "10 pierres de lune", "Saint Georges, au stade II, pour le III : « %s »" % gs.pierre_demandee("georges"))
 	gs.cartes["kitsune"]["stade"] = 2
-	gs.pierres = {"lune": 1}
-	_verifier(not gs.peut_evoluer("kitsune") and gs.plan_evolution("kitsune").is_empty(), "1 lune pour 2 pierres : non")
+	gs.pierres = {"lune": 9}
+	_verifier(not gs.peut_evoluer("kitsune") and gs.plan_evolution("kitsune").is_empty(), "9 lunes pour 10 pierres : non")
 	gs.cartes["eau"] = null
 	gs.cartes.erase("eau")
 	gs.cartes["kelpie"] = {"stade": 2, "niveau": 10, "variante": "base", "variantes": ["base"]}
-	_verifier(gs.pierre_demandee("kelpie") == "2 pierres d'eau", "le pluriel : « %s »" % gs.pierre_demandee("kelpie"))
+	_verifier(gs.pierre_demandee("kelpie") == "10 pierres d'eau", "le pluriel : « %s »" % gs.pierre_demandee("kelpie"))
 
 	# 4. Les gains du plateau.
 	var p0: int = gs.poussiere

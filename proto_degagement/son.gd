@@ -164,6 +164,16 @@ static func gain() -> void:
 	global.jouer("gain", randf_range(-1.5, 0.0), float(MONTEE[global._cascade]) + randf_range(-0.4, 0.4))
 
 
+# LA SUPERNOVA (30/09) : l'aspiration qui monte, puis la révélation et les cloches les plus riches — le gros son.
+static func supernova() -> void:
+	if global == null:
+		return
+	inv("aspiration", 2.0, 5.0)
+	global.get_tree().create_timer(0.32).timeout.connect(func():
+		inv("revelation", 2.0, 0.0)
+		rarete(5))
+
+
 # Le gros paquet : pas deux fois de suite (un objet qui tombe, puis les pièces de son amas).
 static func _gros_paquet() -> void:
 	if _t() - global._dernier_gros > 0.6:

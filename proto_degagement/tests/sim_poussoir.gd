@@ -185,6 +185,7 @@ func _jouer() -> void:
 			gros += 1
 			dans_gros += n
 	print("Tombées DEVANT sans être comptées : %d (gagnées : %d)" % [p.ratees_au_bord, pieces_gagnees])
+	print("Supernovas : %d (%s) · cœurs d'étoile gagnés : %d" % [p.supernovas, ("une toutes les %.1f min" % (DUREE / 60.0 / p.supernovas)) if p.supernovas > 0 else "aucune", GS.coeurs])
 	print("Entrechocs : %d (%.1f par minute)" % [p.entrechocs, p.entrechocs / (DUREE / 60.0)])
 	print("Fentes : %d pièces perdues (%d %% de ce qui a quitté le plateau)" % [p.perdues, roundi(100.0 * p.perdues / maxf(1.0, p.perdues + pieces_gagnees))])
 	print("Paquets : %d chutes · %.1f pièces par chute · %d paquets de 4 et plus (%d %% des pièces) · le plus gros : %d" % [
@@ -193,8 +194,16 @@ func _jouer() -> void:
 		ok = false
 	# (29/09) TOUT le plateau du jour est posé : autant d'objets sur le tas qu'il en reste à gagner aujourd'hui
 	var attendus := Plateau.a_poser().size()
+	var coeurs_sur_tas := 0                # (30/09) un cœur d'étoile (la Supernova) n'est pas du plateau du jour
+	for l in p.lots:
+		if str(l.get_meta("lot")) == "coeur-etoile":
+			coeurs_sur_tas += 1
 	print("Objets attendus sur le tas : %d (tout ce qu'il reste à gagner aujourd'hui)" % attendus)
-	if hors > 0 or rendement < 0.5 or empilees == 0 or couverts > 1 or p.lots.size() + p.a_rendre.size() != attendus:
+	# (30/09) le rendement sur TOUTE la partie : avec les fentes (~30 % sur les côtés), une minute creuse peut passer sous la
+	# moitié sans que la machine aille mal
+	var rendement_total := float(pieces_gagnees) / maxf(1.0, lachees)
+	print("Rendement sur la partie : %d %%" % roundi(rendement_total * 100.0))
+	if hors > 0 or rendement_total < 0.5 or empilees == 0 or couverts > 1 or p.lots.size() - coeurs_sur_tas + p.a_rendre.size() != attendus:
 		ok = false
 	# la sauvegarde : le même tas revient
 	p._sauver()
@@ -203,7 +212,7 @@ func _jouer() -> void:
 	p2.size = Vector2(1080, 2400)
 	add_child(p2)
 	print("Rechargé : %d pièces (sauvées : %d), %d objets" % [p2.pieces.size(), n_avant, p2.lots.size()])
-	if absi(p2.pieces.size() - n_avant) > 2 or p2.lots.size() != attendus:
+	if absi(p2.pieces.size() - n_avant) > 2 or p2.lots.size() - coeurs_sur_tas != attendus:
 		ok = false
 	print("RESULTAT: " + ("OK" if ok else "ECHEC"))
 	get_tree().quit(0 if ok else 1)

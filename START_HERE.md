@@ -81,8 +81,8 @@ deviendraient invocables.
 **④** **Les événements du calendrier** (le Grand Carré 4 × 4, les thèmes des saisons — DECISIONS 26/09 ; et des ciels à
 thème dans l'Astrolabe, une fiche dans `Portails.LISTE`) ne sont pas faits.
 **⑤** **Le nom du jeu n'est pas choisi.** « La Poussette » est un nom de travail. La Tarasque manque.
-**⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09, validé par Maxim)** : la Supernova et le cœur d'étoile
-(Nouvelle machine) → les Trésors → la série de 7 jours → le premier événement (Ragnarök, un mini-jeu d'adresse) → la
+**⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09, validé par Maxim)** : ✅ la Supernova et le cœur d'étoile
+(30/09, 23 h 57) → la Nouvelle machine (3 cœurs) → les Trésors → la série de 7 jours → le premier événement (Ragnarök, un mini-jeu d'adresse) → la
 boutique (éclats, pass, cosmétiques ; jamais de hasard vendu). Les coûts relevés (éclats ×2,5, niveau 250, pierres 3 et 10).
 **⑥** **Les idées de Maxim pour la Nébuleuse (29/09)** — reprises au-dessus (⓪bis) : une **jauge** que remplissent les pièces tombées dans
 les fentes — pleine, la machine passe en **« super machine »** (gains doublés) ; des **objets d'événement** et des mini-jeux

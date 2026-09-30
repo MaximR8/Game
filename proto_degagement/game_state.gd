@@ -171,7 +171,8 @@ const HEROS := [
 #    son type (la lune complète s'il en manque). Un héros à trois stades s'arrête au niveau 10 (4 500 poussières
 #    pour y arriver) ; un héros à un seul stade, comme un sbire, n'a pas de niveau. Avant : 40 × le niveau, niveau 3 × s,
 #    une pierre, sans plafond (la poussière ne servait plus à rien après 16 800).
-const POUSSIERE_PAR_NIVEAU := 100
+# (30/09 — Maxim : « augmenter le coût en XP et pierres pour évoluer » ; DECISIONS 30/09) 100 → 250
+const POUSSIERE_PAR_NIVEAU := 250
 const NIVEAU_PAR_STADE := 5
 
 # 🔴 LES ÉCLATS (28/09, ⑧ lot B — Maxim : « pokemon te donne des cristaux quand tu ouvres des packs et tu peux tout
@@ -180,7 +181,8 @@ const NIVEAU_PAR_STADE := 5
 #    variante) donne des éclats en plus, selon sa rareté ; plus de poussière (« imagine j'ai un doublon d'une carte en
 #    Full art, ça m'énerverait que ça me donne de la poussière »).
 const ECLATS_PAR_INVOCATION := 5
-const PRIX_RANG := {"sbire": 60, "heros": 200, "mythe": 450, "legende": 900}
+# (30/09 — « augmenter le coût en éclats des cartes et variantes » : ×2,5 ; les variantes gardent leur multiplicateur)
+const PRIX_RANG := {"sbire": 150, "heros": 500, "mythe": 1100, "legende": 2200}
 const PRIX_VARIANTE := {"base": 1, "or": 2, "ombre": 3, "elem": 5, "prisme": 10}     # pas de Full art
 const ECLATS_DOUBLON := {"base": 5, "or": 10, "ombre": 20, "elem": 40, "prisme": 100, "full": 300}
 # Tirées, ces variantes tombent sur une carte qui ne les a pas encore (tant qu'il en reste dans le rang) : jamais en
@@ -221,6 +223,10 @@ var tas_bloc: Dictionary = {}   # {"y":, "avance":} : où en était le bloc
 # quand on veut, et ce qui tombe du bord revient en main.
 # ⛔ Jamais de minuteur bloquant : la main se régénère toute seule.
 var main_pieces: int = 30
+# (30/09) la Supernova : la jauge que remplissent les pièces tombées dans les fentes ; les cœurs d'étoile qu'elle laisse
+# (trois allument une Nouvelle machine) — DECISIONS 30/09
+var jauge_supernova: int = 0
+var coeurs: int = 0
 
 # Estampille de la geometrie du plateau au moment de la sauvegarde.
 # 🔴 Un tas enregistre avec d'ANCIENNES cotes replace des pieces la ou
@@ -787,9 +793,15 @@ func peut_evoluer(id: String) -> bool:
 	return not plan_evolution(id).is_empty() and int(cartes[id]["niveau"]) >= niveau_pour_evoluer(id)
 
 
-# Combien de pierres pour le stade suivant : 1 pour le stade II, 2 pour le stade III.
+# Combien de pierres pour le stade suivant (30/09 — « les pierres, on peut augmenter de manière drastique ») : 3 pour
+# le stade II, 10 pour le stade III (avant : 1 et 2). Il en tombe 3 par jour, de types au hasard : un stade III d'une
+# carte, c'est ~3 semaines — ou les pierres des Supernovas, des Nouvelles machines, des événements.
+const PIERRES_EVOLUTION := [3, 10]
+
+
 func pierres_pour_evoluer(id: String) -> int:
-	return int(cartes[id]["stade"]) if cartes.has(id) else 1
+	var st := int(cartes[id]["stade"]) if cartes.has(id) else 1
+	return int(PIERRES_EVOLUTION[clampi(st - 1, 0, PIERRES_EVOLUTION.size() - 1)])
 
 
 # Les pierres que prendra l'évolution : celles de son type d'abord, la lune complète ({type: n, lune: m}) ;
@@ -869,6 +881,8 @@ func donnees_sauvegarde() -> Dictionary:
 		"last_daily": last_daily,
 		"parties": parties,
 		"main_pieces": main_pieces,
+		"jauge_supernova": jauge_supernova,
+		"coeurs": coeurs,
 		"voyage": voyage,
 	}
 
@@ -954,6 +968,8 @@ func lire_sauvegarde(parsed: Dictionary, avec_tas := true) -> void:
 	last_daily = str(parsed.get("last_daily", ""))
 	parties = int(parsed.get("parties", 0))
 	main_pieces = int(parsed.get("main_pieces", 30))
+	jauge_supernova = maxi(0, int(parsed.get("jauge_supernova", 0)))
+	coeurs = maxi(0, int(parsed.get("coeurs", 0)))
 	var vy = parsed.get("voyage", {})
 	voyage = vy if typeof(vy) == TYPE_DICTIONARY else {}
 	tas_geo = int(parsed.get("tas_geo", 0))
@@ -1026,6 +1042,8 @@ func reset_tout() -> void:
 	tas_pieces = []
 	tas_lots = []
 	tas_bloc = {}
+	jauge_supernova = 0
+	coeurs = 0
 	main_pieces = 30
 	tas_geo = 0
 	save_game()

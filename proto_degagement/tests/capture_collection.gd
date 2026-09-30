@@ -1,7 +1,7 @@
 extends Node
 
 # Photographie la collection dans le vrai jeu (⑧ lot B, 28/09) :
-#   l'Atlas et ses éclats ; une carte qu'on n'a pas (« Obtenir · 900 éclats », deux touches) ; la même, obtenue, et
+#   l'Atlas et ses éclats ; une carte qu'on n'a pas (« Obtenir · 2 200 éclats », deux touches) ; la même, obtenue, et
 #   les variantes qui lui manquent avec leur prix (le Full art : « chance ») ; une carte au niveau maximum, qui demande
 #   2 pierres pour son stade III ; les probabilités (la règle sans double) ; une invocation et une ×10 (leurs éclats).
 # Vérifie en chemin : le prix payé, la carte entrée, les éclats reçus.
@@ -37,7 +37,7 @@ func _ready() -> void:
 	GS.last_daily = Time.get_date_string_from_system()
 	GS.etoiles = 12
 	GS.poussiere = 3000
-	GS.eclats = 1250
+	GS.eclats = 2550
 	GS.pierres = {"foudre": 1}
 	main = load("res://main.tscn").instantiate()
 	add_child(main)
@@ -50,7 +50,7 @@ func _scenario() -> void:
 	await _attendre(2.5)
 	var c: CollectionScreen = main.ecran_collec
 	_capture("atlas_eclats")
-	_verifier("les éclats au-dessus de la grille (« %s »)" % c.lbl_eclats.text, c.lbl_eclats.text == Style.nombre(1250))
+	_verifier("les éclats au-dessus de la grille (« %s »)" % c.lbl_eclats.text, c.lbl_eclats.text == Style.nombre(2550))
 
 	c._ouvrir(legende)
 	await _attendre(1.2)
@@ -59,17 +59,17 @@ func _scenario() -> void:
 	c.btn_obtenir.pressed.emit()
 	await _attendre(0.4)
 	_capture("obtenir_sur")
-	_verifier("une touche : « Sûr ? », rien n'est payé", GS.eclats == 1250 and not GS.cartes.has(legende))
+	_verifier("une touche : « Sûr ? », rien n'est payé", GS.eclats == 2550 and not GS.cartes.has(legende))
 	c.btn_obtenir.pressed.emit()
 	await _attendre(1.2)
 	_capture("obtenue")
-	_verifier("deux touches : la Légende est à toi, 900 éclats payés", GS.cartes.has(legende) and GS.eclats == 350)
+	_verifier("deux touches : la Légende est à toi, 2 200 éclats payés", GS.cartes.has(legende) and GS.eclats == 350)
 
 	c._ouvrir("thor")
 	await _attendre(1.2)
 	_capture("niveau_max")
 	_verifier("Thor au niveau 10 : « Niveau maximum » (%s)" % c.btn_niveau.text.replace("\n", " "), c.btn_niveau.text.begins_with("Niveau maximum"))
-	_verifier("son stade III demande 2 pierres (%s)" % c.btn_evo.text.replace("\n", " "), c.btn_evo.text.contains("2 pierres"))
+	_verifier("son stade III demande 10 pierres (%s)" % c.btn_evo.text.replace("\n", " "), c.btn_evo.text.contains("10 pierres"))
 	c.detail.visible = false
 	c.selection = ""
 

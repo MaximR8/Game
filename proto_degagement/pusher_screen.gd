@@ -96,6 +96,9 @@ const LOTS := {
 		"detail": "60 poussières d'étoile, pour faire monter tes cartes.", "etiq": "banal", "image": "poussiere-etoile"},
 	"etoile": {"rang": 1, "r": 0.64, "z": 11.2, "col": Color("#c9a4ff"), "titre": "Étoile d'invocation",
 		"detail": "Une invocation dans la collection.", "etiq": "normal", "image": "etoile-invocation"},
+	# (30/09) ce que laisse la Supernova : il ne fait pas partie du plateau du jour (Plateau l'ignore)
+	"coeur-etoile": {"rang": 1, "r": 0.64, "z": 11.2, "col": Color("#f2b440"), "titre": "Cœur d'étoile",
+		"detail": "Trois cœurs allument une Nouvelle machine.", "etiq": "rare", "image": "coeur-etoile"},
 }
 const PIERRES_LOT := Plateau.PIERRES        # (la chance de la lune : Plateau.CHANCE_LUNE)
 const R_PIERRE := 0.70
@@ -198,6 +201,7 @@ func _ready() -> void:
 	decor = _couche(_dessiner_decor)
 	bloc2d = _couche(_dessiner_bloc)
 	fronton2d = _couche(_dessiner_fronton)
+	jauge2d = _couche(_dessiner_jauge)            # (30/09) la jauge de la Supernova, sur la frise de lunes
 	rendu = MachineRendu.new()
 	add_child(rendu)
 	rendu.preparer(Rect2(X0 * U - 12.0, 440.0, (X1 - X0) * U + 24.0, CADRE.end.y - 12.0 - 440.0), R_PIECE, EP_PIECE,
@@ -209,6 +213,8 @@ func _ready() -> void:
 	lueur_bord.color = Color(0.80, 0.98, 0.90)
 	lueur_bord.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(lueur_bord)
+	supernova_fx = SupernovaFx.new()
+	add_child(supernova_fx)
 	visibility_changed.connect(_visibilite)
 	_ui()
 	_decor()
@@ -432,7 +438,9 @@ func _physics_process(delta: float) -> void:
 		return
 	# le bloc va et vient comme une bielle : il ralentit en bout de course au lieu
 	# de repartir d'un coup — sinon les pièces glissent sur lui à chaque retour
-	t_bloc = fmod(t_bloc + delta, PERIODE)
+	t_bloc = fmod(t_bloc + delta * (VITESSE_SUPERNOVA if supernova_t > 0.0 else 1.0), PERIODE)
+	if supernova_t > 0.0:
+		_tic_supernova(delta)
 	face_z = MILIEU - COURSE * cos(TAU * t_bloc / PERIODE)
 	bloc.position.z = face_z - 2.0
 	# L'ENTRECHOC (29/09) : le poussoir ne sonne plus ; une pièce qui TOMBE sur le tas sonne quand elle y arrive. Toutes les
@@ -498,6 +506,7 @@ func _physics_process(delta: float) -> void:
 						ratees_au_bord += 1   # (mesure) tombée DEVANT sans avoir été comptée
 					else:
 						perdues += 1          # tombée dans une fente
+						_nourrir_jauge()
 				arr.remove_at(i)
 				rendu.oublier(b)
 				monde.remove_child(b)
@@ -714,6 +723,9 @@ func _process(delta: float) -> void:
 	bloc2d.queue_redraw()
 	effets.queue_redraw()
 	lueur_bord.modulate.a = 0.75 + 0.25 * sin(horloge * 2.6)
+	if supernova_t > 0.0 or _jauge_vue != _lunes_allumees():
+		jauge2d.queue_redraw()
+	supernova_fx.maj(supernova_t)
 
 
 func _sur_gain(b: RigidBody3D) -> void:
@@ -726,7 +738,10 @@ func _sur_gain(b: RigidBody3D) -> void:
 	Son.gain()                       # la cascade : chaque pièce qui suit de près monte d'une note
 	# 🔴 Une pièce tombée va dans la réserve, et rien d'autre (Maxim, 25/09 : « les pièces, je pense
 	#    qu'elles ne rajoutent pas d'XP, ça rajoute des pièces en réserve ») : elle y file.
-	GS.main_pieces += 1
+	var n := 2 if supernova_t > 0.0 else 1     # (30/09) la Supernova : tout compte double
+	GS.main_pieces += n
+	if n > 1:
+		_texte(pos + Vector2(0, -30), "×2", Style.OR_VIF, 40)
 	GS.demander_sauvegarde()
 	_eclat(pos, COL_PIECE, 6)
 	if Effets.global == null or not is_visible_in_tree():
@@ -745,6 +760,9 @@ func _sur_gain(b: RigidBody3D) -> void:
 #    pop-up, on les voit s'envoler jusqu'au menu en haut pour aller augmenter les stats ») : la
 #    machine ne s'arrête plus ; l'objet file vers son compteur, qui le reçoit en défilant.
 func _gagner_objet(t: String, pos: Vector2) -> void:
+	if t == "coeur-etoile":
+		_gagner_coeur(pos)
+		return
 	var d := lot_def(t)
 	var cle := "poussiere" if t == "poussiere" else ("etoiles" if t == "etoile" else "pierres")
 	var gain := 60 if t == "poussiere" else 1
@@ -861,7 +879,7 @@ func _ui() -> void:
 		plus.add_theme_color_override(c, Style.TEXTE_SUR_OR)
 	p.add_child(plus)
 	Style.jeu(plus)
-	plus.pressed.connect(func(): Style.bulle(plus, "Bientôt : un plateau de plus, dans la boutique"))
+	plus.pressed.connect(func(): Style.bulle(plus, "Trois cœurs d'étoile allument une Nouvelle machine (tu en as %d) — bientôt" % GS.coeurs))
 	_maj_plateau_jour(false)
 
 	var aide := HBoxContainer.new()
@@ -896,7 +914,11 @@ func _ui() -> void:
 		PhysicsServer3D.set_active(true)
 		GS.reset_tout()
 		get_tree().reload_current_scene())
-	lbl_perf = Style.libelle(outils, "", Rect2(46, 164, 988, 44), "normal", 30, Style.SOURD)
+	var bsn := Style.bouton(outils, "Supernova", Rect2(46, 164, 320, 90), false, 36)     # (30/09) la voir tout de suite
+	bsn.pressed.connect(func():
+		if supernova_t <= 0.0:
+			declencher_supernova())
+	lbl_perf = Style.libelle(outils, "", Rect2(384, 184, 650, 44), "normal", 28, Style.SOURD)
 	_maj_main()
 
 
@@ -1033,6 +1055,106 @@ func _poser_avec_amas(k: String, bande: Vector2) -> void:
 			q = _piece(Vector3(px, h, pz))
 		q.set_meta("amas", true)
 	_lot(k, Vector3.INF, meilleure)
+
+
+
+# ─────────────────────────────────────────────────────────────
+# LA SUPERNOVA (30/09 — le « Furax » de Maxim ; DECISIONS 30/09). Les pièces tombées dans les fentes remplissent une jauge
+# (la frise de lunes s'allume, une lune après l'autre) ; pleine : 30 s où la machine s'emballe — le poussoir ×2, une pluie
+# de pièces OFFERTES sur le bloc, tout ce qui tombe devant compte double —, et un CŒUR D'ÉTOILE tombe sur le plateau à la
+# fin (trois allument une Nouvelle machine). L'animation : supernova_fx.gd. Le son : Son.supernova.
+# 🔴 Réglée au banc (sim_poussoir : les Supernovas par minute) — JAUGE_SUPERNOVA.
+# ─────────────────────────────────────────────────────────────
+const JAUGE_SUPERNOVA := 150
+const SUPERNOVA_S := 30.0
+const VITESSE_SUPERNOVA := 2.0
+const PLUIE_SUPERNOVA := 36
+var supernova_t := 0.0            # le temps qui reste (0 : pas de Supernova)
+var supernovas := 0               # combien depuis l'ouverture (le banc les compte)
+var _pluie := 0
+var _pluie_t := 0.0
+var _jauge_vue := -1
+var jauge2d: Control
+var supernova_fx: SupernovaFx
+
+
+func _nourrir_jauge() -> void:
+	if supernova_t > 0.0:
+		return                    # pendant la Supernova, la jauge ne se remplit pas
+	GS.jauge_supernova += 1
+	GS.demander_sauvegarde()
+	if GS.jauge_supernova >= JAUGE_SUPERNOVA:
+		declencher_supernova()
+
+
+func declencher_supernova() -> void:
+	GS.jauge_supernova = 0
+	supernova_t = SUPERNOVA_S
+	supernovas += 1
+	_pluie = PLUIE_SUPERNOVA
+	_pluie_t = 0.4
+	GS.demander_sauvegarde()
+	if is_visible_in_tree():
+		Son.supernova()
+		supernova_fx.lancer(SUPERNOVA_S)
+		Reglages.vibrer(120)
+
+
+# Chaque pas de physique pendant la Supernova : la pluie (une pièce offerte tous les dixièmes, sur le bloc), le temps.
+func _tic_supernova(delta: float) -> void:
+	supernova_t -= delta
+	_pluie_t -= delta
+	if _pluie > 0 and _pluie_t <= 0.0:
+		_pluie_t = 0.1
+		_pluie -= 1
+		var z := randf_range(MUR + R_PIECE + 0.05, face_z - R_PIECE - 0.05)
+		var b := _lacher(randf_range(X0 + R_PIECE, X1 - R_PIECE), z)
+		if b != null:
+			_sonner_a_la_pose(b)
+	if supernova_t <= 0.0:
+		supernova_t = 0.0
+		_fin_supernova()
+
+
+# La fin : le cœur d'étoile tombe au milieu du plateau (il faudra le pousser jusqu'au bord).
+func _fin_supernova() -> void:
+	var x := randf_range(X0 + 2.0, X1 - 2.0)
+	_lot("coeur-etoile", Vector3(x, 1.6, randf_range(10.6, 11.6)))
+	if is_visible_in_tree():
+		Son.sonner("recevoir")
+
+
+func _gagner_coeur(pos: Vector2) -> void:
+	GS.coeurs += 1
+	GS.demander_sauvegarde()
+	Son.objet_tombe()
+	Son.objet("etoile")
+	_eclat(pos, lot_def("coeur-etoile")["col"], 40)
+	_texte(pos + Vector2(0, -40), "Cœur d'étoile  %d / 3" % mini(GS.coeurs, 3) if GS.coeurs <= 3 else "Cœur d'étoile  %d" % GS.coeurs,
+		Style.OR_VIF, 46)
+	_maj_plateau_jour(true)
+
+
+# Combien de lunes allumées (0 à 9) ; toutes pendant la Supernova.
+func _lunes_allumees() -> int:
+	if supernova_t > 0.0:
+		return 9
+	return clampi(GS.jauge_supernova * 9 / JAUGE_SUPERNOVA, 0, 9)
+
+
+# La jauge, par-dessus la frise : une lune allumée devient pleine et vive, cerclée net ; pendant la Supernova, elles
+# pulsent toutes. (Pas de halo flou : les goûts de Maxim.)
+func _dessiner_jauge() -> void:
+	var v := jauge2d
+	var n := _lunes_allumees()
+	_jauge_vue = n
+	var cx := (X0 + X1) * 0.5 * U
+	var cy := CADRE.position.y + 18.0 + 118.0 + 96.0
+	var pulse := 0.75 + 0.25 * sin(horloge * 9.0) if supernova_t > 0.0 else 1.0
+	for i in n:
+		var c := Vector2(cx + 54.0 * (i - 4), cy)
+		v.draw_circle(c, 14.0, Color(Style.OR_VIF, pulse))
+		v.draw_arc(c, 19.0, 0.0, TAU, 40, Color(1.0, 0.95, 0.75, 0.9 * pulse), 2.5, true)
 
 
 # ─────────────────────────────────────────────────────────────
