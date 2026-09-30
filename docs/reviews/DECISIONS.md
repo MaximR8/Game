@@ -26,6 +26,47 @@
 
 ## Les décisions prises
 
+### L'économie : l'argent n'achète JAMAIS du hasard ; la Nébuleuse gagne la Supernova, les Nouvelles machines, les Trésors, les événements — 30/09/2026
+
+**Ce qu'on a tranché** :
+- **Le principe** : les étoiles (les invocations, tirées au hasard) ne se vendent jamais ; on ne vend que du CERTAIN — les
+  **éclats** (la carte et la variante de son choix : le moteur principal), le **Pass de la saison** (~5 €/mois, calé sur le
+  Classé, récompenses affichées), le **cosmétique**. Les pièces (la machine, où elles tombent au hasard) : zone grise — pas
+  vendues en Belgique ni aux Pays-Bas (le pays du store), sauf avis contraire d'un juriste. La parade si l'on voulait un jour
+  vendre des invocations : **le Présage** (l'astrolabe montre la carte avant l'achat : plus de hasard au moment de payer).
+- **La Supernova** (le « Furax » de Maxim) : les pièces tombées dans les fentes remplissent une jauge ; pleine, 30 s où la
+  machine s'emballe (poussoir ×2, pluie de pièces offertes, tout compte double) — le mot SUPERNOVA en énorme, en lettres
+  d'or balayées de lumière, un flash, une gerbe d'étoiles ; un **cœur d'étoile** tombe.
+- **Le cœur d'étoile** : 3 cœurs allument une **Nouvelle machine** — un second plateau du jour (6 objets affichés d'avance :
+  poussière, pierres, éclats, pièces, un trésor). Maxim : *« surtout commercialement, ça a de la valeur »*.
+- **Les Trésors** : toutes les 3-4 h, une pièce de collection dans la machine (par mythologie) ; une collection complète →
+  une variante AU CHOIX dans sa mythologie ; un double → des pièces ou de la poussière.
+- **La série de 7 jours** : le cadeau du jour monte sur 7 jours (un cœur d'étoile le 7ᵉ).
+- **Les événements** (2-3 jours, un par mythologie du jeu : Ragnarök, le Doudou, le Nouvel An lunaire, Samhain, les Mille et
+  une nuits) : un **objet d'événement** gagné dans la machine (et la Supernova) ; il paie une partie d'un **mini-jeu qui n'est
+  PAS le jeu de cartes** — rapide (30-45 s), à un doigt, d'ADRESSE (pas de hasard : on peut en vendre des parties), paliers
+  bronze / argent / or affichés : le lancer de Mjöllnir, attrape le crin, les pétards de Nian, les feux follets, le tapis volant.
+- **Les coûts relevés** (Maxim : *« augmenter le coût en éclats des cartes et variantes, en XP et pierres pour évoluer — les
+  pierres de manière drastique »*) — proposés : éclats ×2,5 (héros 500, légende 2 200 ; les variantes ×2 à ×10 comme avant) ;
+  un niveau 250 × niveau (100) ; stade II : 3 pierres de son type (1), stade III : 10 (2).
+- **Les cosmétiques** (ce qui se voit EN JOUANT — la face de la carte est déjà prise par les variantes, le dos se voit peu) :
+  thèmes de machine, skins de pièces, style de la Supernova ; au Carré en multi : tapis, cadran du joueur (portrait, cadre,
+  titre), effets de pose et de retournement, emotes, animation de victoire ; l'aura des cartes en combat, le décor de la
+  carte en grand, le cadre dans l'Atlas ; le thème de l'astrolabe ; bannière, avatar.
+- **L'ordre** : la Supernova et le cœur (la Nouvelle machine) → les Trésors → la série de 7 jours → le premier événement
+  (Ragnarök) → la boutique (après un juriste). Pas de fonctions « famille » (cadeaux entre joueurs, classement) : écarté.
+
+**Ce qui a fait pencher** : les joueurs, via Maxim, 30/09 : *« la Nébuleuse, ils la vident très vite, donc ils n'ont plus rien à
+faire après, faut donner envie de revenir plus souvent »* ; la loi belge (la Commission des jeux de hasard, 2018 : un achat en
+argent réel qui mène à du hasard est un jeu de hasard — voir la mémoire « boutique-belgique » et FEATURES § ⑧) ; le plateau du
+jour garde son rôle (les étoiles restent rares : les nouveautés donnent des pièces, de la poussière, des pierres, des éclats).
+**Ce qu'on a écarté, et pourquoi** : vendre des tickets (illégal en Belgique) ; des mini-jeux au Carré (Maxim : *« des mini-jeux
+qui n'impliquent pas le jeu de cartes, un truc rien à voir, rapides et fun »*) ; les fonctions famille (Maxim : non) ; vendre
+des dos de cartes comme cosmétique phare (ils se voient peu).
+**Ce que ça coûte, et qu'on assume** : sans vendre le hasard, le jeu gagne moins par joueur qu'un gacha classique — il gagne
+par la collection choisie (éclats), le pass et le cosmétique ; le relèvement des coûts ralentit les joueurs actuels.
+🔓 **Ce qui la rouvrirait** : l'avis d'un juriste sur la vente des pièces ; la mesure du 12/10 (la journée).
+
 ### Tout le plateau du jour est posé, chaque objet sur un amas ; des fentes sur les côtés ; le bloc du haut presque vide — 29/09/2026
 
 **Ce qu'on a tranché** : les 12 objets du jour sont **tous sur le plateau** (plus trois qui reviennent) : le ticket au fond,
