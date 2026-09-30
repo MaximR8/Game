@@ -298,6 +298,25 @@ visiteurs ont la même adresse, et un seul tricheur bloquerait tout le monde) ; 
   sur l'écran d'accueil**. L'adresse publique est un autre site que l'adresse locale : les parties ne se
   mélangent pas.
 
+## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
+
+Le projet (`_NOUVEAU_PROJET`) est un dépôt Git depuis le 30/09 — pour Codemagic (l'app iPhone) et pour l'historique.
+- **Ce qui y est** : le jeu (`proto_degagement/`, ses `.import`), la doc, les fabriques (`design/*.py`), le portier et les
+  codes cadeaux **sans leurs secrets**, les outils. ~90 Mo.
+- **Ce qui n'y est pas** (`.gitignore`) : ⛔ les secrets (`/certs/`, `portier/secret/`, `codes_cadeaux/registre.json`,
+  les clés de signature `*.jks` / `*.keystore` / `*.p8`) ; le cache Godot ; `/web/` (l'export) ; les exécutables Godot ; les
+  sources lourdes re-téléchargeables (`design/sons/sources/**` — sauf `LICENCES.md` et les `_pages.json` / `_sons.json`).
+- 🔴 **Sous Windows, Git ne distingue pas les majuscules** : une règle `Cartes/` excluait aussi `proto_degagement/cartes/`
+  (vu au 1er envoi : 0 carte). Les règles de dossier sont ancrées à la racine (`/Cartes/`).
+- L'accès : une **clé de déploiement** propre au dépôt (`~/.ssh/github_poussette` sur le PC de Maxim, « Allow write
+  access ») ; le dépôt la connaît par `git config core.sshCommand`.
+
+```bash
+cd //nas01/docker/_NOUVEAU_PROJET
+git status && git add -A && git commit -m "…" && git push      # (les messages se terminent par la ligne Co-Authored-By)
+git ls-files | grep -iE "certs/|secret|registre|\.jks|\.p8"    # doit rester VIDE
+```
+
 ## 🗄️ Le serveur des comptes — Nakama sur le VPS de Maxim *(29/09/2026, ⑥)*
 
 **L'adresse** : `https://lapoussette.duckdns.org` (DuckDNS, gratuit — Maxim ne veut ni acheter de domaine maintenant, ni
