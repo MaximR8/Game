@@ -234,6 +234,7 @@ python design/sons/preparer_ecoute.py --troisieme <dossier des films>   # la 3�
 python codes_cadeaux/codes.py ajouter NOEL2026 --etoiles 10 --fin 2026-12-31   # un code cadeau : en ligne tout de suite
 python codes_cadeaux/codes.py liste                              # les codes, en clair (le registre privé : codes_cadeaux/registre.json)
 python codes_cadeaux/codes.py retirer NOEL2026
+python codes_cadeaux/codes.py publier                           # (01/10) remettre la table sur le serveur (l'app la lit là)
 ```
 - 🔴 **Sur le web, le son : des bus DÉCLARÉS, jamais créés en cours de partie ; aucun fondu sur un son qui joue.** Godot y
   joue les sons en échantillons du navigateur : un bus ajouté par `add_bus()` n'y est relié à rien (tout se tait, sans une

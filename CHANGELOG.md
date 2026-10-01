@@ -12,6 +12,28 @@
 
 ---
 
+## ✅ **Les codes cadeaux marchent dans l'app (la table sur le serveur) ; le compte retente hors ligne** — **EN PROD** *(01/10/2026, 13 h 26 ; l'APK 0.3)*
+
+**En clair.** Dans l'app Android, un code cadeau répondait « pas de connexion » : le jeu cherchait la liste des codes sur le
+site à côté de lui (le NAS), et l'app n'a pas de site. La liste vit maintenant aussi sur le serveur du VPS : l'app et le web
+la lisent là (le fichier du NAS reste le secours du web). Et le compte, hors ligne au lancement (pas de réseau, une page
+ouverte avant un changement du portier), retente tout seul toutes les minutes.
+
+🔴 **POURQUOI** — Maxim, 01/10 : *« j'ai mis le code HalaMadrid, il me dit que je suis pas en ligne ; mon cousin, toujours dans le
+web, a voulu mettre le mot de passe, ça lui dit qu'il est hors ligne aussi »*. Le cousin : le portier avait bien la nouvelle
+règle (vérifié) — sa page avait été ouverte AVANT le redémarrage (une app web d'iPhone reste ouverte des jours) : la fermer
+pour de bon et la rouvrir.
+
+· `codes_cadeaux/codes.py` : `publier_serveur` — un compte « administrateur des codes » (son identifiant d'appareil SECRET
+  dans `registre.json`, privé) pose l'objet `config/codes` (permission de lecture 2 : tout joueur connecté) ; nouvelle
+  commande `publier`. `codes.gd` : `ADMIN` (595ada12-…), `lire_table` lit le serveur d'abord. `compte.gd` : `lire_public`,
+  `_reessayer` (toutes les `RECONNEXION_S`).
+
+**Tests faits** : `test_compte` (16 : + la table lue sur le serveur, sans code en clair ; « Hala Madrid » y vaut 100 étoiles) ;
+`test_codes` : OK. Déployé : `index.pck` servi à 13 h 26 ; l'APK 0.3 (versionCode 3).
+
+---
+
 ## ✅ **La Supernova ; le cœur d'étoile ; les coûts relevés** — **EN PROD** *(30/09/2026, 23 h 57 ; l'APK Android 0.2 à 23 h 59)*
 
 **En clair.** Les pièces tombées dans les fentes remplissent une **jauge** : la frise de lunes sous « La Poussette »
