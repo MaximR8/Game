@@ -26,6 +26,84 @@
 
 ## Les décisions prises
 
+### On ne vend ni la chance ni la victoire : une monnaie payante pour du connu ; 150 cartes, puis des styles ; un vrai meuble de machine, à thèmes ; les Maîtrises — 01/10/2026
+
+**Ce qu'on a tranché** (Maxim a passé à ChatGPT le jeu entier ; ses 18 points, commentés par Maxim : *« globalement
+d'accord »*) :
+- **La phrase** devient la règle de toute vente : *« On ne vend pas la chance. On ne vend pas la victoire. On vend la
+  collection et la personnalisation. »* (doctrine, plus bas). Les rôles : le Carré = le jeu sérieux, la Nébuleuse = le
+  quotidien, les événements = le terrain d'essai.
+- **L'argent n'achète qu'une monnaie payante** (Maxim : *« on fait payer, à la limite, que les Éclats divins, qui servent de
+  monnaie dans le jeu pour le reste »*). Elle achète **du connu, en une étape** (€ → la monnaie → l'objet ; jamais une autre
+  monnaie) : le pass, les styles, les thèmes de machine, le cosmétique, des bundles par mythologie, une **boutique qui
+  tourne** (une autre sélection chaque jour, rien de tiré au hasard). À côté de chaque prix, **le prix en euros** ; des
+  paquets qui **tombent juste** (les principes européens de mars 2025, plus bas).
+- **Le pass dure 3 mois** (Maxim : *« pour nous laisser le temps de créer les autres »*) ; jamais une carte du Classé en
+  exclusivité. Le Classé garde ses saisons d'un mois.
+- **Le contenu** : ~**150 cartes au lancement**, équilibrées ; ensuite 1-2 cartes de temps en temps — **pas de saisons de
+  nouvelles cartes**. Le flux, ce sont **les styles** : une autre illustration de la même carte, rien ne change au jeu
+  (Maxim : *« je peux faire une variante Looney Toon de Loki »*). Un style a **sa pose en grand** (on voit le dessin) et
+  **son animation** (*« la carte céleste et la carte Seigneur des Enfers ne s'animent pas de la même manière »*).
+- **La Nébuleuse devient un vrai meuble de machine, cosmique** (Maxim : *« actuellement le plateau, c'est un rectangle avec
+  du texte, ça n'a pas le look d'une vraie machine »*) ; puis des **thèmes** purement visuels, un par pass. Sa maquette (cinq
+  machines : Base céleste, Wukong céleste, Seigneur des Enfers, Nouvel An chinois, Corrompu) donne la composition : une
+  arche, des colonnes, une scène au fond, un cadre d'or, l'interface dessous. **Un thème change le meuble, le fond, la
+  lumière, la musique — jamais la couleur des pièces ni des objets** (Claude, la lisibilité : dans « Corrompu », les pièces
+  violettes cachent la bille mauve) ; le skin de pièces est un autre cosmétique, qui garde le contraste. Le meuble est
+  construit à thèmes dès le départ (un thème = des images, une lumière, une musique : pas de code) et reste léger (D13). La
+  base reste universelle ; un thème peut aller à fond dans une culture ; un thème gratuit se gagne.
+- **Les Maîtrises** (Maxim : *« excellent point »*) : une carte monte en maîtrise quand on la joue ; des récompenses
+  cosmétiques seulement (avatar, cadre, titre, animation, style).
+- **Les événements** : des mini-jeux hors du Carré (30/09) ; la carte comme **mascotte** (Maxim : *« on choisit une carte
+  pour nous représenter pendant l'event »* — elle montre son style à tous) ; on les juge **au rendu** (*« ça doit donner
+  envie de venir faire son mini-jeu quotidien »*) : deux prototypes, joués par le cousin et sa femme, on garde celui où ils
+  reviennent. Proposés par Claude : la Chasse (une course à un doigt), le Trésor de Fafnir (la machine en événement : tout
+  existe), le Raid comme une couche (les scores de tous tapent le même boss, une barre commune).
+- **Les monnaies** : plus aucune nouvelle monnaie permanente (la payante mise à part) ; une par événement, convertie en
+  poussière à la fin ; le cœur d'étoile est un objet, pas une monnaie ; 4 compteurs au plus par écran. Le rythme (Maxim) :
+  *« pas fini en 2 jours, mais pas trop lésé »*.
+
+🟡 **À confirmer par Maxim** (l'avis de Claude, 01/10) :
+1. **La monnaie payante n'achète pas de cartes** — ni pierres, ni poussière, ni étoiles, ni pièces, ni Nouvelle machine.
+   Ça remplace le 30/09 (« vendre les éclats, le moteur principal ») : au Carré, le stade change les chiffres ; vendre les
+   cartes, c'est vendre le Classé. La seule vitesse vendue : un bonus de ressources **plafonné** dans le pass payant
+   (personne n'achète toute la collection le premier jour). Le moteur devient le pass, les styles, les thèmes.
+2. **Un autre nom** qu'« Éclats divins » : à côté de nos éclats (la carte choisie), deux compteurs presque pareils. Par
+   exemple les Comètes.
+3. **Jamais de pièces vendues, nulle part** (avant : « zone grise, pas en Belgique ni aux Pays-Bas ») : payer, pousser,
+   gagner des pierres et des étoiles qui font progresser, c'est le schéma jugé à Anvers.
+4. **Un style = une illustration** pour tous les stades (le stade se lit au cadre ; sinon trois images par style) ; une
+   animation **par style**, pas par carte ; la pose en grand ~0,6 s, sans bloquer la partie, vue aussi par l'adversaire ;
+   le style change l'illustration, la finition (Or, Prisme…) reste le cadre ; un style ne tombe jamais d'une invocation.
+5. **Les cibles du rythme** (un joueur gratuit, ~15 min par jour) : semaine 1, un deck complet et une évolution ; mois 1, sa
+   carte préférée au stade III ; 3 mois, ~2/3 de la collection ; 6-9 mois, toute la collection de base ; les finitions, le
+   Full art, les Maîtrises : sans fin. Réglées par un banc (six mois simulés), pas à l'œil.
+6. **L'ordre** : la Nouvelle machine → la série de 7 jours → la machine cosmique (à thèmes) → les Trésors → le banc de
+   l'économie → la pose en grand et un premier style (3-5 cartes) → le premier événement (2 prototypes) → les Maîtrises
+   (avec le cadran du joueur) → la boutique (après un juriste). En fond : les cartes vers ~150.
+
+**Ce qui a fait pencher** : les commentaires de Maxim (ci-dessus) ; **le tribunal de l'entreprise d'Anvers, 16/01/2025**
+(LS contre Apple : 67 813 € dans les loot boxes payantes de *Top War* — jeu de hasard illégal, et **Apple responsable de les
+avoir hébergées** ; question posée à la Cour de justice de l'UE) — les stores vont se durcir en Belgique ; **les principes
+du réseau européen des autorités de consommateurs (CPC) sur les monnaies de jeu, mars 2025** : le prix en euros, rien qui
+cache le coût, pas d'échanges en chaîne, pas de paquet qui force à acheter plus que nécessaire, le droit de rétractation
+expliqué, les enfants protégés ; le banc du rythme (300 joueurs gratuits simulés, ~17 invocations par semaine, les rangs
+60/25/11/4 %, 5 éclats par invocation et par doublon, la carte manquante achetée dès que possible) : **aujourd'hui (40
+cartes), toute la collection en ~24 semaines ; à 150 cartes aux mêmes chiffres, ~105 semaines (2 ans)** — le risque, c'est
+« lésé », pas « fini en 2 jours » ; Queen's Blood, la référence de Maxim, a ~145 cartes.
+**Ce qu'on a écarté, et pourquoi** : des saisons de 6 semaines avec de nouvelles cartes (des cartes toujours plus fortes,
+un équilibrage sans fin ; Maxim : 3 mois) ; descendre à 4 monnaies (les pierres, la poussière, les éclats ont chacune leur
+rôle) ; les mini-jeux longs ou à planifier — Mythic Survivors (5-8 min, des améliorations tirées au hasard, un gros
+chantier), la Défense du village (de la planification), le Labyrinthe (des salles au hasard, des combats automatiques
+qu'on regarde), la Mythic Arena (du temps réel à quatre en ligne : le plus cher de la liste) ; des thèmes qui recolorent
+les objets ; les noms déposés (« Looney Tunes » est une marque, un style « cartoon » est libre ; les noms officiels d'une
+fête — la Ducasse, le Doudou — à vérifier avant d'en vendre un pack).
+**Ce que ça coûte, et qu'on assume** : moins de revenus des joueurs pressés (pas de cartes vendues) ; ~110 cartes à faire
+(~160 à 250 illustrations selon la part de héros à trois stades — Maxim seul) ; une pose et une animation par style ; le
+meuble de la machine à construire.
+🔓 **Ce qui la rouvrirait** : l'avis d'un juriste ; la réponse de la Cour de justice de l'UE (Apple) ; la mesure des
+cousins (reviennent-ils pour un mini-jeu ?) ; les chiffres de la boutique une fois ouverte.
+
 ### L'économie : l'argent n'achète JAMAIS du hasard ; la Nébuleuse gagne la Supernova, les Nouvelles machines, les Trésors, les événements — 30/09/2026
 
 **Ce qu'on a tranché** :
@@ -809,6 +887,10 @@ folklore et légendes ».
   PvP asynchrone quasi gratuit plus tard, et c'est irrattrapable ensuite.* *(posée le 20/09/2026)*
 - **La règle des deux jours** — un joueur n'est jamais bloqué plus de 48 h : ni par l'argent, ni
   par un minuteur, ni par un mur de difficulté. *(posée par Maxim le 20/09/2026)*
+- 🔴 **ON NE VEND NI LA CHANCE NI LA VICTOIRE. On vend la collection et la personnalisation.** Rien de ce qui s'achète ne
+  mène à un tirage (même par une monnaie du jeu), et rien de ce qui s'achète ne manque à un joueur gratuit. *(phrase de
+  ChatGPT, adoptée par Maxim le 01/10/2026 ; sa portée — la monnaie payante n'achète pas de cartes — à confirmer :
+  DECISIONS 01/10)*
 
 ---
 

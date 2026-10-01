@@ -81,9 +81,13 @@ deviendraient invocables.
 **④** **Les événements du calendrier** (le Grand Carré 4 × 4, les thèmes des saisons — DECISIONS 26/09 ; et des ciels à
 thème dans l'Astrolabe, une fiche dans `Portails.LISTE`) ne sont pas faits.
 **⑤** **Le nom du jeu n'est pas choisi.** « La Poussette » est un nom de travail. La Tarasque manque.
-**⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09, validé par Maxim)** : ✅ la Supernova et le cœur d'étoile
-(30/09, 23 h 57) → la Nouvelle machine (3 cœurs) → les Trésors → la série de 7 jours → le premier événement (Ragnarök, un mini-jeu d'adresse) → la
-boutique (éclats, pass, cosmétiques ; jamais de hasard vendu). Les coûts relevés (éclats ×2,5, niveau 250, pierres 3 et 10).
+**⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09 et 01/10)** : ✅ la Supernova et le cœur d'étoile
+(30/09, 23 h 57). 🔄 *01/10 — les 18 points de ChatGPT, commentés par Maxim (« on ne vend ni la chance ni la victoire ») ; l'ordre
+proposé par Claude, 🟡 à confirmer :* la Nouvelle machine (3 cœurs) → la série de 7 jours → **la machine cosmique** (un vrai meuble,
+à thèmes) → les Trésors → le banc de l'économie (à 150 cartes, un joueur gratuit ne doit pas mettre 2 ans) → la pose en grand et un
+premier style → le premier événement (2 prototypes de mini-jeux, joués par le cousin et sa femme) → les Maîtrises (avec le cadran) →
+la boutique (une monnaie payante pour du connu : le pass de 3 mois, les styles, les thèmes ; après un juriste). En fond : les cartes
+vers ~150. Les coûts relevés (éclats ×2,5, niveau 250, pierres 3 et 10).
 **⑥** **Les idées de Maxim pour la Nébuleuse (29/09)** — reprises au-dessus (⓪bis) : une **jauge** que remplissent les pièces tombées dans
 les fentes — pleine, la machine passe en **« super machine »** (gains doublés) ; des **objets d'événement** et des mini-jeux
 programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« Nouvelle machine »** (avec la boutique).
@@ -222,7 +226,9 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 - **La cible** : des **adultes, hommes et femmes, qui paient**. Registre *art toy* de
   collectionneur (POP MART), pas jouet pour enfant.
 - **Modèle** : l'argent achète la **prestance** (foil, cosmétiques, vitesse), **jamais la
-  puissance**. Un F2P atteint les sommets, il lui faut plus de temps.
+  puissance**. Un F2P atteint les sommets, il lui faut plus de temps. 🔄 *01/10 : « on ne vend ni la chance ni la
+  victoire » — une monnaie payante qui n'achète que du connu (pass, styles, thèmes) ; la vitesse, seulement un bonus
+  plafonné dans le pass (🟡 à confirmer, DECISIONS 01/10).*
 - 🎯 **La cible du portefeuille : ~20 k€/an par app**, sur plusieurs apps et plusieurs années.
   ⛔ *Ne jamais recalculer sur 100 k€.*
 
