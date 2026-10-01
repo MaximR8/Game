@@ -15,6 +15,9 @@ extends RefCounted
 # ─────────────────────────────────────────────────────────────
 
 const CHEMIN := "codes/codes.json"
+# (01/10) la table vit AUSSI sur le serveur : l'app n'a pas de site à côté d'elle (« il me dit que je suis pas en ligne »).
+# L'administrateur des codes (un compte du serveur, codes_cadeaux/codes.py) la pose en « config/codes », lisible par tous.
+const ADMIN := "595ada12-1c93-4a51-856a-f61ea46bb58f"
 const RECOMPENSES := ["etoiles", "poussiere", "pieces", "eclats", "pierres"]
 
 static var table_test: Dictionary = {}      # les tests posent la table ici (hors du web, pas de fichier à lire)
@@ -121,6 +124,11 @@ static func phrase(donne: Dictionary) -> String:
 # Lire la table : sur le web, le fichier à côté du jeu (sans cache : un code ajouté se voit tout de suite) ; ailleurs,
 # la table des tests. Rend {} si on n'a pas pu la lire (hors ligne, fichier absent).
 static func lire_table(arbre: SceneTree) -> Dictionary:
+	# d'abord le serveur (l'app, le web) ; le fichier du NAS en secours (le web seulement)
+	if Compte.global != null and Compte.global.actif:
+		var t: Dictionary = await Compte.global.lire_public("config", "codes", ADMIN)
+		if not t.is_empty():
+			return t
 	if not OS.has_feature("web"):
 		return table_test
 	JavaScriptBridge.eval("window.__codes = null; fetch('%s?t=' + Date.now(), {cache: 'no-store', credentials: 'same-origin'})" % CHEMIN

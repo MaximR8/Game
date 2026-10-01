@@ -6,15 +6,24 @@
     python codes_cadeaux/codes.py ajouter BIENVENUE --pierre lune=2 --eclats 50
     python codes_cadeaux/codes.py liste
     python codes_cadeaux/codes.py retirer NOEL2026
+    python codes_cadeaux/codes.py publier                                       # remettre la table sur le serveur
 
-Deux fichiers :
-  · codes_cadeaux/registre.json — le PRIVÉ : les codes en clair, pour s'en souvenir. Jamais servi (hors de web/).
-  · web/codes/codes.json        — le PUBLIC, lu par le jeu : seulement l'empreinte de chaque code (SHA-256 du sel et du
-                                  code normalisé), sa récompense, sa date de fin. Le lire ne donne aucun code.
+Deux fichiers, et le serveur :
+  · codes_cadeaux/registre.json — le PRIVÉ : les codes en clair, pour s'en souvenir. Jamais servi (hors de web/). Il garde
+                                  aussi l'identifiant SECRET de « l'administrateur des codes » (un compte du serveur).
+  · web/codes/codes.json        — le PUBLIC, lu par le jeu web du NAS (le secours) : seulement l'empreinte de chaque code
+                                  (SHA-256 du sel et du code normalisé), sa récompense, sa date de fin. Le lire ne donne
+                                  aucun code.
+  · le SERVEUR (01/10 — l'app n'a pas de site à côté d'elle : « il me dit que je suis pas en ligne ») : la même table,
+    posée sur Nakama (https://lapoussette.duckdns.org) par l'administrateur des codes, lisible par tout joueur connecté
+    (collection « config », clé « codes ») — le jeu la lit là d'abord (Codes.lire_table).
 Récompenses : --etoiles, --poussiere, --pieces, --eclats, --pierre <type>=<n> (feu, foudre, eau, glace, nature, esprit, lune).
 Un code vaut une fois par partie (le jeu retient ceux qu'il a pris). Normalisé : majuscules, sans espace ni tiret.
 """
-import argparse, hashlib, json, os, secrets, sys
+import argparse, base64, hashlib, json, os, secrets, sys, urllib.request
+
+SERVEUR = "https://lapoussette.duckdns.org"
+CLE_JEU = "a384cd768c354b22ec3ed13dc738b741"        # la clé du jeu (elle est dans tout client : pas un secret)
 
 ICI = os.path.dirname(os.path.abspath(__file__))
 REGISTRE = os.path.join(ICI, "registre.json")
@@ -49,11 +58,41 @@ def lire_registre():
     return {"sel": secrets.token_hex(16), "codes": {}}
 
 
+def _demander(methode, chemin, corps, jeton=None):
+    entetes = {"Content-Type": "application/json"}
+    if jeton:
+        entetes["Authorization"] = "Bearer " + jeton
+    else:
+        entetes["Authorization"] = "Basic " + base64.b64encode((CLE_JEU + ":").encode()).decode()
+    r = urllib.request.Request(SERVEUR + chemin, data=None if corps is None else json.dumps(corps).encode(),
+                               headers=entetes, method=methode)
+    with urllib.request.urlopen(r, timeout=20) as rep:
+        return json.loads(rep.read().decode() or "{}")
+
+
+def publier_serveur(pub, reg):
+    """La table sur le serveur : l'administrateur des codes (un compte d'appareil, son identifiant secret dans le registre)
+    y pose l'objet « config/codes », lisible par tous (permission_read 2), modifiable par lui seul."""
+    if "admin_appareil" not in reg:
+        reg["admin_appareil"] = "admin-codes-" + secrets.token_hex(24)
+    jeton = _demander("POST", "/v2/account/authenticate/device?create=true", {"id": reg["admin_appareil"]})["token"]
+    compte = _demander("GET", "/v2/account", None, jeton)
+    reg["admin_id"] = compte["user"]["id"]
+    _demander("PUT", "/v2/storage", {"objects": [{"collection": "config", "key": "codes", "value": json.dumps(pub),
+                                                   "permission_read": 2, "permission_write": 1}]}, jeton)
+    return reg["admin_id"]
+
+
 def publier(reg):
     pub = {"v": 1, "sel": reg["sel"], "codes": {}}
     for code, e in reg["codes"].items():
         pub["codes"][empreinte(code, reg["sel"])] = {"recompense": e["recompense"], "fin": e.get("fin", "")}
     ecrire(PUBLIC, pub)
+    try:
+        admin = publier_serveur(pub, reg)
+        print("sur le serveur (l'app, le web) : OK — administrateur des codes %s" % admin)
+    except Exception as e:
+        print("⚠️ le serveur n'a pas pu être mis à jour (%s) : relance « python codes_cadeaux/codes.py publier »" % e)
     ecrire(REGISTRE, reg)
 
 
@@ -74,11 +113,15 @@ def main(argv=None):
     a.add_argument("--fin", default="", help="dernier jour, AAAA-MM-JJ (vide : jamais)")
     a.add_argument("--note", default="", help="pour toi seul (registre privé)")
     sous.add_parser("liste")
+    sous.add_parser("publier")
     r = sous.add_parser("retirer")
     r.add_argument("code")
     args = ap.parse_args(argv)
 
     reg = lire_registre()
+    if args.action == "publier":
+        publier(reg)
+        return 0
     if args.action == "liste":
         if not reg["codes"]:
             print("aucun code")
@@ -115,7 +158,7 @@ def main(argv=None):
     reg["codes"][code] = {"recompense": rec, "fin": args.fin, "note": args.note}
     publier(reg)
     print("CODE : %s  →  %s%s" % (code, json.dumps(rec, ensure_ascii=False), ("  (jusqu'au %s)" % args.fin) if args.fin else ""))
-    print("en ligne tout de suite (web/codes/codes.json) — chez toi et chez les cousins")
+    print("en ligne tout de suite — dans l'app (le serveur) et sur le web (web/codes/codes.json)")
     return 0
 
 

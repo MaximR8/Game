@@ -65,6 +65,13 @@ func _ready() -> void:
 	_ok("le nouveau téléphone rejoint le compte", await neuf.adopter(t) and neuf.utilisateur == u and neuf.mail == adresse)
 	neuf.jeton = ""
 	_ok("… et le retrouve tout seul au lancement suivant", await neuf.connecter() and neuf.utilisateur == u and neuf.mail == adresse)
+	# (01/10) la table des codes cadeaux, sur le serveur : lisible par un joueur connecté, sans le code en clair
+	var tab := await neuf.lire_public("config", "codes", Codes.ADMIN)
+	_ok("la table des codes cadeaux se lit sur le serveur (%d codes)" % (tab.get("codes", {}) as Dictionary).size(),
+		not tab.is_empty() and (tab.get("codes", {}) as Dictionary).size() >= 1 and str(tab.get("sel", "")) != ""
+		and not JSON.stringify(tab).contains("HALAMADRID"))
+	var v := Codes.verifier(tab, "Hala Madrid", Time.get_date_string_from_system())
+	_ok("« Hala Madrid » y est reconnu : 100 étoiles", bool(v["ok"]) and int((v["recompense"] as Dictionary).get("etoiles", 0)) == 100)
 	_ok("les comptes d'essai effacés", await neuf.effacer() and await autre.effacer())
 	print("%d vérifications" % verifs)
 	print("RESULTAT: %s" % ("OK" if erreurs == 0 else "ECHEC (%d)" % erreurs))

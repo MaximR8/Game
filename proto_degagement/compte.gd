@@ -21,6 +21,7 @@ const SERVEUR := "https://lapoussette.duckdns.org"
 const CLE := "a384cd768c354b22ec3ed13dc738b741"
 const CHEMIN := "user://compte.cfg"
 const ENVOI_S := 60.0
+const RECONNEXION_S := 60.0      # (01/10) hors ligne au lancement : on retente, sans attendre une sauvegarde
 const COLLECTION := "partie"
 const CLE_PARTIE := "sauvegarde"
 
@@ -36,6 +37,8 @@ var actif := true            # faux dans les tests : ni réseau, ni fichier
 var _a_envoyer := false
 var _depuis := 0.0
 var _en_cours := false
+var _depuis_essai := 0.0
+var _essai_en_cours := false
 
 
 func _ready() -> void:
@@ -85,6 +88,12 @@ func connecter() -> bool:
 	return true
 
 
+func _reessayer() -> void:
+	_essai_en_cours = true
+	await connecter()
+	_essai_en_cours = false
+
+
 # La partie a changé (GS.save_game) : elle partira au serveur au plus tard dans ENVOI_S.
 func partie_changee() -> void:
 	_a_envoyer = true
@@ -96,6 +105,10 @@ func _process(delta: float) -> void:
 	_depuis += delta
 	if _a_envoyer and _depuis >= ENVOI_S and not _en_cours:
 		envoyer()
+	_depuis_essai += delta
+	if jeton == "" and not _en_cours and not _essai_en_cours and _depuis_essai >= RECONNEXION_S:
+		_depuis_essai = 0.0
+		_reessayer()
 
 
 func _notification(what: int) -> void:
@@ -235,6 +248,21 @@ func lire() -> Dictionary:
 		return {}
 	var r := await _demander(HTTPClient.METHOD_POST, "/v2/storage",
 		{"object_ids": [{"collection": COLLECTION, "key": CLE_PARTIE, "user_id": utilisateur}]})
+	var objets: Array = r["donnees"].get("objects", []) if r["code"] == 200 else []
+	if objets.is_empty():
+		return {}
+	var v = JSON.parse_string(str((objets[0] as Dictionary).get("value", "")))
+	return v if typeof(v) == TYPE_DICTIONARY else {}
+
+
+# Un objet PUBLIC d'un autre compte (01/10 : la table des codes cadeaux, posée par l'administrateur des codes) ; {} sinon.
+func lire_public(collection: String, cle: String, proprietaire: String) -> Dictionary:
+	if jeton == "":
+		await connecter()
+	if jeton == "":
+		return {}
+	var r := await _demander(HTTPClient.METHOD_POST, "/v2/storage",
+		{"object_ids": [{"collection": collection, "key": cle, "user_id": proprietaire}]})
 	var objets: Array = r["donnees"].get("objects", []) if r["code"] == 200 else []
 	if objets.is_empty():
 		return {}
