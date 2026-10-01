@@ -83,7 +83,7 @@ thème dans l'Astrolabe, une fiche dans `Portails.LISTE`) ne sont pas faits.
 **⑤** **Le nom du jeu n'est pas choisi.** « La Poussette » est un nom de travail. La Tarasque manque.
 **⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09 et 01/10)** : ✅ la Supernova et le cœur d'étoile
 (30/09, 23 h 57). 🔄 *01/10 — les 18 points de ChatGPT, commentés par Maxim (« on ne vend ni la chance ni la victoire ») ; l'ordre
-proposé par Claude, 🟡 à confirmer :* la Nouvelle machine (3 cœurs) → la série de 7 jours → **la machine cosmique** (un vrai meuble,
+proposé par Claude, ✅ confirmé par Maxim le 01/10 (les Comètes ; un style = un stade III alternatif) :* la Nouvelle machine (3 cœurs) → la série de 7 jours → **la machine cosmique** (un vrai meuble,
 à thèmes) → les Trésors → le banc de l'économie (à 150 cartes, un joueur gratuit ne doit pas mettre 2 ans) → la pose en grand et un
 premier style → le premier événement (2 prototypes de mini-jeux, joués par le cousin et sa femme) → les Maîtrises (avec le cadran) →
 la boutique (une monnaie payante pour du connu : le pass de 3 mois, les styles, les thèmes ; après un juriste). En fond : les cartes
@@ -98,6 +98,15 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
+>
+> #### *🧪 Le prototype du 01/10 au soir — la machine « Base céleste » et le tapis céleste (PAS dans le jeu)*
+>
+> Maxim : *« tu peux me faire un artifact pour déjà voir la nouvelle machine »* ; *« les skins pour les plateaux de jeu, fais-moi
+> celui de base »*. Le canevas *Machine Base céleste* (claude.ai) : la machine au repos, le film (24 s, avec le son), la
+> Supernova dans le décor, l'avant, une variante en plongée ; le tapis céleste en combat, l'avant, le tapis à plat. **À
+> trancher par Maxim** : le look, et l'angle (en profondeur, retenu ; ou en plongée). Puis l'intégrer (CHANGELOG, « Pour
+> l'intégrer »), dans l'ordre de ⓪bis (après la Nouvelle machine et la série de 7 jours). `proto_degagement/meuble/`,
+> `tests/capture_meuble`, `tests/capture_tapis`, `render_carre.py --celeste`.
 >
 > #### *Le lot qui vient d'être clos — la Nébuleuse refaite pour les gros paquets (29/09, en ligne à 19 h 54)*
 >
@@ -228,7 +237,7 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 - **Modèle** : l'argent achète la **prestance** (foil, cosmétiques, vitesse), **jamais la
   puissance**. Un F2P atteint les sommets, il lui faut plus de temps. 🔄 *01/10 : « on ne vend ni la chance ni la
   victoire » — une monnaie payante qui n'achète que du connu (pass, styles, thèmes) ; la vitesse, seulement un bonus
-  plafonné dans le pass (🟡 à confirmer, DECISIONS 01/10).*
+  plafonné dans le pass (✅ confirmé, DECISIONS 01/10 ; la monnaie : les Comètes).*
 - 🎯 **La cible du portefeuille : ~20 k€/an par app**, sur plusieurs apps et plusieurs années.
   ⛔ *Ne jamais recalculer sur 100 k€.*
 

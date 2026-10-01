@@ -406,8 +406,202 @@ def planche():
     print("planche écrite")
 
 
+# ───────────────────────── Le tapis « Base céleste » (01/10, prototype) ─────────────────────────
+# Maxim, 01/10 : « on n'a pas parlé des skins pour les plateaux de jeu ; fais-moi celui de base dans le même
+# esprit que la Base céleste » (la nouvelle machine). Le même bleu nuit et le même or que le meuble
+# (proto_degagement/meuble/) : un cadre d'or PERLÉ (les perles de l'arche), les NEUF LUNES de la jauge dans le
+# canal (en haut et en bas), un grand astrolabe gravé, deux constellations d'un trait fin, des étoiles nettes.
+# Les cases ne bougent pas (le jeu les pose aux mêmes places) : seul l'habit change.
+#     python render_carre.py --celeste     → carre/tapis-carre-celeste.png
+LAQUE_CEL_CENTRE = R._hex("#16295c")
+LAQUE_CEL_BORD = R._hex("#070f29")
+LAQUE_CEL_CANAL = R._hex("#050b20")
+PHASES_LUNES = [0.0, 0.25, 0.5, 0.75, 1.0, -0.75, -0.5, -0.25, 0.0]
+
+
+def _lune(x, y, cx, cy, r, k):
+    """Le disque d'une lune et sa part éclairée (k : 0 nouvelle → 1 pleine ; négatif : elle décroît)."""
+    dx, dy = x - cx, y - cy
+    dans = np.hypot(dx, dy) <= r
+    fk = abs(k)
+    if fk < 0.001:
+        return np.zeros(x.shape, dtype=bool), dans
+    if fk > 0.999:
+        return dans, dans
+    cote = 1.0 if k > 0 else -1.0
+    rx = (1.0 - 2.0 * fk) * np.sqrt(np.clip(r * r - dy * dy, 0, None))
+    return dans & (dx * cote >= rx), dans
+
+
+def _chemin_cadre(decale, pas):
+    """Des points tous les `pas` le long du bord arrondi du tapis, à `decale` du bord."""
+    x0, y0, x1, y1 = decale, decale, TAPIS_W - decale, TAPIS_H - decale
+    r = RAYON_TAPIS - decale
+    pts = []
+    segs = [((x0 + r, y0), (x1 - r, y0)), ((x1, y0 + r), (x1, y1 - r)), ((x1 - r, y1), (x0 + r, y1)), ((x0, y1 - r), (x0, y0 + r))]
+    coins = [(x1 - r, y0 + r, -90), (x1 - r, y1 - r, 0), (x0 + r, y1 - r, 90), (x0 + r, y0 + r, 180)]
+    for (a, b), (ccx, ccy, a0) in zip(segs, coins):
+        long = math.hypot(b[0] - a[0], b[1] - a[1])
+        n = max(1, int(long // pas))
+        for i in range(n):
+            f = (i + 0.5) / n
+            pts.append((a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f))
+        arc = r * math.pi / 2
+        m = max(1, int(round(arc / pas)))
+        for i in range(m):
+            th = math.radians(a0 + 90.0 * (i + 0.5) / m)
+            pts.append((ccx + r * math.cos(th), ccy + r * math.sin(th)))
+    return pts
+
+
+def tapis_celeste(nom="tapis-carre-celeste.png"):
+    W, H, x, y = grille_rect(TAPIS_W, TAPIS_H)
+    d_tapis = R._rect_arrondi(x, y, 0, 0, TAPIS_W, TAPIS_H, RAYON_TAPIS)
+    t = -d_tapis
+    # le cadre : un jonc bas, des perles d'or dessus ; le canal d'émail nuit ; un filet d'or
+    h_jonc = bourrelet(t, 9.0, 2.6)
+    h_perles = np.zeros(x.shape, dtype=np.float32)
+    rb = 3.9
+    for (px, py) in _chemin_cadre(4.5, 13.0):
+        rx0, rx1 = int(max(0, (px - rb - 2) * K)), int(min(W, (px + rb + 2) * K))
+        ry0, ry1 = int(max(0, (py - rb - 2) * K)), int(min(H, (py + rb + 2) * K))
+        d2 = (x[ry0:ry1, rx0:rx1] - px) ** 2 + (y[ry0:ry1, rx0:rx1] - py) ** 2
+        h_perles[ry0:ry1, rx0:rx1] = np.maximum(h_perles[ry0:ry1, rx0:rx1], np.sqrt(np.clip(rb * rb - d2, 0, None)) * 1.25)
+    h_filet = bourrelet(t - 27.0, 7.0, 3.6)
+    canal = (t > 9.0) & (t < 27.0)
+    # dans le canal : les neuf lunes en haut et en bas, des étoiles sur les côtés
+    h_canal = np.zeros(x.shape, dtype=np.float32)
+    or_canal = np.zeros(x.shape, dtype=bool)
+    mil = 18.0
+    for cy in (mil, TAPIS_H - mil):
+        for i, k in enumerate(PHASES_LUNES):
+            cx = 150.0 + i * (TAPIS_W - 300.0) / 8.0
+            eclaire, dans = _lune(x, y, cx, cy, 7.4, k)
+            rr = np.hypot(x - cx, y - cy)
+            bague = np.abs(rr - 7.4) < 1.1
+            h_canal = np.maximum(h_canal, np.where(eclaire, 1.5, 0.0) + np.where(bague, 1.2, 0.0))
+            or_canal |= eclaire | bague
+    d_et = np.full(x.shape, 99.0, dtype=np.float32)
+    for cx in (mil, TAPIS_W - mil):
+        nb = int((TAPIS_H - 160.0) // 92.0)
+        debut = (TAPIS_H - nb * 92.0) / 2 + 46.0
+        for i in range(nb):
+            d_et = np.minimum(d_et, etoile_sdf(x - cx, y - (debut + i * 92.0), 4, 8.5, 2.4))
+    h_et = 2.4 * np.clip(-d_et / 2.0, 0, 1)
+    h_canal = np.maximum(h_canal, h_et)
+    or_canal |= h_et > 0.05
+    h_canal = np.where(canal, h_canal, 0.0)
+    or_canal &= canal
+    # les rosaces des coins : une bague, un anneau incliné (une sphère armillaire vue de face), l'étoile à huit branches
+    d_ros = np.full(x.shape, 99.0, dtype=np.float32)
+    h_ros = np.zeros(x.shape, dtype=np.float32)
+    for (cx, cy) in [(30, 30), (TAPIS_W - 30, 30), (30, TAPIS_H - 30), (TAPIS_W - 30, TAPIS_H - 30)]:
+        dx, dy = x - cx, y - cy
+        rr = np.hypot(dx, dy)
+        bague = bourrelet(rr - 17.5, 5.5, 3.4)
+        u = (dx + dy) / math.sqrt(2.0)
+        v = (dx - dy) / math.sqrt(2.0)
+        ell = np.hypot(u / 16.0, v / 6.5)
+        anneau = np.where(np.abs(ell - 1.0) < 0.12, 2.2, 0.0)
+        etoile = np.clip(-etoile_sdf(dx, dy, 8, 12.5, 4.5) / 3.5, 0, 1) * 3.4
+        disque = rr < 23.5
+        h_ros = np.maximum(h_ros, np.where(disque, np.maximum(np.maximum(bague, etoile), anneau) + 1.0, 0.0))
+        d_ros = np.minimum(d_ros, rr - 23.5)
+    # le champ : la laque, et un grand astrolabe gravé à l'or (des traits fins, une seule teinte)
+    champ = t >= 34.0
+    cx, cy = TAPIS_W / 2, TAPIS_H / 2
+    rr = np.hypot(x - cx, y - cy)
+    th = np.arctan2(y - cy, x - cx)
+    grav = np.zeros(x.shape, dtype=np.float32)
+    for rayon in (138.0, 150.0, 300.0, 318.0, 452.0, 470.0):
+        grav = np.maximum(grav, lisse(1.6, 0.4, np.abs(rr - rayon)))
+    pas_a = math.radians(5.0)
+    k_a = np.round(th / pas_a)
+    d_a = np.abs(th - k_a * pas_a) * rr
+    longue = (np.mod(k_a, 6) == 0)
+    grad = (d_a < 0.9) & (rr > 300.0) & (rr < np.where(longue, 340.0, 318.0))
+    grav = np.maximum(grav, grad.astype(np.float32) * lisse(1.3, 0.5, d_a))
+    # entre les deux anneaux du dehors : une perle gravée tous les 10°
+    pas_b = math.radians(10.0)
+    k_b = np.round(th / pas_b)
+    pb_x = cx + 461.0 * np.cos(k_b * pas_b)
+    pb_y = cy + 461.0 * np.sin(k_b * pas_b)
+    d_pb = np.hypot(x - pb_x, y - pb_y)
+    grav = np.maximum(grav, lisse(3.2, 2.0, d_pb))
+    # la rose des vents, et quatre longs rayons fins jusqu'à l'anneau du milieu
+    d_rose = etoile_sdf(x - cx, y - cy, 8, 118.0, 26.0)
+    grav = np.maximum(grav, lisse(1.4, 0.3, np.abs(d_rose)))
+    for ang in (0.0, 90.0, 180.0, 270.0):
+        a = math.radians(ang)
+        ax, ay = cx + 150.0 * math.cos(a), cy + 150.0 * math.sin(a)
+        bx, by = cx + 300.0 * math.cos(a), cy + 300.0 * math.sin(a)
+        grav = np.maximum(grav, lisse(1.2, 0.3, trait_sdf(x, y, ax, ay, bx, by)))
+    # deux constellations, en haut et en bas du champ (hors de l'astrolabe), d'un trait fin
+    constellations = [
+        [(110, 140), (205, 96), (300, 128), (372, 86), (446, 150)],
+        [(612, 1250), (690, 1206), (786, 1238), (850, 1180), (905, 1262), (812, 1296)],
+    ]
+    d_etoiles = np.full(x.shape, 99.0, dtype=np.float32)
+    for c in constellations:
+        for (a, b) in zip(c[:-1], c[1:]):
+            grav = np.maximum(grav, 0.8 * lisse(1.0, 0.25, trait_sdf(x, y, a[0], a[1], b[0], b[1])))
+        for (sx, sy) in c:
+            d_etoiles = np.minimum(d_etoiles, etoile_sdf(x - sx, y - sy, 4, 9.0, 2.2))
+    rng = np.random.default_rng(11)
+    for i in range(34):
+        sx, sy = rng.uniform(60, TAPIS_W - 60), rng.uniform(60, TAPIS_H - 60)
+        s = rng.uniform(3.5, 6.5)
+        d_etoiles = np.minimum(d_etoiles, etoile_sdf(x - sx, y - sy, 4, s, s * 0.22))
+    grav = np.maximum(grav, lisse(0.8, -0.6, d_etoiles))
+    # les cases : des alvéoles creusées, bordées d'un filet d'or
+    d_case = np.full(x.shape, 99.0, dtype=np.float32)
+    for (x0, y0, x1, y1) in cases_rect():
+        d_case = np.minimum(d_case, R._rect_arrondi(x, y, x0, y0, x1, y1, RAYON_CASE))
+    fond_case = 1.6 - 5.0 * lisse(0.0, -6.0, d_case)
+    h_liseret = bourrelet(d_case, 4.5, 2.4)
+    h_champ = np.where(d_case < 0, fond_case, 1.6 + h_liseret) - 0.35 * grav
+    # tout assemblé
+    h = np.where(champ, h_champ, 0.0) + h_jonc + h_perles + h_filet + np.where(canal, 0.6 + h_canal, 0.0)
+    h = np.where(d_ros < 0, np.maximum(h, h_ros), h)
+    h = h + (R.bruit_rect(W, H, 60, 11).astype(np.float32) - 0.5) * 0.02
+    n = normales_px(h, relief=0.9)
+    ao = occlusion_px(h, 7.0, 0.55)
+    est_or = (h_jonc > 0) | (h_perles > 0) | (h_filet > 0) | or_canal | (d_ros < 0) | (champ & (h_liseret > 0.01) & (d_case >= 0))
+    c_or = metal(n, OR, ao, 1.0)
+    # la laque bleu nuit : plus claire au centre ; un poli large ; une nébuleuse discrète (violet, un fil turquoise)
+    k_c = np.clip(np.hypot((x - cx) / (TAPIS_W * 0.62), (y - cy) / (TAPIS_H * 0.62)), 0, 1)[..., None]
+    base = LAQUE_CEL_CENTRE * (1 - k_c) + LAQUE_CEL_BORD * k_c
+    poli = (0.5 + 0.5 * np.cos((x * 0.45 + y - 420.0) / 380.0))[..., None]
+    base = base * (0.88 + 0.16 * poli)
+    n1 = R.bruit_rect(W, H, 5, 81).astype(np.float32)
+    n2 = R.bruit_rect(W, H, 11, 82).astype(np.float32)
+    neb = lisse(0.45, 0.85, 0.65 * n1 + 0.35 * n2)[..., None]
+    base = base * (1 - 0.45 * neb) + (base * 0.55 + R._hex("#2b2160") * 0.45) * neb
+    teal = lisse(0.58, 0.9, R.bruit_rect(W, H, 4, 83).astype(np.float32))[..., None]
+    base = base * (1 - 0.3 * teal) + R._hex("#123c4c") * 0.3 * teal
+    base = np.where((d_case < 0)[..., None], base * 0.8, base)
+    base = np.where(canal[..., None], LAQUE_CEL_CANAL, base)
+    c_laque = laque(n, base, ao)
+    or_grave = R._hex("#d6b46c")
+    c_laque = c_laque * (1 - 0.55 * grav[..., None]) + or_grave * (0.55 * grav)[..., None] * ao[..., None]
+    poussiere = np.zeros(x.shape, dtype=np.float32)
+    for i in range(460):
+        px, py = rng.uniform(40, TAPIS_W - 40), rng.uniform(40, TAPIS_H - 40)
+        rx0, rx1 = int(max(0, (px - 4) * K)), int(min(W, (px + 4) * K))
+        ry0, ry1 = int(max(0, (py - 4) * K)), int(min(H, (py + 4) * K))
+        d2 = (x[ry0:ry1, rx0:rx1] - px) ** 2 + (y[ry0:ry1, rx0:rx1] - py) ** 2
+        poussiere[ry0:ry1, rx0:rx1] += np.exp(-d2 / 0.5) * (0.10 + 0.30 * rng.random())
+    c_laque = c_laque + (poussiere * ao)[..., None] * R._hex("#e8eefc")
+    col = np.where(est_or[..., None], c_or, c_laque)
+    alpha = np.clip(0.5 - d_tapis * K, 0, 1)
+    ecrire_rect(nom, col, alpha)
+
+
 if __name__ == "__main__":
     os.makedirs(SORTIE, exist_ok=True)
+    if "--celeste" in sys.argv:
+        tapis_celeste()
+        sys.exit(0)
     if "--planche" not in sys.argv:
         tapis()
         for st in ["jade", "rose", "cible", "gel"]:

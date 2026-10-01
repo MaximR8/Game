@@ -327,6 +327,10 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
 - Pour le Play Store : un **AAB** (il faudra la fabrication Gradle de Godot) ; l'APK sert aux essais (installation directe).
 
 - **La Supernova** (30/09) : `tests/test_supernova.tscn` (headless) ; `tests/capture_supernova.tscn` (en fenêtre, l'animation).
+- **La machine « Base céleste », prototype** (01/10) : `tests/capture_meuble.tscn -- <dossier> [avant] [cam=x,y,z,vx,vy,vz,fov]`
+  (en fenêtre, photos en 1080 × 2400) ; le film : `--write-movie <dossier>/machine.avi --fixed-fps 30 … -- <dossier> film`, puis
+  ffmpeg (celui d'imageio_ffmpeg) : `crop=1080:1785:0:0,scale=720:1190` en H.264. Le tapis céleste :
+  `python design/objets/render_carre.py --celeste`, puis `tests/capture_tapis.tscn -- <dossier>`.
 
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 

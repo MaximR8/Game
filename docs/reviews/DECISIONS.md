@@ -63,7 +63,18 @@ d'accord »*) :
   poussière à la fin ; le cœur d'étoile est un objet, pas une monnaie ; 4 compteurs au plus par écran. Le rythme (Maxim) :
   *« pas fini en 2 jours, mais pas trop lésé »*.
 
-🟡 **À confirmer par Maxim** (l'avis de Claude, 01/10) :
+✅ **Confirmé par Maxim le 01/10 au soir** (*« 1. oui 2. Comète c'est très bien 3. ok 4. non… 5. aligné 6. ok »*) — 1, 2
+(**les Comètes**), 3, 5 et 6 tels quels ; **4 changé par Maxim** : *« le style de base pour tous les stades, et quand on
+rajoute un style c'est pour les lvl 3 — plutôt un stade III alternatif »* ; *« au moins ça pousse les gens à monter leurs
+cartes »* ; *« les cartes de base ont toutes la même animation d'entrée sur le plateau ; les cartes spéciales, elles, ont
+leur animation bien spécifique (on ne fait pas d'office une carte spéciale par carte ; au pire ça fera 150 : jouable) »*.
+Et sur la machine : *« on ne recolore ni les pièces ni les objets, seulement le décor ; le titre La Poussette peut dégager
+(plus d'espace) ; j'aime le jeu de profondeur — nous on a une vue aérienne, là ça donne une impression de long plateau ;
+des petites animations sur la machine ; la barre de la Supernova intégrée au décor, qui gère aussi l'animation de la
+Supernova »*. Les cartes : *« on peut avancer tout doucement »*. Et les **skins du tapis du Carré**, un « base » dans le
+même esprit que la machine céleste. Premier aperçu demandé : la machine « Base céleste » et le tapis céleste, en artifact.
+
+Les six points, tels que proposés (l'avis de Claude, 01/10) :
 1. **La monnaie payante n'achète pas de cartes** — ni pierres, ni poussière, ni étoiles, ni pièces, ni Nouvelle machine.
    Ça remplace le 30/09 (« vendre les éclats, le moteur principal ») : au Carré, le stade change les chiffres ; vendre les
    cartes, c'est vendre le Classé. La seule vitesse vendue : un bonus de ressources **plafonné** dans le pass payant
@@ -890,8 +901,8 @@ folklore et légendes ».
   par un minuteur, ni par un mur de difficulté. *(posée par Maxim le 20/09/2026)*
 - 🔴 **ON NE VEND NI LA CHANCE NI LA VICTOIRE. On vend la collection et la personnalisation.** Rien de ce qui s'achète ne
   mène à un tirage (même par une monnaie du jeu), et rien de ce qui s'achète ne manque à un joueur gratuit. *(phrase de
-  ChatGPT, adoptée par Maxim le 01/10/2026 ; sa portée — la monnaie payante n'achète pas de cartes — à confirmer :
-  DECISIONS 01/10)*
+  ChatGPT, adoptée par Maxim le 01/10/2026 ; sa portée, confirmée le 01/10 : la monnaie payante — les Comètes — n'achète
+  pas de cartes, et aucune pièce ne se vend : DECISIONS 01/10)*
 
 ---
 

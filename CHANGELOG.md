@@ -12,6 +12,42 @@
 
 ---
 
+## 🧪 **La machine « Base céleste » et le tapis céleste du Carré — PROTOTYPE** *(01/10/2026, au soir ; pas dans le jeu)*
+
+**En clair.** Un premier aperçu de la nouvelle machine, demandé par Maxim (*« tu peux me faire un artifact pour déjà voir
+la nouvelle machine, on partirait sur la Base céleste »*), et du tapis du Carré « dans le même esprit ». La vraie machine
+(sa physique, ses pièces, ses objets, son interface) regardée par une caméra **en perspective** (la profondeur, « un long
+plateau »), dans un **meuble 3D** : une arche d'or perlée qui porte les **neuf lunes de la jauge**, un **astrolabe** dont
+les anneaux tournent, deux colonnes bleu nuit et leurs **sphères armillaires**, un ciel aux étoiles nettes (deux
+constellations, une étoile filante). Plus de titre « La Poussette ». À la **Supernova**, le décor la joue : les anneaux
+s'emballent puis se verrouillent, l'étoile flambe, des rayons d'or nets, les lunes battent, les perles de l'arche
+s'allument en file. Le tapis céleste : laque bleu nuit, astrolabe gravé à l'or, cadre perlé, les neuf lunes dans le cadre.
+Rien n'est changé dans le jeu : les photos et le film sortent de scènes de capture. Le canevas : *Machine Base céleste*
+(claude.ai, 01/10).
+
+🔴 **POURQUOI** — DECISIONS 01/10 (Maxim : *« actuellement le plateau, c'est un rectangle avec du texte »* ; *« on ne
+recolore ni les pièces ni les objets, seulement le décor ; le titre peut dégager ; j'aime le jeu de profondeur ; des petites
+animations ; la barre de la Supernova intégrée au décor, qui gère aussi son animation »*).
+
+· `proto_degagement/meuble/` : `meuble_celeste.gd` (le meuble, en volumes simples : la bande d'arche balayée, l'étoile à
+  facettes, des tores, des perles ; `regler_jauge`, la Supernova dans `_process`), `or.gdshader` (l'or et l'émail : le
+  modèle métal des pièces, vu en perspective ; le chenillard des perles), `ciel_fond.gdshader` (le ciel sous l'arche, ses
+  rayons de Supernova), `lune.gdshader` (une lune de la jauge), `etoile_sprite.gdshader` (une étoile nette, face à l'œil),
+  `plateau.gdshader`, `bille_vue.gdshader` (les billes, vraies sphères vues en perspective).
+· `tests/capture_meuble.tscn` : la conversion (la caméra en perspective, `k_h` = 0 sur les matières des pièces, le dessin
+  2D d'avant caché) ; les photos (repos, semis, Supernova), `avant` (la machine d'aujourd'hui, aux mêmes moments),
+  `cam=…` (un autre angle), `film` (pour `--write-movie`). La caméra retenue : (5,4 ; 12,2 ; 22,5) vers (5,4 ; 3,7 ; 10,2),
+  47° ; la variante « plongée » : (5,4 ; 16,6 ; 28) vers (5,4 ; 4,3 ; 11,2), 33°.
+· `design/objets/render_carre.py --celeste` → `carre/tapis-carre-celeste.png` ; `tests/capture_tapis.tscn` le pose dans un
+  vrai combat de l'Aventure, à la place du tapis d'aujourd'hui, le temps des photos.
+
+**Pour l'intégrer** (après le oui de Maxim) : la caméra en perspective dans `MachineRendu` ; le plateau, le bloc, le
+fronton en 3D (le dessin 2D s'en va) ; le doigt qui lâche les pièces passe par la caméra (un rayon, plus l'oblique) ; les
+effets (étincelles, « +3 ») placés par la caméra ; le mot SUPERNOVA rangé au-dessus de l'arche ; un thème = des matières,
+un ciel, une musique (`meuble_*.gd`). **Mesurer sur le téléphone** (D13) : ~150 objets de plus dans la vue.
+
+---
+
 ## ✅ **Les codes cadeaux marchent dans l'app (la table sur le serveur) ; le compte retente hors ligne** — **EN PROD** *(01/10/2026, 13 h 26 ; l'APK 0.3)*
 
 **En clair.** Dans l'app Android, un code cadeau répondait « pas de connexion » : le jeu cherchait la liste des codes sur le
