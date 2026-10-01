@@ -83,8 +83,9 @@ d'accord »*) :
    (avec le cadran du joueur) → la boutique (après un juriste). En fond : les cartes vers ~150.
 
 **Ce qui a fait pencher** : les commentaires de Maxim (ci-dessus) ; **le tribunal de l'entreprise d'Anvers, 16/01/2025**
-(LS contre Apple : 67 813 € dans les loot boxes payantes de *Top War* — jeu de hasard illégal, et **Apple responsable de les
-avoir hébergées** ; question posée à la Cour de justice de l'UE) — les stores vont se durcir en Belgique ; **les principes
+(LS contre Apple : 67 813 € dans les loot boxes payantes de *Top War* — un jeu de hasard sans licence, donc illégal ; **la
+responsabilité d'Apple, qui héberge le jeu, posée à la Cour de justice de l'UE**) — si elle est retenue, les stores se
+durciront en Belgique ; **les principes
 du réseau européen des autorités de consommateurs (CPC) sur les monnaies de jeu, mars 2025** : le prix en euros, rien qui
 cache le coût, pas d'échanges en chaîne, pas de paquet qui force à acheter plus que nécessaire, le droit de rétractation
 expliqué, les enfants protégés ; le banc du rythme (300 joueurs gratuits simulés, ~17 invocations par semaine, les rangs

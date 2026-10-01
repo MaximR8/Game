@@ -449,8 +449,8 @@ extrêmement simple et rapide, aucun intérêt de payer pour avoir plus de pièc
 > plateau, le bonus), ~660 poussières, 205 pièces ; la semaine, +3 étoiles. 🗓️ **Lot B** : ci-dessus, ligne 8.
 >
 > 🗓️ **01/10 — la boutique (DECISIONS 01/10, ligne 21)** : *« on ne vend ni la chance ni la victoire »*. Le 16/01/2025, le
-> tribunal de l'entreprise d'Anvers a jugé jeu de hasard illégal les loot boxes payantes de *Top War* — **et Apple
-> responsable de les avoir hébergées** (question posée à la Cour de justice de l'UE) : 🟡 **plus de pièces vendues, nulle
+> tribunal de l'entreprise d'Anvers a jugé jeu de hasard illégal les loot boxes payantes de *Top War*, et a posé à la Cour
+> de justice de l'UE la question de **la responsabilité d'Apple, qui héberge le jeu** : 🟡 **plus de pièces vendues, nulle
 > part** (à confirmer). Les principes européens des monnaies de jeu (CPC, mars 2025) : le prix en euros affiché, des
 > paquets qui tombent juste, pas d'échanges en chaîne, le droit de rétractation expliqué, les enfants protégés.
 
