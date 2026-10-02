@@ -101,6 +101,10 @@ func _ready() -> void:
 	# un duel ou un classé resté en cours (app fermée en plein combat) compte comme perdu (arene.gd)
 	Arene.solder_interrompu()
 	_prechauffer_cartes()
+	# (02/10) on vient de changer le décor de la machine depuis les outils de test : ils restent ouverts
+	if PusherScreen.rouvrir_outils:
+		PusherScreen.rouvrir_outils = false
+		_basculer_outils()
 	# le premier pack offert (28/09) : l'accueil montre le chemin, après le cadeau du jour s'il y en a un
 	if GS.premier_pack_du():
 		if daily != null and is_instance_valid(daily):

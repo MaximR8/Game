@@ -333,7 +333,8 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
   `python design/objets/render_carre.py --celeste`, puis `tests/capture_tapis.tscn -- <dossier>`.
 - **Les décors peints de la machine** (02/10, en prod) : `python design/machines/analyser.py [décor]` (le relevé →
   `design/machines/<décor>.json`, les masques, l'habit du bloc) ; `python design/machines/analyser.py --jeu BaseCeleste
-  [Grec …]` (les décors retenus → `proto_degagement/machines/<décor>/` et `machines/decors.gd` ; puis l'import de Godot :
+  [Grec …]` (les décors retenus → `proto_degagement/machines/<décor>/` et `machines/decors.gd` — 🔴 TOUS ceux du jeu à chaque
+  fois : `decors.gd` ne garde que ceux qu'on nomme ; depuis le 02/10 au soir, les sept ; puis l'import de Godot :
   `--headless --path ./proto_degagement --import`, et le décor en « Lossy » 0,92 dans son `.import`) ; `python
   design/machines/lunes.py` (les lunes, le cadran, les lance-pièces) ; `tests/capture_decor.tscn -- <dossier>
   [theme=<décor exporté>] [fov=90] [film]` (en fenêtre : le vrai jeu, un doigt simulé ; la Supernova en entier). Les décors

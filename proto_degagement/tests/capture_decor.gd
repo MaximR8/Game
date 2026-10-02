@@ -30,6 +30,7 @@ func _ready() -> void:
 		if a.begins_with("theme="):
 			theme = a.trim_prefix("theme=")
 			DECOR.theme = theme
+			Reglages.decor_machine = theme      # (la machine prend le décor des réglages)
 		elif a.begins_with("fov="):
 			DECOR.champ = a.trim_prefix("fov=")
 	GS.sauvegarde_active = false

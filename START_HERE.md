@@ -99,7 +99,12 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
-> #### *✅ Le lot qui vient d'être clos — la Supernova devient un gros lot ; la pluie ne bloque plus (02/10, en ligne à 23 h 10 ; APK 0.6)*
+> #### *✅ Le lot qui vient d'être clos — les sept décors dans le jeu, le bouton caché « Décor » (02/10, en ligne à 23 h 23 ; APK 0.7)*
+>
+> Maxim : *« mets-moi un bouton caché pour changer le skin »*. Outils de test (réseau local) → « Décor : … › ». Les réglages
+> de l'appareil gardent le choix. À régler selon ses essais : l'émail du mot SUPERNOVA et la teinte des comètes par thème.
+>
+> #### *✅ Juste avant — la Supernova devient un gros lot ; la pluie ne bloque plus (02/10, en ligne à 23 h 10 ; APK 0.6)*
 >
 > Maxim, sur la 0.5 : *« le cœur impossible à avoir dans les 30 s — ou on laisse tomber les 30 s : plein de pièces, le cœur,
 > d'autres poussières »*, *« frustrant d'être bloqué »*. Plus de mode de 30 s (ni ×2, ni compte à rebours) : 36 pièces, trois

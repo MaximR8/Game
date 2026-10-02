@@ -61,6 +61,10 @@ const VOL_COEUR := 1.4
 const Z_ASTRE := 5.6                   # d'où partent les vols : juste derrière le mur bas, au cœur de l'astrolabe
 
 static var theme := "BaseCeleste"      # le décor de la machine — Base céleste par défaut (DECISIONS 02/10)
+# leurs noms, pour les outils de test (02/10 — Maxim : « faudrait que je teste les skins : mets-moi un bouton caché ») ;
+# l'ordre : celui de machines/decors.gd
+const NOMS := {"BaseCeleste": "Base céleste", "Grec": "Olympe", "Vahlalla": "Valhalla", "egypte": "Égypte",
+	"Atlantis": "Atlantide", "Persian": "Perse", "Aztec": "Aztèque"}
 static var champ := "80"               # la caméra relevée pour un champ de 80° (90° : moins d'étirement, plus grand-angle)
 
 var p: PusherScreen
@@ -153,6 +157,15 @@ func installer(pusher: PusherScreen) -> void:
 	p.supernova_fx.visible = false         # le décor a sa Supernova (supernova_fx sert à la vue d'avant)
 	# ses sons, chargés d'avance (au premier son, le téléphone lit le fichier : un à-coup) — après l'ouverture
 	p.get_tree().create_timer(2.0).timeout.connect(_prechauffer_sons)
+
+
+static func nom_du(cle: String) -> String:
+	return str(NOMS.get(cle, cle))
+
+
+static func suivant(cle: String) -> String:
+	var l: Array = DONNEES.DECORS.keys()
+	return str(l[(l.find(cle) + 1) % l.size()])
 
 
 func _signe(ph: float) -> String:

@@ -12,6 +12,32 @@
 
 ---
 
+## ✅ **Les sept décors dans le jeu ; un bouton caché pour changer le décor de la machine** — **EN PROD** *(02/10/2026, 23 h 23 ; l'APK 0.7)*
+
+**En clair.** Maxim : *« faudrait que je teste les skins, donc sur le local, mets-moi un bouton caché pour changer le skin »*.
+Les six autres décors (Olympe, Valhalla, Égypte, Atlantide, Perse, Aztèque) sont maintenant dans le jeu, à côté de Base
+céleste. Dans les **outils de test** (appui long sur l'onglet Nébuleuse — ils n'existent que sur le réseau local), un bouton
+**« Décor : … › »** passe au suivant : la machine se recharge sur le nouveau décor, le tas de pièces gardé, les outils restent
+ouverts. Le choix suit l'appareil (les réglages), pas la partie. Toute l'animation (les lunes, le reflet, les flammes, la
+Supernova) lit le relevé de chaque décor : rien à refaire par thème.
+
+· `design/machines/analyser.py --jeu BaseCeleste Grec Vahlalla egypte Atlantis Persian Aztec` (les décors →
+  `proto_degagement/machines/<décor>/`, `machines/decors.gd`) ; leurs `decor.jpg` en « Lossy » 0,92 (comme le céleste) ;
+  `Reglages.decor_machine` (`user://reglages.cfg`) ; `MachineDecor.NOMS`, `suivant()` ; `PusherScreen._decor_suivant()`,
+  `rouvrir_outils` (main.gd rouvre les outils après le rechargement).
+
+**Tests faits** : `capture_decor theme=<chacun des six>` (en fenêtre : la machine posée dans chaque décor, la Supernova sans
+erreur — vu par Claude) ; `test_supernova` : OK. Déployé : `index.pck` servi (200, 53,2 Mo : +7,8 Mo pour les six décors) ;
+l'APK 0.7 (versionCode 7, 80 Mo), signée.
+
+**À régler au fil des essais de Maxim** : par thème, la couleur de l'émail du mot SUPERNOVA (bleu nuit, fait pour le céleste)
+et celle des comètes.
+
+### ✅ À tester
+- [ ] Outils de test → « Décor : … › » : les sept décors, la machine et la Supernova dans chacun
+
+---
+
 ## ✅ **La Supernova devient un gros lot : plus de mode de 30 s ; des poussières d'étoile offertes ; la pluie ne bloque plus le joueur** — **EN PROD** *(02/10/2026, 23 h 10 ; l'APK 0.6)*
 
 **En clair.** Maxim, sur la 0.5 : *« le cœur d'étoile est impossible à avoir dans les 30 secondes […] ou alors on laisse

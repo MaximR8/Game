@@ -16,6 +16,9 @@ static var musique := 0.5          # 29/09, Maxim : « le son général à 50 pa
 static var effets := 0.8
 static var vibrations := true
 static var actif := true            # les tests coupent l'écriture du fichier
+# (02/10) le décor de la machine (machines/decors.gd) — pour l'instant un outil d'essai (les outils de test, sur le réseau
+# local : Maxim, « faudrait que je teste les skins ») ; les thèmes des pass, eux, suivront la partie
+static var decor_machine := "BaseCeleste"
 
 
 static func charger() -> void:
@@ -24,6 +27,7 @@ static func charger() -> void:
 		musique = clampf(float(c.get_value("son", "musique", musique)), 0.0, 1.0)
 		effets = clampf(float(c.get_value("son", "effets", effets)), 0.0, 1.0)
 		vibrations = bool(c.get_value("jeu", "vibrations", vibrations))
+		decor_machine = str(c.get_value("jeu", "decor_machine", decor_machine))
 	appliquer()
 
 
@@ -35,6 +39,7 @@ static func sauver() -> void:
 	c.set_value("son", "musique", musique)
 	c.set_value("son", "effets", effets)
 	c.set_value("jeu", "vibrations", vibrations)
+	c.set_value("jeu", "decor_machine", decor_machine)
 	c.save(CHEMIN)
 
 

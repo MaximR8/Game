@@ -188,6 +188,8 @@ var bandeau: Bandeau            # le bandeau du haut (main.gd) : les objets gagn
 # cadre dessiné d'avant (son titre, sa frise, le bloc en 2D) ; la vue 3D y passe en perspective
 const MACHINE_DECOR := preload("res://machines/machine_decor.gd")
 var decor_peint: Node
+static var rouvrir_outils := false    # (02/10) le décor change : la machine se recharge, les outils restent ouverts
+var bouton_decor: Button
 var _reserve_retenue := 0       # les pièces en vol vers la réserve
 
 
@@ -227,9 +229,13 @@ func _ready() -> void:
 
 
 func _installer_decor() -> void:
+	if MACHINE_DECOR.DONNEES.DECORS.has(Reglages.decor_machine):
+		MACHINE_DECOR.theme = Reglages.decor_machine
 	decor_peint = MACHINE_DECOR.new()
 	add_child(decor_peint)
 	decor_peint.installer(self)
+	if bouton_decor != null:
+		bouton_decor.text = "Décor : %s  ›" % MACHINE_DECOR.nom_du(MACHINE_DECOR.theme)
 	for c in [decor, bloc2d, fronton2d, jauge2d, lueur_bord]:
 		c.visible = false
 
@@ -973,8 +979,23 @@ func _ui() -> void:
 	bsn.pressed.connect(func():
 		if supernova_t <= 0.0:
 			declencher_supernova())
-	lbl_perf = Style.libelle(outils, "", Rect2(384, 184, 650, 44), "normal", 28, Style.SOURD)
+	# (02/10) le décor de la machine, pour essayer les thèmes : un appui, le suivant (la machine se recharge, le tas gardé)
+	bouton_decor = Style.bouton(outils, "Décor", Rect2(384, 164, 650, 90), false, 36)     # (son nom : _installer_decor)
+	bouton_decor.pressed.connect(_decor_suivant)
+	lbl_perf = Style.libelle(outils, "", Rect2(46, 266, 988, 44), "normal", 28, Style.SOURD)
 	_maj_main()
+
+
+func _decor_suivant() -> void:
+	Reglages.decor_machine = MACHINE_DECOR.suivant(MACHINE_DECOR.theme)
+	Reglages.sauver()
+	if decor_peint != null:
+		decor_peint.achever_pluie()
+	if pieces.size() > 0:
+		_sauver()
+	PhysicsServer3D.set_active(true)
+	rouvrir_outils = true
+	get_tree().reload_current_scene()
 
 
 func montrer_outils(v: bool) -> void:
