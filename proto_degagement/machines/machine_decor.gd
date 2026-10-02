@@ -336,8 +336,9 @@ func _plateau(vue: Node) -> void:
 	dessus.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	dessus.albedo_texture = load(str(d["bloc_dessus"]))
 	dessus.texture_repeat = true
-	dessus.uv1_scale = Vector3(1.0, 2.5, 1.0)       # le dessus se répète tous les 1,6 : ce qui sort de sous le mur
-	dessus.uv1_offset = Vector3(0.0, -1.5, 0.0)     # continue le motif
+	# (02/10) le dessus, d'un seul niveau (analyser.py : sans les filets d'or de la marche peinte, sans couture) : il se
+	# répète à l'échelle de la marche peinte (420 lignes de l'image redressée pour ~1,6 de bloc)
+	dessus.uv1_scale = Vector3(1.0, 2.5 * 420.0 / float(maxi(1, dessus.albedo_texture.get_height())), 1.0)
 	var pm := PlaneMesh.new()
 	pm.size = Vector2(w, 4.0 * k)
 	_mi(bloc3d, pm, dessus, Vector3(cx, float(p.H_BLOC) + 0.002, -2.0 * k))

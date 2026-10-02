@@ -274,6 +274,27 @@ def traiter(nom, dec):
 JEU = os.path.join(RACINE, "proto_degagement", "machines")
 
 
+def dessus_sans_couture(chemin):
+    """Le dessus du bloc, d'un seul niveau (02/10 — Maxim : « sur tous les plateaux mouvants, il y a des doubles niveaux : une
+    barre traverse tout le plateau ») : le dessus de la marche peinte, redressé, emportait ses filets d'or (le dos, le devant
+    de la marche) ; répété sur le bloc, chacun traçait une barre en travers, comme une marche. On garde la bande du milieu,
+    sa lumière rendue égale de haut en bas (répété, un dégradé ferait des bandes), fondue sur elle-même : elle se répète sans
+    couture."""
+    a = np.asarray(Image.open(chemin).convert("RGB")).astype(np.float64) / 255.0
+    H = a.shape[0]
+    b = a[int(H * 0.20):int(H * 0.75)]
+    # chaque ligne ramenée à la teinte médiane du tout : ce qui barre toute la largeur (un filet, un joint de dalle, un
+    # dégradé) s'efface ; ce qui est local (une veine, une étoile) reste
+    med = np.median(b, axis=1)
+    b = b * np.clip(np.median(med, axis=0) / np.maximum(med, 1e-3), 0.6, 1.6)[:, None, :]
+    h = b.shape[0]
+    o = int(h * 0.3)
+    t = b[:h - o].copy()
+    w = (np.arange(o) / o)[:, None, None]
+    t[:o] = b[:o] * w + b[h - o:] * (1 - w)
+    return Image.fromarray((np.clip(t, 0, 1) * 255 + 0.5).astype(np.uint8))
+
+
 def exporter_jeu(noms):
     import shutil
     os.makedirs(os.path.join(JEU, "lunes"), exist_ok=True)
@@ -289,7 +310,7 @@ def exporter_jeu(noms):
         os.makedirs(dossier, exist_ok=True)
         Image.open(os.path.join(SOURCE, dec["fichier"])).convert("RGB").save(os.path.join(dossier, "decor.jpg"), quality=92)
         Image.open(os.path.join(BASE, "%s-or.png" % nom)).resize((512, 768), Image.LANCZOS).save(os.path.join(dossier, "or.png"))
-        Image.open(os.path.join(BASE, "%s-bloc-dessus.png" % nom)).convert("RGB").save(os.path.join(dossier, "bloc-dessus.jpg"), quality=90)
+        dessus_sans_couture(os.path.join(BASE, "%s-bloc-dessus.png" % nom)).save(os.path.join(dossier, "bloc-dessus.jpg"), quality=90)
         Image.open(os.path.join(BASE, "%s-bloc-face.png" % nom)).convert("RGB").save(os.path.join(dossier, "bloc-face.jpg"), quality=90)
         r = "res://machines/%s/" % nom
         donnees[nom] = {

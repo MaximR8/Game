@@ -99,7 +99,11 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
-> #### *✅ Le lot qui vient d'être clos — le front de marche fixe : le bloc ne passe plus « sous un jpeg » (02/10, en ligne à 23 h 39 ; APK 0.8)*
+> #### *✅ Le lot qui vient d'être clos — le bloc d'un seul niveau, plus de barre en travers (02/10, en ligne à 23 h 51 ; APK 0.9)*
+>
+> Maxim : *« des doubles niveaux : une barre traverse tout le plateau »*. `analyser.py` `dessus_sans_couture()`. CHANGELOG.
+>
+> #### *✅ Juste avant — le front de marche fixe : le bloc ne passe plus « sous un jpeg » (02/10, en ligne à 23 h 39 ; APK 0.8)*
 >
 > Maxim, sur les six autres décors : *« la plaque mobile, on dirait qu'elle passe sous un jpeg du décor »*. CHANGELOG.
 >

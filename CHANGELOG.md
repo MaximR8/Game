@@ -12,6 +12,23 @@
 
 ---
 
+## ✅ **Le bloc d'un seul niveau : plus de barre en travers de la plaque mobile** — **EN PROD** *(02/10/2026, 23 h 51 ; l'APK 0.9)*
+
+**En clair.** Maxim : *« sur tous les plateaux mouvants, il y a des doubles niveaux (une barre traverse tout le plateau) : on
+dirait qu'il y a deux niveaux, alors que les pièces sont au même niveau »*. Le dessus du bloc était découpé dans la marche
+peinte avec ses filets d'or (son dos, son devant), puis répété 2,5 fois : chaque raccord traçait une barre en travers, comme
+une marche (sur la Base céleste aussi : une ligne au raccord). Maintenant : la bande du milieu seulement, chaque ligne ramenée
+à la teinte du tout (ce qui barre toute la largeur — un filet, un joint de dalle, un dégradé — s'efface ; une veine, une
+étoile restent), fondue sur elle-même : elle se répète sans couture, à l'échelle de la marche peinte.
+
+· `design/machines/analyser.py` `dessus_sans_couture()` (appelé par `--jeu`) ; `machine_decor.gd` : la répétition suit la
+  hauteur de la texture.
+
+**Tests faits** : `capture_decor` (Égypte, Olympe, Perse, Base céleste : la plaque d'un seul tenant — vu par Claude).
+Déployé : `index.pck` servi (200) ; l'APK 0.9 (versionCode 9), signée.
+
+---
+
 ## ✅ **Le bloc ne passe plus « sous un jpeg » : un front de marche fixe au fond de la machine** — **EN PROD** *(02/10/2026, 23 h 39 ; l'APK 0.8)*
 
 **En clair.** Maxim, en essayant les décors : *« petit souci sur tous sauf la Base céleste : la plaque mobile, on dirait
