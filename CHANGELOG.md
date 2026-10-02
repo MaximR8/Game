@@ -12,6 +12,40 @@
 
 ---
 
+## 🧪 **La machine dans les décors peints de Maxim (7 thèmes) — ESSAI** *(02/10/2026 ; pas dans le jeu)*
+
+**En clair.** Après le meuble en volumes simples (*« ça fait vieille 3D »*), la direction de Maxim : *« un décor fixe derrière,
+bien HD, propre, et des petites animations dessus, un peu comme les cartes »*. Il a généré sept décors dans ChatGPT avec
+les prompts de `REPRISE.md` (Base céleste, Olympe, Valhalla, Égypte, Atlantide, Mille et une nuits, Aztèque :
+`Machine/`, 1024 × 1536). L'essai pose la **vraie machine** (sa physique, ses pièces, ses objets, son interface) dans le
+creux peint de chacun : la caméra du jeu est calculée pour que le plateau tombe pile dans le plateau peint (la profondeur
+est étirée à l'image, ×1,14 à ×1,31 selon le décor ; la physique ne change pas) ; le bloc qui pousse porte l'habit de la
+marche peinte (découpée dans l'image, redressée) ; deux caches « peints » (invisibles : ils montrent le décor) font passer
+le bloc sous le mur du fond et tomber les pièces derrière la lèvre de l'avant. Par-dessus : les **lunes de la jauge** dans
+les alvéoles de l'arche (7 ou 9 selon le décor : la jauge suit), un **reflet** qui glisse sur l'or (comme les cartes),
+les étoiles du ciel peint qui **scintillent** (ou les reflets de l'or, de jour), les **flammes** qui vacillent. À la
+**Supernova** : l'emblème s'allume, des anneaux nets en partent, une gerbe d'étoiles, et le **compte à rebours** s'inscrit au
+centre de l'emblème (le mot SUPERNOVA rangé laisse la place). Le décor descend tout seul assez bas pour que le haut de
+l'arche passe sous le bandeau. Le canevas *Les décors de la machine* (claude.ai, compte perso) : les sept, deux films
+avec le son (Base céleste, Valhalla), la Supernova.
+
+🔴 **POURQUOI** — `REPRISE.md` (le verdict du 01/10) ; Maxim, 02/10 : *« il y a des images dans Machine, je sais pas si ça
+peut bien aller, test »*.
+
+· `design/machines/analyser.py` : le relevé de chaque décor (le creux, la marche, les alvéoles, l'emblème, les flammes —
+  relevés à la loupe sur une grille) → `<décor>.json` (deux caméras : 80° et 90°), `-or.png` (le masque de l'or),
+  `-bloc-dessus.png`, `-bloc-face.png`.
+· `tests/capture_decor.tscn -- <dossier> theme=<décor> [fov=90] [film]` ; les matières des pièces vues dans un décor :
+  `meuble/corps_vue.gdshader`, `ombre_vue.gdshader`, `bille_vue.gdshader` (copies avec l'étirement ; les billes restent
+  rondes) ; `meuble/peint.gdshader` (les caches), `reflet_or.gdshader`, `decor_fondu.gdshader`.
+· `Machine/` (les sources de Maxim, lourdes) reste hors du dépôt, comme `Cartes/`.
+
+**À trancher par Maxim** : les décors (garder, refaire) ; le champ (80°, retenu, ou 90° : moins d'étirement). **Pour
+l'intégrer** : la pose des pièces (DECISIONS 02/10 : le doigt choisit gauche-droite, une glissière suit) ; un décor par
+thème = son image + son relevé ; les images en ×2 (netteté) ; mesurer sur le téléphone (D13).
+
+---
+
 ## 🧪 **La machine « Base céleste » et le tapis céleste du Carré — PROTOTYPE** *(01/10/2026, au soir ; pas dans le jeu)*
 
 **En clair.** Un premier aperçu de la nouvelle machine, demandé par Maxim (*« tu peux me faire un artifact pour déjà voir
@@ -22,8 +56,9 @@ les anneaux tournent, deux colonnes bleu nuit et leurs **sphères armillaires**,
 constellations, une étoile filante). Plus de titre « La Poussette ». À la **Supernova**, le décor la joue : les anneaux
 s'emballent puis se verrouillent, l'étoile flambe, des rayons d'or nets, les lunes battent, les perles de l'arche
 s'allument en file. Le tapis céleste : laque bleu nuit, astrolabe gravé à l'or, cadre perlé, les neuf lunes dans le cadre.
-Rien n'est changé dans le jeu : les photos et le film sortent de scènes de capture. Le canevas : *Machine Base céleste*
-(claude.ai, 01/10).
+Rien n'est changé dans le jeu : les photos et le film sortent de scènes de capture. Montré sur un canevas, retiré le soir
+même (la session tournait sur le compte Claude du travail). **Le verdict de Maxim** : *« ça fait vieille 3D »* — il veut
+un décor fixe, HD, peint, qui remplit l'écran, avec de petites animations dessus : la suite et les prompts → `REPRISE.md`.
 
 🔴 **POURQUOI** — DECISIONS 01/10 (Maxim : *« actuellement le plateau, c'est un rectangle avec du texte »* ; *« on ne
 recolore ni les pièces ni les objets, seulement le décor ; le titre peut dégager ; j'aime le jeu de profondeur ; des petites

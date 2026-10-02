@@ -331,6 +331,9 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
   (en fenêtre, photos en 1080 × 2400) ; le film : `--write-movie <dossier>/machine.avi --fixed-fps 30 … -- <dossier> film`, puis
   ffmpeg (celui d'imageio_ffmpeg) : `crop=1080:1785:0:0,scale=720:1190` en H.264. Le tapis céleste :
   `python design/objets/render_carre.py --celeste`, puis `tests/capture_tapis.tscn -- <dossier>`.
+- **Les décors peints de la machine, essai** (02/10) : `python design/machines/analyser.py [décor]` (le relevé →
+  `design/machines/<décor>.json`, les masques, l'habit du bloc), puis `tests/capture_decor.tscn -- <dossier> theme=<décor>
+  [fov=90] [film]` (en fenêtre). Les décors sources : `Machine/` (hors du dépôt).
 
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 

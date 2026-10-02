@@ -26,6 +26,23 @@
 
 ## Les décisions prises
 
+### Dans la machine en perspective, le doigt choisit seulement gauche-droite : une glissière (la fente des vraies machines) suit le doigt et lâche les pièces sur le bloc — 02/10/2026
+
+**Ce qu'on a tranché** (Claude, le design fonctionnel — Maxim, 02/10 : *« comment le joueur va poser ses pièces avec le plateau
+incliné comme ça ? peu importe où il touche en hauteur d'écran, ça se met sur le plateau qui bouge ? ou alors un système de
+fente comme les vraies machines ? »*) : **les deux à la fois**. Où que le doigt touche la machine (même bas, près du pouce),
+seule sa position **gauche-droite** compte ; une petite **glissière** dorée, posée sur le haut du bloc, suit le doigt et les
+pièces en tombent sur le bloc (toujours à la même profondeur). Glisser le doigt sème plusieurs pièces, comme aujourd'hui.
+**Ce qui a fait pencher** : en perspective, le dessus du bloc ne fait plus qu'une mince bande à l'écran (viser la profondeur au
+doigt serait imprécis) ; le bloc est haut sur l'écran (le pouce y arrive mal) ; les vraies machines font ainsi (une fente
+qu'on oriente) — la référence de Maxim ; et la profondeur du lâcher ne change presque rien au jeu (le bloc emmène les pièces
+contre le mur).
+**Ce qu'on a écarté, et pourquoi** : viser la case au doigt (la vue d'aujourd'hui : précise de haut, imprécise en perspective) ;
+une fente fixe au milieu (on perd le choix gauche-droite, le seul vrai geste de visée).
+**Ce que ça coûte, et qu'on assume** : la glissière à dessiner dans chaque décor (un petit objet d'or, ou l'habit du thème) ;
+le geste « glisse le doigt sur le bloc » devient « glisse le doigt » (la consigne change).
+🔓 **Ce qui la rouvrirait** : le cousin et sa femme qui visent mal, ou cherchent à toucher le bloc.
+
 ### On ne vend ni la chance ni la victoire : une monnaie payante pour du connu ; 150 cartes, puis des styles ; un vrai meuble de machine, à thèmes ; les Maîtrises — 01/10/2026
 
 **Ce qu'on a tranché** (Maxim a passé à ChatGPT le jeu entier ; ses 18 points, commentés par Maxim : *« globalement

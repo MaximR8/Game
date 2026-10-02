@@ -99,12 +99,22 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
+> #### *🧪 L'essai du 02/10 — la machine dans les sept décors peints de Maxim (PAS dans le jeu)*
+>
+> Les décors générés par Maxim dans ChatGPT (`Machine/`, les prompts de `REPRISE.md`) ; la vraie machine posée dans le creux
+> peint de chacun, les lunes dans les alvéoles, les reflets, les étoiles, les flammes, la Supernova dans l'emblème (CHANGELOG).
+> Le canevas *Les décors de la machine* (claude.ai, compte perso). **À trancher par Maxim** : les décors, le champ (80°/90°).
+> La pose des pièces en perspective : DECISIONS 02/10 (gauche-droite, une glissière). Ensuite : ses **monstres** à intégrer
+> (14 dans `Cartes/Illustration` — dont 5 à 2 images seulement : Cyclope, Talos, Griffon, Cockatrice, Barghest ; Mokèlé-mbèmbé
+> 1 et 2 sont dans `Machine/`).
+>
 > #### *🧪 Le prototype du 01/10 au soir — la machine « Base céleste » et le tapis céleste (PAS dans le jeu)*
 >
 > Maxim : *« tu peux me faire un artifact pour déjà voir la nouvelle machine »* ; *« les skins pour les plateaux de jeu, fais-moi
-> celui de base »*. Le canevas *Machine Base céleste* (claude.ai) : la machine au repos, le film (24 s, avec le son), la
-> Supernova dans le décor, l'avant, une variante en plongée ; le tapis céleste en combat, l'avant, le tapis à plat. **À
-> trancher par Maxim** : le look, et l'angle (en profondeur, retenu ; ou en plongée). Puis l'intégrer (CHANGELOG, « Pour
+> celui de base »*. Montré sur un canevas, **retiré le soir même** (la session tournait sur le compte Claude du travail :
+> aucune trace de La Poussette là-bas). Maxim : *« ça fait vieille 3D […] un décor fixe derrière, bien HD, propre, et des
+> petites animations dessus, un peu comme les cartes »* → **`REPRISE.md`** (la direction, les prompts ChatGPT du décor,
+> ce qui reste à committer). Le tapis céleste : pas encore commenté. Puis l'intégrer (CHANGELOG, « Pour
 > l'intégrer »), dans l'ordre de ⓪bis (après la Nouvelle machine et la série de 7 jours). `proto_degagement/meuble/`,
 > `tests/capture_meuble`, `tests/capture_tapis`, `render_carre.py --celeste`.
 >

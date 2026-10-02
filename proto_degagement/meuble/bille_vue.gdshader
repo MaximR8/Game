@@ -15,6 +15,18 @@ uniform float fondu_objet = 0.0;
 uniform float rayon = 0.5;
 uniform float aplati = 1.0;
 uniform float echelle = 0.9;
+// (02/10, essai des décors peints) la profondeur du plateau étirée À L'IMAGE autour du bord (la physique ne change pas) :
+// le creux peint est plus profond que notre plateau ; etirement = 1 : rien ne change.
+uniform float etirement = 1.0;
+uniform float bord_plateau = 14.0;
+
+void vertex() {
+	// seul le CENTRE suit l'étirement : la bille reste ronde (étirée, elle devenait un œuf)
+	vec3 c = MODEL_MATRIX[3].xyz;
+	vec3 w = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 c2 = vec3(c.x, c.y, bord_plateau - etirement * (bord_plateau - c.z));
+	POSITION = PROJECTION_MATRIX * VIEW_MATRIX * vec4(w - c + c2, 1.0);
+}
 
 const vec3 L_CLE = vec3(-0.4545, -0.6126, 0.6324);
 const vec3 L_CONTRE = vec3(0.6353, 0.4303, 0.6763);

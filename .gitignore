@@ -33,3 +33,5 @@ design/canevas/sons/ecoute/
 
 # l'app Android fabriquée (APK, AAB)
 /android/
+# les décors de la machine générés par Maxim (sources lourdes, comme /Cartes/)
+/Machine/
