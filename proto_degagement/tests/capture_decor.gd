@@ -46,6 +46,14 @@ var film := false
 var glissiere := false                 # la démonstration de la glissière (le doigt simulé)
 var tex_glissiere: ImageTexture
 var tex_rail: ImageTexture
+var lance := "croissant"               # (02/10, le soir) croissant | armillaire | lanterne
+var tex_lance: ImageTexture
+var tex_piece: Texture2D
+var _chutes: Array = []                # les pièces qui tombent du lance-pièces : {de, x, t}
+var _prochaine := 1.0                  # la pièce suivante apparaît dans le lance-pièces (de 0 à 1)
+var _vx := 0.0                         # la vitesse du lance-pièces à l'écran (il penche un peu quand il glisse)
+const Y_LANCE := 3.0                   # PLUS HAUT (Maxim) : le lance-pièces flotte au-dessus du bloc
+const DUREE_CHUTE := 0.42
 var chariot_x := 5.4                   # la place du chariot sur le rail (en x du monde)
 var _x_dernier_lacher := -99.0
 var doigt := {"la": false, "x": 540.0, "appui": 0.0}   # le doigt simulé : présent, sa position, l'onde d'un appui
@@ -84,6 +92,9 @@ func _ready() -> void:
 	dossier = args[0] if args.size() > 0 else OS.get_user_data_dir()
 	film = args.has("film")
 	glissiere = args.has("glissiere")
+	for a2 in args:
+		if a2.begins_with("lance="):
+			lance = a2.trim_prefix("lance=")
 	for a in args:
 		if a.begins_with("theme="):
 			theme = a.trim_prefix("theme=")
@@ -102,6 +113,8 @@ func _ready() -> void:
 	tex_cadran = _texture("design/machines/lunes/cadran.png")
 	tex_glissiere = _texture("design/machines/lunes/glissiere.png")
 	tex_rail = _texture("design/machines/lunes/rail.png")
+	tex_lance = _texture("design/machines/lunes/lance-%s.png" % lance)
+	tex_piece = Style.objet("piece-etoile")
 	tex_eclat = load("res://ciel/eclat-etoile.png")
 	var n_alv: int = (d["alveoles"] as Array).size()
 	for i in n_alv:
@@ -402,6 +415,7 @@ func _process(delta: float) -> void:
 		(fl[1] as ShaderMaterial).set_shader_parameter("temps", _t)
 	if glissiere:
 		_suivre_doigt(delta)
+		_avancer_chutes(delta)
 		p.lbl_hint.text = "Glisse le doigt pour lâcher tes pièces."
 	couche_lunes.queue_redraw()
 	couche_eclats.queue_redraw()
@@ -519,20 +533,53 @@ func _suivre_doigt(delta: float) -> void:
 	doigt["appui"] = maxf(0.0, float(doigt["appui"]) - delta * 2.5)
 	if not bool(doigt["la"]):
 		return
-	chariot_x = lerpf(chariot_x, _x_sous(float(doigt["x"])), minf(1.0, delta * 14.0))
+	var avant := chariot_x
+	chariot_x = lerpf(chariot_x, _x_sous(float(doigt["x"])), minf(1.0, delta * 12.0))
+	_vx = lerpf(_vx, (chariot_x - avant) / maxf(delta, 1e-3), minf(1.0, delta * 8.0))
 	if absf(chariot_x - _x_dernier_lacher) >= 0.75:
 		_lacher_ici()
 
 
 func _lacher_ici() -> void:
 	_x_dernier_lacher = chariot_x
-	var b: RigidBody3D = p._lacher(chariot_x, Z_LACHER)
+	_chutes.append({"de": _bouche(), "x": chariot_x, "t": 0.0})
+	_prochaine = -1.3                  # la suivante attend que celle-ci soit partie (~0,23 s), puis grandit
+	doigt["appui"] = 1.0
+
+
+# La chute finie : la vraie pièce naît là où l'animation l'a posée (et sonne à son premier contact).
+func _atterrir(x: float) -> void:
+	var b: RigidBody3D = p._lacher(x, Z_LACHER)
 	if b == null:
 		return
 	p._sonner_a_la_pose(b)
 	GS.main_pieces -= 1
 	p._maj_main()
-	doigt["appui"] = 1.0
+
+
+func _avancer_chutes(delta: float) -> void:
+	_prochaine = minf(1.0, _prochaine + delta / 0.18)
+	for c in _chutes:
+		c["t"] = float(c["t"]) + delta
+		if float(c["t"]) >= DUREE_CHUTE and not c.has("pose"):
+			c["pose"] = true
+			_atterrir(float(c["x"]))
+	_chutes = _chutes.filter(func(c): return float(c["t"]) < DUREE_CHUTE + 0.02)
+
+
+# Le lance-pièces à l'écran : au-dessus du doigt, flottant (il respire), et sa bouche, d'où part la pièce.
+func _lance_pos() -> Vector2:
+	return _a_l_ecran(chariot_x, Y_LANCE, Z_RAIL) + Vector2(0, 3.0 * sin(_t * 2.1))
+
+
+func _taille_lance() -> float:
+	return 150.0 if lance != "croissant" else 140.0
+
+
+func _bouche() -> Vector2:
+	var t := _taille_lance()
+	var dy := {"croissant": 0.08, "armillaire": 0.0, "lanterne": 0.12}.get(lance, 0.0) as float
+	return _lance_pos() + Vector2(0, t * dy)
 
 
 func _toucher(ecran_x: float) -> void:
@@ -543,16 +590,31 @@ func _toucher(ecran_x: float) -> void:
 
 
 func _dessiner_glissiere(v: Control) -> void:
-	# le rail perlé, d'un bout à l'autre du bloc
-	var a := _a_l_ecran(float(p.X0) - 0.25, Y_RAIL, Z_RAIL)
-	var b := _a_l_ecran(float(p.X1) + 0.25, Y_RAIL, Z_RAIL)
-	var h_rail := 22.0
-	v.draw_texture_rect(tex_rail, Rect2(a.x, a.y - h_rail * 0.5, b.x - a.x, h_rail), false)
-	# le chariot : accroché au rail, à une taille qui se lit (la perspective du fond le rendait minuscule)
-	var haut := _a_l_ecran(chariot_x, Y_RAIL, Z_RAIL)
-	var hc := 128.0
-	var tremble := 1.0 + 0.07 * float(doigt["appui"])
-	v.draw_texture_rect(tex_glissiere, Rect2(haut.x - hc * 0.5 * tremble, haut.y - 20.0, hc * tremble, hc * tremble), false)
+	var c0 := _lance_pos()
+	var tl := _taille_lance()
+	var penche := clampf(-_vx * 0.035, -0.22, 0.22)
+	# la pièce qui attend, derrière l'avant du lance-pièces (elle apparaît en grandissant après chaque lâcher)
+	var vue_p := clampf(_prochaine, 0.0, 1.0)
+	var tp := tl * 0.30 * (0.4 + 0.6 * vue_p)
+	var b := _bouche()
+	v.draw_set_transform(c0, penche, Vector2.ONE)
+	if lance == "armillaire":
+		v.draw_texture_rect(tex_piece, Rect2(b - c0 - Vector2(tp, tp) * 0.5, Vector2(tp, tp)), false, Color(1, 1, 1, vue_p))
+		v.draw_texture_rect(tex_lance, Rect2(-Vector2(tl, tl) * 0.5, Vector2(tl, tl)), false)
+	else:
+		v.draw_texture_rect(tex_lance, Rect2(-Vector2(tl, tl) * 0.5, Vector2(tl, tl)), false)
+		v.draw_texture_rect(tex_piece, Rect2(b - c0 - Vector2(tp, tp) * 0.5 - Vector2(0, tp * 0.25), Vector2(tp, tp)), false, Color(1, 1, 1, vue_p))
+	v.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	# les pièces qui tombent : elles tournoient (la tranche, puis la face), grandissent un peu en approchant
+	for ch in _chutes:
+		var u := clampf(float(ch["t"]) / DUREE_CHUTE, 0.0, 1.0)
+		var arrivee := _a_l_ecran(float(ch["x"]), float(p.H_BLOC) + 0.12, Z_LACHER)
+		var pos: Vector2 = (ch["de"] as Vector2).lerp(arrivee, u * u)
+		var taille := lerpf(tl * 0.30, 58.0, u)
+		var tour := absf(cos(u * 9.0)) * 0.75 + 0.25
+		v.draw_set_transform(pos, 0.0, Vector2(1.0, tour))
+		v.draw_texture_rect(tex_piece, Rect2(-Vector2(taille, taille) * 0.5, Vector2(taille, taille)), false)
+		v.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	# le doigt (simulé) : un rond clair, une onde à chaque pièce lâchée
 	if bool(doigt["la"]):
 		var c := Vector2(float(doigt["x"]), Y_DOIGT)
@@ -568,14 +630,14 @@ func _scenario_glissiere() -> void:
 	_sans_cadeau()
 	await _attendre(4.0)
 	_toucher(250.0)
-	await _attendre(0.25)
-	_capture("glissiere_appui")
+	await _attendre(0.18)
+	_capture("lance_%s_chute" % lance)
 	for i in 60:
 		doigt["x"] = 540.0 + 300.0 * sin(-1.0 + float(i) / 60.0 * 3.0)
 		await _attendre(1.0 / 30.0)
-	_capture("glissiere_glisse")
+	_capture("lance_%s_glisse" % lance)
 	await _attendre(0.8)
-	_capture("glissiere_pieces")
+	_capture("lance_%s_pieces" % lance)
 	get_tree().quit(0)
 
 

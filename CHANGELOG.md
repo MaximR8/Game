@@ -58,6 +58,14 @@ goulotte d'or, sa fente, son étoile sur l'émail) le suit sur un rail perlé en
 (le vrai lâcher du jeu, son son) ; glisser sème, toucher lâche une pièce. Le chariot et le rail : `design/machines/lunes.py`
 (`glissiere`, `rail`). La vue 3D se calcule au plein du jeu dans les photos (plus nette).
 
+🎯 **Trois lance-pièces (02/10, la nuit)** — Maxim, sur la glissière : *« je la mettrais plus haut, qu'on anime les pièces qui
+tombent de là ; mais je changerais l'aspect, là c'est pas beau »*. Trois propositions rendues par la fabrique
+(`design/machines/lunes.py` : `lance_croissant`, `lance_armillaire`, `lance_lanterne`) : un croissant de lune d'or, une petite
+sphère armillaire (comme celles des colonnes), une lanterne céleste ; ils FLOTTENT plus haut, au pied de l'arche (plus de
+tringle perlée), la pièce suivante visible dedans ; à chaque lâcher, la pièce sort, tombe en tournoyant et se pose sur le
+bloc — là, elle devient la vraie pièce (le son au contact). `tests/capture_decor … glissiere lance=<croissant|armillaire|
+lanterne>` ; trois films sur le canevas. **À choisir par Maxim** (ou un lance-pièces généré dans ChatGPT).
+
 **À trancher par Maxim** : le rendu de la v2 (le canevas). **Pour
 l'intégrer** : la pose des pièces (DECISIONS 02/10 : le doigt choisit gauche-droite, une glissière suit) ; un décor par
 thème = son image + son relevé ; les images en ×2 (netteté) ; mesurer sur le téléphone (D13).

@@ -191,6 +191,100 @@ def rail(W=1024, H=48, ss=2):
     Image.fromarray((np.clip(np.dstack([rgb, a]), 0, 1) * 255 + 0.5).astype(np.uint8), "RGBA").save(os.path.join(SORTIE, "rail.png"))
 
 
+# ─────────────────────────────────────────────────────────────
+# Les lance-pièces (02/10 — Maxim, sur la glissière : « je la mettrais plus haut, qu'on anime les pièces qui tombent de
+# là ; mais je changerais l'aspect, là c'est pas beau »). Trois propositions, dans l'esprit du décor céleste ; elles
+# flottent au-dessus du bloc (plus de tringle perlée) et la prochaine pièce s'y voit.
+# ─────────────────────────────────────────────────────────────
+
+def _or_relief(h, N, extra_email=None):
+    n = R.normales(h, N)
+    ao = R.occlusion(h, N, N * 0.012)
+    col = R.metal(n, R.OR, ao, 1.0)
+    if extra_email is not None:
+        nz = n[..., 2:3]
+        fres = 0.04 + 0.96 * (1 - nz) ** 5
+        e = R.environnement(R.reflet(n))[..., None]
+        email = np.array([0.03, 0.06, 0.17]) * ao[..., None] + e * fres * 0.45
+        col = np.where(extra_email[..., None], email, col)
+    return col
+
+
+def _anneau(u, v, cx, cy, rx, ry, ang, tube):
+    """Un anneau en ellipse (tourné de ang) : sa hauteur bombée, 0 dehors."""
+    c, s_ = math.cos(ang), math.sin(ang)
+    x, y = (u - cx) * c + (v - cy) * s_, -(u - cx) * s_ + (v - cy) * c
+    d = np.abs(np.hypot(x / rx, y / ry) - 1.0) * min(rx, ry)
+    return np.where(d < tube, np.sqrt(np.clip(1 - (d / tube) ** 2, 0, 1)) * tube * 1.4, 0.0)
+
+
+def lance_croissant(S=256, ss=3):
+    """Un croissant de lune d'or, cornes en l'air : un berceau où la prochaine pièce se pose ; une gemme d'émail en bas."""
+    N, u, v = R.grille(S, ss)
+    d_ext = np.hypot(u, v - 0.08) - 0.80
+    d_int = np.hypot(u, v + 0.24) - 0.66
+    dans = (d_ext < 0) & (d_int > 0) & (v > -0.52)
+    larg = np.clip(-d_ext, 0, None) + np.clip(d_int, 0, None)
+    t = np.clip(-d_ext / np.maximum(larg, 1e-3), 0, 1)
+    h = np.where(dans, 0.14 * np.sin(np.pi * t) ** 0.6, 0.0)
+    # un filet gravé au milieu du croissant, et des étoiles fines le long
+    h = np.where(dans & (np.abs(t - 0.5) < 0.06), h - 0.025, h)
+    gemme = np.hypot(u, v - 0.78) < 0.075
+    h = np.where(gemme, h + 0.04 * np.sqrt(np.clip(1 - (np.hypot(u, v - 0.78) / 0.075) ** 2, 0, 1)), h)
+    col = _or_relief(h, N, extra_email=gemme)
+    alpha = R.flou_boite(dans.astype(np.float64), max(1, ss // 2))
+    _ecrire("lance-croissant.png", S, ss, col, alpha)
+
+
+def lance_armillaire(S=256, ss=3):
+    """Une petite sphère armillaire d'or (comme celles des colonnes) : trois anneaux, l'étoile au cœur ; la pièce y tient."""
+    N, u, v = R.grille(S, ss)
+    h = np.maximum.reduce([
+        _anneau(u, v, 0, 0, 0.78, 0.78, 0.0, 0.065),
+        _anneau(u, v, 0, 0, 0.30, 0.78, 0.0, 0.055),
+        _anneau(u, v, 0, 0, 0.78, 0.26, math.radians(-24), 0.055),
+    ])
+    d_et = R.etoile_sdf(u, v, 8, 0.22, 0.08)
+    h = np.where(d_et < 0, np.maximum(h, 0.07 * np.clip(-d_et / 0.05, 0, 1) + 0.02), h)
+    tige = (np.abs(u) < 0.035) & (v < -0.78) & (v > -0.98)
+    h = np.where(tige, np.maximum(h, 0.05), h)
+    forme = h > 0.001
+    col = _or_relief(h, N)
+    alpha = R.flou_boite(forme.astype(np.float64), max(1, ss // 2))
+    _ecrire("lance-armillaire.png", S, ss, col, alpha)
+
+
+def lance_lanterne(S=256, ss=3):
+    """Une lanterne céleste : un dôme, une flèche et son étoile, une cage d'or aux vitres nuit (la pièce se voit dedans),
+    une bague en bas d'où elle tombe."""
+    N, u, v = R.grille(S, ss)
+    cage = (np.abs(u) < 0.46) & (v > -0.30) & (v < 0.62)
+    vitre = cage & (np.abs(u) < 0.40) & (v > -0.24) & (v < 0.56) & (np.abs(np.abs(u) - 0.0) > 0.0)
+    montants = cage & ((np.abs(np.abs(u) - 0.43) < 0.03) | (np.abs(u) < 0.022))
+    dome = (np.hypot(u / 0.52, (v + 0.30) / 0.30) < 1.0) & (v < -0.30)
+    fleche = (np.abs(u) < 0.03 + 0.05 * np.clip((v + 0.62) / 0.06, 0, 1)) & (v > -0.86) & (v < -0.58)
+    d_et = R.etoile_sdf(u, v + 0.90, 8, 0.11, 0.04)
+    etoile = d_et < 0
+    bague_h = (np.abs(u) < 0.52) & (np.abs(v + 0.30) < 0.04)
+    bague_b = (np.abs(u) < 0.50) & (np.abs(v - 0.62) < 0.045)
+    bouche = np.hypot(u / 0.18, (v - 0.72) / 0.06) < 1.0
+    h = np.zeros(u.shape)
+    h = np.where(dome, 0.16 * np.sqrt(np.clip(1 - np.hypot(u / 0.52, (v + 0.30) / 0.30) ** 2, 0, 1)), h)
+    h = np.where(vitre, 0.015, h)
+    h = np.where(montants, 0.07, h)
+    h = np.where(bague_h | bague_b, 0.09, h)
+    h = np.where(fleche, 0.06, h)
+    h = np.where(etoile, 0.06 * np.clip(-d_et / 0.03, 0, 1) + 0.03, h)
+    h = np.where(bouche, np.maximum(h, 0.06), h)
+    forme = dome | cage | fleche | etoile | bague_h | bague_b | bouche
+    verre = vitre & ~montants
+    col = _or_relief(h, N, extra_email=verre)
+    a = forme.astype(np.float64)
+    a = np.where(verre, 0.55, a)
+    alpha = R.flou_boite(a, max(1, ss // 2))
+    _ecrire("lance-lanterne.png", S, ss, col, alpha)
+
+
 if __name__ == "__main__":
     os.makedirs(SORTIE, exist_ok=True)
     for k in PHASES:
@@ -199,4 +293,7 @@ if __name__ == "__main__":
     cadran()
     glissiere()
     rail()
+    lance_croissant()
+    lance_armillaire()
+    lance_lanterne()
     print("lunes :", ", ".join("%+.3f" % k for k in PHASES), "+ allumée + cadran + glissière + rail")
