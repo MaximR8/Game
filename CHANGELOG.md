@@ -12,6 +12,42 @@
 
 ---
 
+## ✅ **La Supernova devient un gros lot : plus de mode de 30 s ; des poussières d'étoile offertes ; la pluie ne bloque plus le joueur** — **EN PROD** *(02/10/2026, 23 h 10 ; l'APK 0.6)*
+
+**En clair.** Maxim, sur la 0.5 : *« le cœur d'étoile est impossible à avoir dans les 30 secondes […] ou alors on laisse
+tomber les 30 secondes, on fait tomber plein de pièces comme maintenant, on fait tomber le cœur et d'autres poussières
+d'étoile »* ; *« il y a une limite de pièces sur le plateau, je ne pouvais plus en mettre : en mode Supernova, c'est
+frustrant d'être bloqué »* ; *« sinon pour le reste, c'est très bien »*.
+
+- **Un gros lot, d'un coup** : le spectacle (l'aspiration, l'explosion, le mot) puis la pluie d'or (36 pièces), **trois
+  poussières d'étoile offertes** et le cœur d'étoile, en dernier — tout sur le plateau, en ~6 s. **Plus de compte à
+  rebours, plus de poussoir ×2, plus de « tout compte double »** : le cœur reste sur le plateau, sans chrono pour le
+  perdre. Le mot rentre dans l'astrolabe, et le cœur en sort.
+- Les poussières offertes ne comptent **pas** dans le plateau du jour (la méta `bonus`, gardée par la sauvegarde) : gagnées,
+  elles donnent leurs 60 poussières, le plateau du jour ne bouge pas.
+- **Plus bloqué** : la machine vit près de son plafond (équilibre ~255, plafond 270) — la pluie le dépassait, et le
+  lance-pièces refusait tout. Les pièces offertes ont maintenant leur marge (`marge_supernova`) : on lâche par-dessus ; la
+  machine revenue sous le plafond, la marge s'efface.
+
+🔴 **POURQUOI** — DECISIONS 02/10 (la Supernova, révisée le soir).
+
+· `PusherScreen` : `SUPERNOVA_S` 6 s (le spectacle), `POUSSIERES_SUPERNOVA`, `marge_supernova` / `machine_pleine()`,
+  `_gagner_objet(…, bonus)` ; plus de `VITESSE_SUPERNOVA`. `machines/machine_decor.gd` : les poussières dans la pluie
+  (`_lancer_poussiere`, `_cible_bille`), le sillage bleu pâle ; plus de cadran ni de compte à rebours.
+
+**Tests faits** : `test_supernova` (18 vérifications : le poussoir garde son pas, une pièce compte une fois, trois
+poussières offertes sur le plateau, gagnée = +60 sans toucher au plateau du jour, au-dessus du plafond le joueur lâche
+encore, un seul cœur), `test_son`, `test_objets`, `test_journee`, `test_collection` : OK ; `capture_decor` : le dessin
+sans erreur. Déployé : `index.pck` servi (200) ; l'APK 0.6 (versionCode 6), signée.
+
+**À relire au banc** (sim_poussoir) : le rendement d'une Supernova sans le ×2 (moins de pièces gagnées pendant 30 s, des
+poussières en plus).
+
+### ✅ À tester
+- [ ] Outils de test → Supernova : la pluie, les trois poussières, le cœur ; puis lâcher des pièces juste après (plus de refus)
+
+---
+
 ## ✅ **La Supernova refaite : le spectacle, et la récompense qui tombe sur le plateau ; les billes recentrées** — **EN PROD** *(02/10/2026, 22 h 46 ; l'APK 0.5)*
 
 **En clair.** Maxim, sur la machine en ligne : *« c'est nickel, sublime, juste la Supernova, l'animation n'est pas assez

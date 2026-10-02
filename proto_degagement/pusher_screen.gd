@@ -457,7 +457,7 @@ func _physics_process(delta: float) -> void:
 		return
 	# le bloc va et vient comme une bielle : il ralentit en bout de course au lieu
 	# de repartir d'un coup — sinon les pièces glissent sur lui à chaque retour
-	t_bloc = fmod(t_bloc + delta * (VITESSE_SUPERNOVA if supernova_t > 0.0 else 1.0), PERIODE)
+	t_bloc = fmod(t_bloc + delta, PERIODE)
 	if supernova_t > 0.0:
 		_tic_supernova(delta)
 	face_z = MILIEU - COURSE * cos(TAU * t_bloc / PERIODE)
@@ -559,11 +559,19 @@ func _input(event: InputEvent) -> void:
 
 # Pourquoi une pièce ne peut pas partir ("" : elle peut) — le lance-pièces le demande avant de la lâcher.
 func refus_lacher() -> String:
-	if pieces.size() >= MAX_PIECES:
+	if machine_pleine():
 		return "La machine est pleine : fais d'abord tomber des pièces."
 	if GS.main_pieces <= 0:
 		return "Plus de pièces : les Présages en donnent."
 	return ""
+
+
+# Le plafond des pièces lâchées (MAX_PIECES), plus la marge de la Supernova : ses pièces offertes ne bloquent pas le joueur ;
+# revenue sous le plafond, la machine reprend son plafond (la marge s'efface).
+func machine_pleine() -> bool:
+	if pieces.size() < MAX_PIECES:
+		marge_supernova = 0
+	return pieces.size() >= MAX_PIECES + marge_supernova
 
 
 func _semer(p: Vector2) -> void:
@@ -571,7 +579,7 @@ func _semer(p: Vector2) -> void:
 		return
 	if p.distance_to(dernier_semis) < SEMIS_DIST:
 		return
-	if pieces.size() >= MAX_PIECES:
+	if machine_pleine():
 		_indice("La machine est pleine : fais d'abord tomber des pièces.", Style.ALERTE)
 		return
 	if GS.main_pieces <= 0:
@@ -670,6 +678,8 @@ func _charger() -> void:
 				var r: float = lot_def(k)["r"]
 				pos.y = maxf(pos.y, _hauteur_libre(pos.x, pos.z, r, r * Volumes.APLATI + 0.01))
 			var b := _lot(k, pos)
+			if l.get("bonus", false):
+				b.set_meta("bonus", true)
 			if not est_bille and l.has("q"):
 				var q: Array = l["q"]
 				b.quaternion = Quaternion(q[0], q[1], q[2], q[3]).normalized()
@@ -696,8 +706,11 @@ func _sauver() -> void:
 		if b.get_meta("gagne", false):
 			continue
 		var q := b.quaternion
-		ls.append({"x": snappedf(b.position.x, 0.001), "y": snappedf(b.position.y, 0.001), "z": snappedf(b.position.z, 0.001),
-			"q": [q.x, q.y, q.z, q.w], "type": str(b.get_meta("lot"))})
+		var l := {"x": snappedf(b.position.x, 0.001), "y": snappedf(b.position.y, 0.001), "z": snappedf(b.position.z, 0.001),
+			"q": [q.x, q.y, q.z, q.w], "type": str(b.get_meta("lot"))}
+		if b.has_meta("bonus"):
+			l["bonus"] = true
+		ls.append(l)
 	for k in a_rendre:
 		ls.append({"x": (X0 + X1) * 0.5, "y": 0.5, "z": float(lot_def(k)["z"]), "q": [0, 0, 0, 1], "type": k})
 	GS.tas_pieces = cs
@@ -775,16 +788,13 @@ func _sur_gain(b: RigidBody3D) -> void:
 	var pos := _ecran_bord(b.position.x)
 	if b.has_meta("lot"):
 		tombe.emit("lot")
-		_gagner_objet(str(b.get_meta("lot")), pos)
+		_gagner_objet(str(b.get_meta("lot")), pos, b.has_meta("bonus"))
 		return
 	tombe.emit("piece")
 	Son.gain()                       # la cascade : chaque pièce qui suit de près monte d'une note
 	# 🔴 Une pièce tombée va dans la réserve, et rien d'autre (Maxim, 25/09 : « les pièces, je pense
 	#    qu'elles ne rajoutent pas d'XP, ça rajoute des pièces en réserve ») : elle y file.
-	var n := 2 if supernova_t > 0.0 else 1     # (30/09) la Supernova : tout compte double
-	GS.main_pieces += n
-	if n > 1:
-		_texte(pos + Vector2(0, -30), "×2", Style.OR_VIF, 40)
+	GS.main_pieces += 1
 	GS.demander_sauvegarde()
 	_eclat(pos, COL_PIECE, 6)
 	if Effets.global == null or not is_visible_in_tree():
@@ -802,7 +812,8 @@ func _sur_gain(b: RigidBody3D) -> void:
 # 🔴 PLUS DE FENÊTRE « GAGNÉ » (Maxim, 25/09 : « les objets qu'on gagne dans la poussette, plus de
 #    pop-up, on les voit s'envoler jusqu'au menu en haut pour aller augmenter les stats ») : la
 #    machine ne s'arrête plus ; l'objet file vers son compteur, qui le reçoit en défilant.
-func _gagner_objet(t: String, pos: Vector2) -> void:
+# « bonus » : un objet offert par la Supernova — il ne compte pas dans le plateau du jour.
+func _gagner_objet(t: String, pos: Vector2, bonus := false) -> void:
 	if t == "coeur-etoile":
 		_gagner_coeur(pos)
 		return
@@ -811,11 +822,12 @@ func _gagner_objet(t: String, pos: Vector2) -> void:
 	var gain := 60 if t == "poussiere" else 1
 	if bandeau != null:
 		bandeau.retenir(cle, gain)
-	Plateau.gagner(t)
+	if not bonus:
+		Plateau.gagner(t)
 	Presages.evenement("objet")
 	Son.objet_tombe()               # (29/09) il tombe avec son amas : le gros paquet
 	Son.objet(t)
-	if Plateau.restants() == 0:
+	if not bonus and Plateau.restants() == 0:
 		Presages.evenement("plateau_vide")
 		get_tree().create_timer(0.55).timeout.connect(func(): Son.sonner("plateau-vide"))
 	if t == "poussiere":
@@ -1035,7 +1047,7 @@ func _completer_plateau() -> void:
 	_jour_vu = Plateau.aujourdhui()
 	var manque := Plateau.a_poser()
 	for b in lots:
-		if b.get_meta("gagne", false):
+		if b.get_meta("gagne", false) or b.has_meta("bonus"):
 			continue
 		for i in manque.size():
 			if str(manque[i]["k"]) == str(b.get_meta("lot")):
@@ -1110,13 +1122,20 @@ func _poser_avec_amas(k: String, bande: Vector2) -> void:
 # 🔴 (02/10) Dans le décor peint (machines/machine_decor.gd) — Maxim : « pas assez spectaculaire », « il n'y a pas de
 #    récompense sur le plateau » : la pluie (offerte, toujours PLUIE_SUPERNOVA pièces) et le cœur d'étoile JAILLISSENT de
 #    l'astrolabe et volent jusqu'au plateau, devant le bloc, dès le début ; le décor a sa propre animation.
+# 🔴 (02/10 au soir — DECISIONS 02/10) PLUS DE MODE DE 30 S — Maxim : « le cœur d'étoile est impossible à avoir dans les
+#    30 secondes […] ou alors on laisse tomber les 30 secondes, on fait tomber plein de pièces, le cœur et d'autres
+#    poussières d'étoile ». La Supernova est un GROS LOT, d'un coup : le spectacle (~6 s : SUPERNOVA_S), la pluie d'or, des
+#    poussières d'étoile offertes (hors du plateau du jour : la méta « bonus ») et le cœur ; plus de poussoir ×2, plus de
+#    « tout compte double », plus de compte à rebours. Et ses pièces ne bloquent pas le joueur (marge_supernova :
+#    « en mode Supernova, c'est frustrant d'être bloqué » — la machine vit près de son plafond, la pluie le dépassait).
 # 🔴 Réglée au banc (sim_poussoir : les Supernovas par minute) — JAUGE_SUPERNOVA.
 # ─────────────────────────────────────────────────────────────
 const JAUGE_SUPERNOVA := 150
-const SUPERNOVA_S := 30.0
-const VITESSE_SUPERNOVA := 2.0
+const SUPERNOVA_S := 6.0              # le spectacle, jusqu'au cœur posé (la jauge ne se remplit pas pendant)
 const PLUIE_SUPERNOVA := 36
-var supernova_t := 0.0            # le temps qui reste (0 : pas de Supernova)
+const POUSSIERES_SUPERNOVA := 3
+var supernova_t := 0.0            # le temps qui reste du spectacle (0 : pas de Supernova)
+var marge_supernova := 0          # les pièces offertes au-dessus du plafond : le joueur peut lâcher par-dessus
 var supernovas := 0               # combien depuis l'ouverture (le banc les compte)
 var _pluie := 0
 var _pluie_t := 0.0
@@ -1141,9 +1160,10 @@ func declencher_supernova() -> void:
 	_pluie = PLUIE_SUPERNOVA
 	_pluie_t = 0.4
 	GS.demander_sauvegarde()
+	marge_supernova = PLUIE_SUPERNOVA
 	if decor_peint != null:
 		_pluie = 0
-		decor_peint.supernova(PLUIE_SUPERNOVA, is_visible_in_tree())
+		decor_peint.supernova(PLUIE_SUPERNOVA, POUSSIERES_SUPERNOVA, is_visible_in_tree())
 		if is_visible_in_tree():
 			Son.supernova(true)          # (la vibration : à l'explosion, machine_decor._eclater)
 		return

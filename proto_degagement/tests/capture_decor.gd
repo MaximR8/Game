@@ -147,7 +147,7 @@ func _film() -> void:
 	await _images(20)
 	p.declencher_supernova()
 	await _images(215)
-	p.supernova_t = 1.6               # (le film saute au bout des 30 s : la fin)
+	p.supernova_t = 0.4               # (la fin : les lunes s'éteignent)
 	await _images(100)
 	get_tree().quit(0)
 

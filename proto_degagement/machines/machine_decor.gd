@@ -17,12 +17,12 @@ extends Node
 #     tombent) ;
 #   · par-dessus : les lunes de la jauge (des cabochons, au centre mesuré de chaque alvéole), le reflet sur les arêtes de
 #     l'or, les étoiles qui scintillent, les flammes qui ondulent ;
-#   · la SUPERNOVA (refaite le 02/10 — Maxim : « pas assez spectaculaire », « il n'y a pas de récompense sur le plateau ») :
-#     les lunes versent leur lumière dans l'astrolabe, il explose (une couronne de rais, l'étoile, deux ondes ; l'onde court
-#     dans tout l'or du décor ; la machine tremble), le mot SUPERNOVA en lettres d'or ; puis une PLUIE D'OR en jaillit — de
-#     vraies pièces qui volent jusqu'au plateau, devant le bloc — et le CŒUR D'ÉTOILE, en dernier, qui brille sur le
-#     plateau ; le compte à rebours dans un cadran d'émail, les lunes en chenillard ; à la fin, elles s'éteignent du centre
-#     vers les bords ;
+#   · la SUPERNOVA (refaite le 02/10 — Maxim : « pas assez spectaculaire », « il n'y a pas de récompense sur le plateau » ;
+#     puis, le soir : plus de mode de 30 s, un gros lot d'un coup) : la salle s'assombrit, les lunes versent leur lumière
+#     dans l'astrolabe, il explose (une couronne de rais, l'étoile, deux ondes ; l'onde court dans tout l'or du décor ; la
+#     machine tremble), le mot SUPERNOVA en lettres d'or ; une PLUIE D'OR en jaillit — de vraies pièces qui volent jusqu'au
+#     plateau, devant le bloc —, des POUSSIÈRES D'ÉTOILE offertes, et le CŒUR D'ÉTOILE, en dernier, qui brille sur le
+#     plateau ; les lunes en chenillard ; à la fin, elles s'éteignent du centre vers les bords ;
 #   · le LANCE-PIÈCES (DECISIONS 02/10) : le doigt touche la machine n'importe où, seule sa position gauche-droite compte ;
 #     la sphère armillaire se place au-dessus de lui, la pièce suivante en son cœur ; chaque pièce lâchée tombe en
 #     tournoyant, puis devient la vraie pièce sur le bloc (le son à son premier contact).
@@ -44,18 +44,21 @@ const DUREE_CHUTE := 0.42
 const PAS_SEMIS := 0.75                # glisser : une pièce tous les ~0,75 de chemin du lance-pièces
 const HAUT_TOUCHER := 200.0            # au-dessus : le bandeau du haut (ses compteurs)
 const BAS_TOUCHER := 1470.0            # au-dessous : le panneau Réserve
-# La Supernova : ses instants, depuis son départ (le son les suit : Son.supernova(true))
+# La Supernova : ses instants, depuis son départ (le son les suit : Son.supernova(true)) ; elle dure
+# PusherScreen.SUPERNOVA_S (~6 s : le cœur est posé), puis les lunes s'éteignent
 const SN_ECLAT := 0.6                  # l'explosion (avant : l'aspiration)
-const SN_MOT := 1.8                    # le mot reste, puis se range dans le cadran
-const SN_CADRAN := SN_ECLAT + SN_MOT
+const SN_MOT := 2.6                    # le mot reste, puis rentre dans l'astrolabe…
+const SN_RANGE := SN_ECLAT + SN_MOT
 const SN_PLUIE := SN_ECLAT + 0.3       # la pluie d'or jaillit de l'astrolabe…
 const SN_PAS_PLUIE := 0.065            # …une pièce tous les 65 ms
-const SN_COEUR := SN_CADRAN + 0.3      # le cœur d'étoile sort du cadran, en dernier
+const SN_POUSSIERE := SN_PLUIE + 0.6   # les poussières d'étoile, au milieu de la pluie…
+const SN_PAS_POUSSIERE := 0.7          # …une tous les 0,7 s
+const SN_COEUR := SN_RANGE + 0.3       # …et le cœur d'étoile en sort, en dernier
 const SN_FIN := 0.7                    # la fin : les lunes s'éteignent
 const VOL_PIECE := 0.85
+const VOL_POUSSIERE := 1.15
 const VOL_COEUR := 1.4
 const Z_ASTRE := 5.6                   # d'où partent les vols : juste derrière le mur bas, au cœur de l'astrolabe
-const ORBITES := [[1.7, 1.30, 22.0], [-1.2, 1.48, 17.0], [2.3, 1.66, 13.0]]   # vitesse, rayon (× cadran), taille
 
 static var theme := "BaseCeleste"      # le décor de la machine — Base céleste par défaut (DECISIONS 02/10)
 static var champ := "80"               # la caméra relevée pour un champ de 80° (90° : moins d'étirement, plus grand-angle)
@@ -68,7 +71,6 @@ var rect := Rect2()
 var tex_decor: Texture2D
 var tex_eclat: Texture2D
 var tex_lune_allumee: Texture2D
-var tex_cadran: Texture2D
 var tex_lance: Texture2D
 var tex_piece: Texture2D
 var tex_lunes: Array = []
@@ -104,6 +106,8 @@ var _flash_lune: Array = []            # depuis quand chaque lune s'est avivée
 var _vols: Array = []                  # les pièces et le cœur qui volent de l'astrolabe au plateau
 var _pluie_reste := 0
 var _pluie_t := 0.0
+var _poussieres_reste := 0
+var _poussiere_t := 0.0
 var _posees := 0
 var _coeur_du := false
 var _depart := Vector3.ZERO
@@ -123,7 +127,6 @@ func installer(pusher: PusherScreen) -> void:
 	rect = Rect2(0, y_decor, 1080, 1536.0 * E)
 	tex_decor = load(str(d["image"]))
 	tex_lune_allumee = load("res://machines/lunes/lune-allumee.png")
-	tex_cadran = load("res://machines/lunes/cadran.png")
 	tex_lance = load("res://machines/lunes/lance-armillaire.png")
 	tex_eclat = load("res://ciel/eclat-etoile.png")
 	tex_piece = Style.objet("piece-etoile")
@@ -446,13 +449,15 @@ func _bouche() -> Vector2:
 # La Supernova (refaite le 02/10)
 # ─────────────────────────────────────────────────────────────
 
-# Elle part (PusherScreen.declencher_supernova) : la pluie d'or (n pièces offertes) et le cœur d'étoile sortiront de
-# l'astrolabe. La machine cachée (personne ne regarde) : tout se pose tout de suite sur le plateau.
-func supernova(n_pieces: int, anime: bool) -> void:
+# Elle part (PusherScreen.declencher_supernova) : la pluie d'or (n pièces offertes), les poussières d'étoile et le cœur
+# sortiront de l'astrolabe. La machine cachée (personne ne regarde) : tout se pose tout de suite sur le plateau.
+func supernova(n_pieces: int, n_poussieres: int, anime: bool) -> void:
 	_sn_t = 0.0
 	_sn_fin = -1.0
 	_pluie_reste = n_pieces
 	_pluie_t = SN_PLUIE
+	_poussieres_reste = n_poussieres
+	_poussiere_t = SN_POUSSIERE
 	_posees = 0
 	_coeur_du = n_pieces > 0
 	_depart = _point_astre()
@@ -489,6 +494,10 @@ func achever_pluie() -> void:
 	while _pluie_reste > 0:
 		_pluie_reste -= 1
 		p._piece(_cible_pluie())
+	while _poussieres_reste > 0:
+		_poussieres_reste -= 1
+		var xz := _cible_bille(float(p.lot_def("poussiere")["r"]))
+		p._lot("poussiere", Vector3.INF, Vector2(xz.x, xz.z)).set_meta("bonus", true)
 	if _coeur_du:
 		_donner_coeur(false)
 
@@ -518,7 +527,7 @@ func _cible_pluie() -> Vector3:
 
 
 func _lancer_piece() -> void:
-	_envoler(p._piece(_depart), _cible_pluie(), VOL_PIECE * randf_range(0.9, 1.15), randf_range(0.5, 1.2), false)
+	_envoler(p._piece(_depart), _cible_pluie(), VOL_PIECE * randf_range(0.9, 1.15), randf_range(0.5, 1.2), "piece")
 	# elle naît d'un éclat, au cœur de l'astrolabe
 	var ce := _centre_embleme()
 	for j in 3:
@@ -527,23 +536,33 @@ func _lancer_piece() -> void:
 			"vie0": vie, "taille": randf_range(14.0, 26.0)})
 
 
+# Une place pour une bille offerte, sur le plateau devant le bloc : x, la hauteur où elle tient, z.
+func _cible_bille(r: float, x0 := 1.2, z0 := 9.9, z1 := 11.8) -> Vector3:
+	var x := randf_range(float(p.X0) + r + x0, float(p.X1) - r - x0)
+	var z := randf_range(z0, z1)
+	var ep := 2.0 * r * Volumes.APLATI
+	return Vector3(x, float(p._hauteur_libre(x, z, r, ep * 0.5 + 0.01)) + 0.25, z)
+
+
 func _donner_coeur(anime: bool) -> void:
 	_coeur_du = false
-	var r := float(p.lot_def("coeur-etoile")["r"])
-	var x := randf_range(float(p.X0) + 2.0, float(p.X1) - 2.0)
-	var z := randf_range(10.4, 11.2)
+	var a := _cible_bille(float(p.lot_def("coeur-etoile")["r"]), 2.0, 10.4, 11.2)
 	if not anime:
-		p._lot("coeur-etoile", Vector3.INF, Vector2(x, z))
+		p._lot("coeur-etoile", Vector3.INF, Vector2(a.x, a.z))
 		return
-	var ep := 2.0 * r * Volumes.APLATI
-	var a := Vector3(x, float(p._hauteur_libre(x, z, r, ep * 0.5 + 0.01)) + 0.25, z)
-	_envoler(p._lot("coeur-etoile", _depart), a, VOL_COEUR, 1.6, true)
+	_envoler(p._lot("coeur-etoile", _depart), a, VOL_COEUR, 1.6, "coeur")
 	Son.inv("etoile", 0.0, 0.0)
+
+
+func _lancer_poussiere() -> void:
+	var b: RigidBody3D = p._lot("poussiere", _depart)
+	b.set_meta("bonus", true)
+	_envoler(b, _cible_bille(float(p.lot_def("poussiere")["r"])), VOL_POUSSIERE, 1.3, "poussiere")
 
 
 # Un corps qui vole : figé (rien ne le touche, il ne touche rien ; PusherScreen ne le compte pas pour faire de la
 # place), mené à la main de l'astrolabe jusqu'à sa place ; arrivé, il redevient un corps comme les autres.
-func _envoler(b: RigidBody3D, a: Vector3, duree: float, bosse: float, coeur: bool) -> void:
+func _envoler(b: RigidBody3D, a: Vector3, duree: float, bosse: float, sorte: String) -> void:
 	b.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 	b.freeze = true
 	b.collision_layer = 0
@@ -551,7 +570,7 @@ func _envoler(b: RigidBody3D, a: Vector3, duree: float, bosse: float, coeur: boo
 	b.set_meta("vol", true)
 	var de := _depart + Vector3(randf_range(-0.25, 0.25), randf_range(-0.15, 0.15), 0.0)
 	b.global_transform = Transform3D(Basis(), de)
-	_vols.append({"b": b, "de": de, "a": a, "t": 0.0, "duree": duree, "bosse": bosse, "coeur": coeur,
+	_vols.append({"b": b, "de": de, "a": a, "t": 0.0, "duree": duree, "bosse": bosse, "sorte": sorte,
 		"axe": Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU),
 		"tours": randf_range(2.0, 3.5) * TAU * (1.0 if randf() < 0.5 else -1.0), "lacet": randf() * TAU})
 
@@ -570,14 +589,15 @@ func _voler(delta: float) -> void:
 		var pos := Vector3(lerpf(de.x, a.x, e), lerpf(de.y, a.y, u) + float(v["bosse"]) * 4.0 * u * (1.0 - u),
 			lerpf(de.z, a.z, e))
 		var bs := Basis()
-		if bool(v["coeur"]):
-			# le cœur laisse un sillage d'étoiles
+		if str(v["sorte"]) != "piece":
+			# une bille laisse un sillage d'étoiles (d'or : le cœur ; bleu pâle : la poussière)
 			var sp := ecran(pos)
-			for j in 2:
+			var coeur := str(v["sorte"]) == "coeur"
+			for j in (2 if coeur else 1):
 				var vie := randf_range(0.35, 0.7)
-				_gerbe.append({"pos": sp + Vector2(randf_range(-24.0, 24.0), randf_range(-24.0, 24.0)),
+				_gerbe.append({"pos": sp + Vector2(randf_range(-22.0, 22.0), randf_range(-22.0, 22.0)),
 					"vel": Vector2(randf_range(-40.0, 40.0), randf_range(-70.0, 0.0)), "vie": vie, "vie0": vie,
-					"taille": randf_range(12.0, 26.0)})
+					"taille": randf_range(12.0, 26.0), "col": Color(1, 0.93, 0.74) if coeur else Color(0.78, 0.88, 1.0)})
 		else:
 			# elle tournoie, et arrive à plat
 			bs = Basis(Vector3.UP, float(v["lacet"])) * Basis(v["axe"] as Vector3, float(v["tours"]) * (1.0 - e))
@@ -596,8 +616,8 @@ func _poser_vol(v: Dictionary, sonore: bool) -> void:
 	# la place a pu se prendre pendant le vol : jamais dans un autre corps (lui vole encore : il ne se compte pas)
 	var libre := float(p._hauteur_libre(ici.x, ici.z, float(b.get_meta("r")), float(b.get_meta("ep")) * 0.5 + 0.01)) + 0.04
 	ici.y = maxf(ici.y, libre)
-	var coeur := bool(v["coeur"])
-	b.global_transform = Transform3D(Basis() if coeur else Basis(Vector3.UP, float(v["lacet"])), ici)
+	var sorte := str(v["sorte"])
+	b.global_transform = Transform3D(Basis() if sorte != "piece" else Basis(Vector3.UP, float(v["lacet"])), ici)
 	b.remove_meta("vol")
 	b.collision_layer = 1
 	b.collision_mask = 1
@@ -606,13 +626,16 @@ func _poser_vol(v: Dictionary, sonore: bool) -> void:
 	b.angular_velocity = Vector3.ZERO
 	if not sonore:
 		return
-	if coeur:
-		Son.sonner("recevoir")
+	if sorte != "piece":
+		var coeur := sorte == "coeur"
+		Son.sonner("recevoir", 0.0 if coeur else -5.0, 0.0 if coeur else 4.0)
 		var c := ecran(ici)
-		for i in 12:
+		var n := 12 if coeur else 7
+		for i in n:
 			var vie := randf_range(0.5, 0.8)
-			_gerbe.append({"pos": c, "vel": Vector2.from_angle(TAU * float(i) / 12.0) * randf_range(150.0, 260.0),
-				"vie": vie, "vie0": vie, "taille": randf_range(18.0, 32.0)})
+			_gerbe.append({"pos": c, "vel": Vector2.from_angle(TAU * float(i) / float(n)) * randf_range(150.0, 260.0),
+				"vie": vie, "vie0": vie, "taille": randf_range(18.0, 32.0) * (1.0 if coeur else 0.8),
+				"col": Color(1, 0.93, 0.74) if coeur else Color(0.78, 0.88, 1.0)})
 	else:
 		_posees += 1
 		p._sonner_a_la_pose(b)
@@ -664,7 +687,7 @@ func _eclater() -> void:
 # la secousse ; la fin.
 func _supernova_image(delta: float, en_sn: bool, n: int) -> void:
 	if en_sn and _sn_t < 0.0:
-		supernova(0, true)              # (partie sans PusherScreen.declencher_supernova : le spectacle seul)
+		supernova(0, 0, true)           # (partie sans PusherScreen.declencher_supernova : le spectacle seul)
 	if _sn_t >= 0.0:
 		var avant := _sn_t
 		_sn_t += delta
@@ -678,6 +701,10 @@ func _supernova_image(delta: float, en_sn: bool, n: int) -> void:
 			_pluie_reste -= 1
 			_pluie_t += SN_PAS_PLUIE
 			_lancer_piece()
+		while _poussieres_reste > 0 and _sn_t >= _poussiere_t:
+			_poussieres_reste -= 1
+			_poussiere_t += SN_PAS_POUSSIERE
+			_lancer_poussiere()
 		if _coeur_du and _sn_t >= SN_COEUR:
 			_donner_coeur(true)
 	_voler(delta)
@@ -691,7 +718,7 @@ func _supernova_image(delta: float, en_sn: bool, n: int) -> void:
 				_eclats_lune(i)
 		if _sn_fin > SN_FIN:
 			_sn_fin = -1.0
-	# le mot : il jaillit, deux reflets le traversent, puis il se range dans le cadran
+	# le mot : il jaillit, deux reflets le traversent, puis il rentre dans l'astrolabe (le cœur va en sortir)
 	var tm := _sn_t - SN_ECLAT if _sn_t >= 0.0 else -1.0
 	mot.visible = tm >= 0.0 and tm < SN_MOT + 0.35
 	if _rechauffe > 0:
@@ -781,20 +808,6 @@ func _lune_allumee(i: int, n: int) -> bool:
 	return i < _allumees
 
 
-func _rayon_cadran() -> float:
-	return clampf(float(d["r_embleme"]) * 0.38, 50.0, 78.0) * E
-
-
-# Le cadran du compte à rebours : il s'ouvre quand le mot s'y range ; à la fin, il se referme.
-func _echelle_cadran() -> float:
-	if _sn_t >= SN_CADRAN:
-		return _retour(clampf((_sn_t - SN_CADRAN) / 0.3, 0.0, 1.0))
-	if _sn_fin >= 0.0 and _sn_fin < 0.25:
-		var kf := _sn_fin / 0.25
-		return 1.0 - kf * kf
-	return 0.0
-
-
 # ─────────────────────────────────────────────────────────────
 # À chaque image
 # ─────────────────────────────────────────────────────────────
@@ -856,8 +869,8 @@ func _centre_embleme() -> Vector2:
 	return _ecran_image(float(em[0]), float(em[1]))
 
 
-# Les lunes (des cabochons : design/machines/lunes.py), au centre mesuré de chaque trou, à sa taille ; le cadran du compte
-# à rebours ; le lance-pièces, la pièce qui l'attend, les pièces qui tombent.
+# Les lunes (des cabochons : design/machines/lunes.py), au centre mesuré de chaque trou, à sa taille ; le lance-pièces,
+# la pièce qui l'attend, les pièces qui tombent.
 func _dessiner_lunes() -> void:
 	var v := couche_lunes
 	var alv: Array = d["alveoles"]
@@ -871,23 +884,6 @@ func _dessiner_lunes() -> void:
 			pop *= 1.0 + 0.04 * sin(_t * 9.0 + i)
 		var rr := r * pop
 		v.draw_texture_rect(tex_lune_allumee if allumee else tex_lunes[i], Rect2(c - Vector2(rr, rr), Vector2(rr, rr) * 2.0), false)
-	var ech_c := _echelle_cadran()
-	if ech_c > 0.001:
-		var ce := _centre_embleme()
-		var rc := _rayon_cadran() * ech_c
-		v.draw_texture_rect(tex_cadran, Rect2(ce - Vector2(rc, rc), Vector2(rc, rc) * 2.0), false)
-		var reste := maxf(p.supernova_t, 0.0)
-		var txt := str(int(ceil(reste)))
-		# les cinq dernières secondes : chaque seconde bat
-		var bat := 0.0
-		if reste > 0.0 and reste <= 5.0:
-			bat = exp(-(1.0 - (reste - floorf(reste))) / 0.12)
-		var f := Style.police("etiquette")
-		var taille := maxi(8, int(rc * 1.05 * (1.0 + 0.16 * bat)))
-		var ts := f.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, taille)
-		var bas := ce + Vector2(-ts.x * 0.5, taille * 0.36)
-		v.draw_string_outline(f, bas, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, taille, 7, Color(0.08, 0.05, 0.0, ech_c))
-		v.draw_string(f, bas, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, taille, OR_TEXTE.lerp(Color(1.0, 0.98, 0.92), 0.6 * bat))
 	# le lance-pièces (la sphère armillaire) : la pièce suivante en son cœur, il penche un peu quand il glisse
 	var c0 := _lance_pos()
 	var tl := 150.0
@@ -910,7 +906,7 @@ func _dessiner_lunes() -> void:
 
 
 # Les éclats (additifs) : les étoiles du ciel peint qui scintillent ; les lunes qui s'avivent ; à la Supernova, la lumière
-# aspirée, l'explosion (les rais, l'étoile, les ondes), les gerbes, les petites étoiles qui tournent autour du cadran ; le
+# aspirée, l'explosion (les rais, l'étoile, les ondes), les gerbes ; le
 # cœur d'étoile qui scintille sur le plateau.
 func _dessiner_eclats() -> void:
 	var v := couche_eclats
@@ -931,7 +927,7 @@ func _dessiner_eclats() -> void:
 	for i in alv.size():
 		var fl := exp(-float(_flash_lune[i]) / 0.22)
 		var chenille := 0.0
-		if en_sn and _sn_t > SN_CADRAN:
+		if en_sn and _sn_t > SN_ECLAT + 0.5:
 			chenille = pow(maxf(0.0, cos(_sn_t * 4.2 - float(i) * 0.8)), 10.0) * 0.55
 		var al := clampf(fl + chenille, 0.0, 1.0)
 		if al > 0.01 and _lune_allumee(i, alv.size()):
@@ -986,18 +982,8 @@ func _dessiner_eclats() -> void:
 	for g in _gerbe:
 		var a3 := clampf(float(g["vie"]) / float(g["vie0"]), 0.0, 1.0)
 		var t2 := float(g["taille"]) * (0.6 + 0.4 * a3)
-		v.draw_texture_rect(tex_nova, Rect2(g["pos"] - Vector2(t2, t2) * 0.5, Vector2(t2, t2)), false, Color(1, 0.93, 0.74, a3))
-	# autour du cadran, trois petites étoiles tournent, comme les planètes d'un astrolabe
-	var ech_c := _echelle_cadran()
-	if en_sn and ech_c > 0.5:
-		var ce3 := _centre_embleme()
-		var rc := _rayon_cadran()
-		for o in ORBITES:
-			var ang3 := _t * float(o[0]) + float(o[1]) * 4.0
-			var pos3 := ce3 + Vector2(cos(ang3), sin(ang3) * 0.92) * rc * float(o[1])
-			var t3 := float(o[2])
-			v.draw_texture_rect(tex_nova, Rect2(pos3 - Vector2(t3, t3) * 0.5, Vector2(t3, t3)), false,
-				Color(1.0, 0.95, 0.82, 0.75 * clampf(ech_c, 0.0, 1.0)))
+		var cg: Color = g.get("col", Color(1, 0.93, 0.74))
+		v.draw_texture_rect(tex_nova, Rect2(g["pos"] - Vector2(t2, t2) * 0.5, Vector2(t2, t2)), false, Color(cg, a3))
 	# le cœur d'étoile, posé sur le plateau : deux éclats tournent sur son verre (on le reconnaît de loin)
 	for l in p.lots:
 		if str(l.get_meta("lot")) != "coeur-etoile" or l.has_meta("vol"):

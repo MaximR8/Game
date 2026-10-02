@@ -41,6 +41,15 @@ un peu : à relire au banc et chez le cousin).
 
 🔓 **Ce qui la rouvrirait** : la Supernova trop généreuse au banc (sim_poussoir) ; le cœur qui tombe trop vite pour qu'on le
 voie.
+🔄 **Le soir même — plus de mode de 30 s : la Supernova est un GROS LOT.** Maxim, sur la 0.5 : *« le cœur d'étoile est
+impossible à avoir dans les 30 secondes ; pas un souci si on le laisse sur le plateau après, mais si on ne veut pas, il faut
+le rendre plus facile — ou alors on laisse tomber les 30 secondes, on fait tomber plein de pièces, le cœur et d'autres
+poussières d'étoile »* ; et *« en mode Supernova, c'est frustrant d'être bloqué »* (le plafond des pièces). **Tranché**
+(Claude) : la deuxième voie — plus lisible, plus rapide, et rien à perdre : le spectacle, puis 36 pièces, **trois poussières
+d'étoile offertes** (hors du plateau du jour) et le cœur, en ~6 s ; **plus de ×2, plus de « tout compte double », plus de
+compte à rebours** (un chrono qui rend le cœur impossible ne fait qu'un échec). Les pièces offertes ne bloquent plus le
+joueur : elles ont leur marge au-dessus du plafond (`marge_supernova`), qui s'efface quand la machine y redescend.
+🔓 *Ce qui la rouvrirait : la Supernova devenue fade sans ses 30 s (à voir chez le cousin) ; le rendement au banc.*
 
 ### Les décors de la machine : les sept gardés, Base céleste par défaut ; les cartes à une seule évolution sont voulues — 02/10/2026
 
