@@ -57,7 +57,8 @@ contre le mur).
 une fente fixe au milieu (on perd le choix gauche-droite, le seul vrai geste de visée).
 **Ce que ça coûte, et qu'on assume** : la glissière à dessiner dans chaque décor (un petit objet d'or, ou l'habit du thème) ;
 le geste « glisse le doigt sur le bloc » devient « glisse le doigt » (la consigne change).
-🔓 **Ce qui la rouvrirait** : le cousin et sa femme qui visent mal, ou cherchent à toucher le bloc.
+🔓 **Ce qui la rouvrirait** : le cousin et sa femme qui visent mal, ou cherchent à toucher le bloc. *(Montrée le 02/10 au soir :
+le film « Lâcher les pièces » du canevas — le chariot d'or sur un rail perlé, `tests/capture_decor` mode `glissiere`.)*
 
 ### On ne vend ni la chance ni la victoire : une monnaie payante pour du connu ; 150 cartes, puis des styles ; un vrai meuble de machine, à thèmes ; les Maîtrises — 01/10/2026
 

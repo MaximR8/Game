@@ -52,6 +52,12 @@ s'allume (le masque de l'or, pas un carré), une gerbe d'étoiles ; le reflet ne
 les flammes ondulent à partir de leurs propres pixels (`meuble/flamme.gdshader`). **Décidé** (Maxim) : on garde les sept
 décors, **Base céleste par défaut**.
 
+🎯 **La glissière, montrée (02/10, le soir)** — Maxim : *« top, mais du coup comment on fait pour lâcher les pièces ? »*. Le mode
+`glissiere` de `tests/capture_decor` (DECISIONS 02/10) : un doigt simulé glisse tout en bas de la machine ; le chariot (une
+goulotte d'or, sa fente, son étoile sur l'émail) le suit sur un rail perlé en haut du bloc et lâche les pièces sur le bloc
+(le vrai lâcher du jeu, son son) ; glisser sème, toucher lâche une pièce. Le chariot et le rail : `design/machines/lunes.py`
+(`glissiere`, `rail`). La vue 3D se calcule au plein du jeu dans les photos (plus nette).
+
 **À trancher par Maxim** : le rendu de la v2 (le canevas). **Pour
 l'intégrer** : la pose des pièces (DECISIONS 02/10 : le doigt choisit gauche-droite, une glissière suit) ; un décor par
 thème = son image + son relevé ; les images en ×2 (netteté) ; mesurer sur le téléphone (D13).

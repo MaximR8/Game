@@ -17,7 +17,12 @@ extends Node
 # Un ESSAI, rien n'est changé dans le jeu : la vraie machine (sa physique, ses pièces, ses objets, son interface) posée dans
 # le creux peint — la caméra du jeu calée sur le décor, la profondeur étirée à l'image (la physique ne change pas).
 #
-#   Godot_v4.7.2-stable_win64_console.exe --path ./proto_degagement --rendering-driver opengl3_angle --resolution 720x1600 --position -3000,0 res://tests/capture_decor.tscn -- <dossier> [theme=BaseCeleste] [fov=80|90] [film]
+#   Godot_v4.7.2-stable_win64_console.exe --path ./proto_degagement --rendering-driver opengl3_angle --resolution 720x1600 --position -3000,0 res://tests/capture_decor.tscn -- <dossier> [theme=BaseCeleste] [fov=80|90] [film] [glissiere]
+#
+# « glissiere » (02/10 — Maxim : « comment on fait pour lâcher les pièces ? ») : DECISIONS 02/10 montré. Un doigt (simulé)
+# touche la machine n'importe où — ici tout en bas, près du pouce ; seule sa position gauche-droite compte : le chariot de la
+# glissière (une goulotte d'or sur un rail perlé, en haut du bloc) le suit, et les pièces tombent de sa bouche sur le bloc ;
+# glisser sème une pièce tous les ~0,75 de chemin, toucher en lâche une.
 
 const SH_CORPS := preload("res://meuble/corps_vue.gdshader")
 const SH_OMBRE := preload("res://meuble/ombre_vue.gdshader")
@@ -38,6 +43,16 @@ var main: Node
 var p: PusherScreen
 var dossier := ""
 var film := false
+var glissiere := false                 # la démonstration de la glissière (le doigt simulé)
+var tex_glissiere: ImageTexture
+var tex_rail: ImageTexture
+var chariot_x := 5.4                   # la place du chariot sur le rail (en x du monde)
+var _x_dernier_lacher := -99.0
+var doigt := {"la": false, "x": 540.0, "appui": 0.0}   # le doigt simulé : présent, sa position, l'onde d'un appui
+const Y_RAIL := 1.5                    # le rail : au-dessus du bloc, près du mur du fond
+const Z_RAIL := MUR + 0.35
+const Z_LACHER := MUR + 0.6            # où tombent les pièces sur le bloc (toujours la même profondeur)
+const Y_DOIGT := 1290.0                # le doigt touche en BAS de la machine (le pouce) : la hauteur n'y fait rien
 var theme := "BaseCeleste"
 var fov := "80"
 var d: Dictionary
@@ -68,6 +83,7 @@ func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	dossier = args[0] if args.size() > 0 else OS.get_user_data_dir()
 	film = args.has("film")
+	glissiere = args.has("glissiere")
 	for a in args:
 		if a.begins_with("theme="):
 			theme = a.trim_prefix("theme=")
@@ -84,6 +100,8 @@ func _ready() -> void:
 	tex_bloc_face = _texture(str(d["bloc_face"]))
 	tex_lune_allumee = _texture("design/machines/lunes/lune-allumee.png")
 	tex_cadran = _texture("design/machines/lunes/cadran.png")
+	tex_glissiere = _texture("design/machines/lunes/glissiere.png")
+	tex_rail = _texture("design/machines/lunes/rail.png")
 	tex_eclat = load("res://ciel/eclat-etoile.png")
 	var n_alv: int = (d["alveoles"] as Array).size()
 	for i in n_alv:
@@ -110,7 +128,13 @@ func _ready() -> void:
 	add_child(main)
 	p = main.ecran_pousse
 	_convertir()
-	if film:
+	if glissiere:
+		p.lbl_hint.text = "Glisse le doigt pour lâcher tes pièces."
+		if film:
+			_film_glissiere()
+		else:
+			_scenario_glissiere()
+	elif film:
 		_film()
 	else:
 		_scenario()
@@ -200,6 +224,8 @@ func _convertir() -> void:
 	r.size = rect.size
 	r.ecran.size = rect.size
 	r._ajuster()
+	# la vue 3D au plein du jeu (dans une fenêtre réduite, elle se calculait plus petite, puis agrandie : moins nette)
+	r.vue.size = Vector2i(int(rect.size.x), int(rect.size.y))
 	var cam_d: Dictionary = d["cameras"][fov]
 	k = float(cam_d["etirement"])
 	var cam: Camera3D = r.camera
@@ -374,6 +400,9 @@ func _process(delta: float) -> void:
 	mat_reflet.set_shader_parameter("eclat_embleme", (0.95 + 0.35 * sin(_t * 8.0)) * clampf(_sn_t / 0.3, 0.0, 1.0) if en_sn else 0.0)
 	for fl in flammes:
 		(fl[1] as ShaderMaterial).set_shader_parameter("temps", _t)
+	if glissiere:
+		_suivre_doigt(delta)
+		p.lbl_hint.text = "Glisse le doigt pour lâcher tes pièces."
 	couche_lunes.queue_redraw()
 	couche_eclats.queue_redraw()
 
@@ -419,6 +448,8 @@ func _dessiner_lunes() -> void:
 			pop *= 1.0 + 0.04 * sin(_t * 9.0 + i)
 		var rr := r * pop
 		v.draw_texture_rect(tex_lune_allumee if allumee else tex_lunes[i], Rect2(c - Vector2(rr, rr), Vector2(rr, rr) * 2.0), false)
+	if glissiere:
+		_dessiner_glissiere(v)
 	if en_sn and p.supernova_fx._range:
 		var ce := _centre_embleme()
 		var rc := clampf(float(d["r_embleme"]) * 0.38, 50.0, 78.0) * E
@@ -465,6 +496,109 @@ func _lancer_gerbe() -> void:
 		var vie := randf_range(0.9, 1.7)
 		_gerbe.append({"pos": ce + Vector2.from_angle(a) * 30.0, "vel": Vector2.from_angle(a) * randf_range(240.0, 640.0),
 			"vie": vie, "vie0": vie, "taille": randf_range(26.0, 54.0)})
+
+
+# ── La glissière (DECISIONS 02/10) ──────────────────────────────────────────────────────────────────────────────
+
+# Un point du monde, à l'écran (la vue 3D couvre le décor, décalée de Y_DECOR).
+func _a_l_ecran(x: float, y: float, z: float) -> Vector2:
+	var vue: SubViewport = p.rendu.vue
+	var k_vue := p.rendu.size.x / float(vue.size.x)
+	return p.rendu.camera.unproject_position(Vector3(x, y, zs(z))) * k_vue + Vector2(0, Y_DECOR)
+
+
+# Le x du monde sous le doigt, à la profondeur du rail : le chariot reste exactement au-dessus du doigt.
+func _x_sous(ecran_x: float) -> float:
+	var a := _a_l_ecran(float(p.X0), Y_RAIL, Z_RAIL)
+	var b := _a_l_ecran(float(p.X1), Y_RAIL, Z_RAIL)
+	var x := float(p.X0) + (ecran_x - a.x) / (b.x - a.x) * (float(p.X1) - float(p.X0))
+	return clampf(x, float(p.X0) + float(p.R_PIECE), float(p.X1) - float(p.R_PIECE))
+
+
+func _suivre_doigt(delta: float) -> void:
+	doigt["appui"] = maxf(0.0, float(doigt["appui"]) - delta * 2.5)
+	if not bool(doigt["la"]):
+		return
+	chariot_x = lerpf(chariot_x, _x_sous(float(doigt["x"])), minf(1.0, delta * 14.0))
+	if absf(chariot_x - _x_dernier_lacher) >= 0.75:
+		_lacher_ici()
+
+
+func _lacher_ici() -> void:
+	_x_dernier_lacher = chariot_x
+	var b: RigidBody3D = p._lacher(chariot_x, Z_LACHER)
+	if b == null:
+		return
+	p._sonner_a_la_pose(b)
+	GS.main_pieces -= 1
+	p._maj_main()
+	doigt["appui"] = 1.0
+
+
+func _toucher(ecran_x: float) -> void:
+	doigt["la"] = true
+	doigt["x"] = ecran_x
+	chariot_x = _x_sous(ecran_x)
+	_lacher_ici()
+
+
+func _dessiner_glissiere(v: Control) -> void:
+	# le rail perlé, d'un bout à l'autre du bloc
+	var a := _a_l_ecran(float(p.X0) - 0.25, Y_RAIL, Z_RAIL)
+	var b := _a_l_ecran(float(p.X1) + 0.25, Y_RAIL, Z_RAIL)
+	var h_rail := 22.0
+	v.draw_texture_rect(tex_rail, Rect2(a.x, a.y - h_rail * 0.5, b.x - a.x, h_rail), false)
+	# le chariot : accroché au rail, à une taille qui se lit (la perspective du fond le rendait minuscule)
+	var haut := _a_l_ecran(chariot_x, Y_RAIL, Z_RAIL)
+	var hc := 128.0
+	var tremble := 1.0 + 0.07 * float(doigt["appui"])
+	v.draw_texture_rect(tex_glissiere, Rect2(haut.x - hc * 0.5 * tremble, haut.y - 20.0, hc * tremble, hc * tremble), false)
+	# le doigt (simulé) : un rond clair, une onde à chaque pièce lâchée
+	if bool(doigt["la"]):
+		var c := Vector2(float(doigt["x"]), Y_DOIGT)
+		v.draw_circle(c, 44.0, Color(1.0, 0.97, 0.88, 0.30))
+		v.draw_arc(c, 44.0, 0.0, TAU, 64, Color(1.0, 0.95, 0.80, 0.85), 3.0, true)
+		var o := 1.0 - float(doigt["appui"])
+		if float(doigt["appui"]) > 0.0:
+			v.draw_arc(c, 44.0 + o * 40.0, 0.0, TAU, 64, Color(1.0, 0.9, 0.6, float(doigt["appui"]) * 0.8), 2.5, true)
+
+
+func _scenario_glissiere() -> void:
+	await _attendre(0.3)
+	_sans_cadeau()
+	await _attendre(4.0)
+	_toucher(250.0)
+	await _attendre(0.25)
+	_capture("glissiere_appui")
+	for i in 60:
+		doigt["x"] = 540.0 + 300.0 * sin(-1.0 + float(i) / 60.0 * 3.0)
+		await _attendre(1.0 / 30.0)
+	_capture("glissiere_glisse")
+	await _attendre(0.8)
+	_capture("glissiere_pieces")
+	get_tree().quit(0)
+
+
+func _film_glissiere() -> void:
+	await _images(10)
+	_sans_cadeau()
+	await _images(70)
+	_toucher(250.0)
+	await _images(30)
+	for i in 330:
+		doigt["x"] = 540.0 + 330.0 * sin(-0.9 + float(i) / 330.0 * TAU * 1.5)
+		await _images(1)
+	doigt["la"] = false
+	await _images(45)
+	_toucher(780.0)
+	await _images(12)
+	doigt["la"] = false
+	await _images(30)
+	_toucher(330.0)
+	await _images(12)
+	doigt["la"] = false
+	await _images(70)
+	get_tree().quit(0)
 
 
 func _scenario() -> void:

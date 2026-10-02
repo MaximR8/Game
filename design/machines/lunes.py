@@ -121,10 +121,82 @@ def cadran(S=512, ss=2):
     _ecrire("cadran.png", S, ss, col, alpha)
 
 
+def glissiere(S=256, ss=3):
+    """Le chariot de la glissière (02/10 — Maxim : « comment on fait pour lâcher les pièces ? ») : une goulotte d'or vue de
+    face, sa fente sombre en haut (où la pièce entre), une bande d'émail nuit et son étoile, une bague à la bouche (d'où la
+    pièce tombe sur le bloc). Il glisse sur le rail, sous le doigt."""
+    N, u, v = R.grille(S, ss)
+    t = np.clip((v + 0.50) / 1.05, 0, 1)
+    w = 0.60 * (1 - t) + 0.27 * t
+    corps = (v > -0.52) & (v < 0.56) & (np.abs(u) < w)
+    h_corps = np.where(corps, 0.16 * np.sqrt(np.clip(1 - (u / np.maximum(w, 1e-3)) ** 2, 0, 1)), 0.0)
+    # la bague du haut (un bourrelet en ellipse) et sa fente
+    eb = np.hypot(u / 0.68, (v + 0.60) / 0.15)
+    bague = (eb < 1.0)
+    h_bague = np.where(bague, 0.22 * np.sqrt(np.clip(1 - eb ** 2, 0, 1)) + 0.05, 0.0)
+    fente = np.hypot(u / 0.46, (v + 0.60) / 0.065) < 1.0
+    # la bouche, en bas
+    em = np.hypot(u / 0.30, (v - 0.62) / 0.09)
+    bouche = em < 1.0
+    h_bouche = np.where(bouche, 0.14 * np.sqrt(np.clip(1 - em ** 2, 0, 1)) + 0.02, 0.0)
+    # la bande d'émail et son étoile
+    bande = corps & (v > -0.14) & (v < 0.20) & (np.abs(u) < w - 0.07)
+    d_et = R.etoile_sdf(u, v - 0.03, 8, 0.14, 0.055)
+    etoile = bande & (d_et < 0)
+    h = np.maximum(np.maximum(h_corps, h_bague), h_bouche)
+    h = np.where(bande, h - 0.03, h)
+    h = np.where(etoile, h + 0.05 * np.clip(-d_et / 0.03, 0, 1), h)
+    h = np.where(fente, h - 0.12, h)
+    n = R.normales(h, N)
+    ao = R.occlusion(h, N, N * 0.012)
+    c_or = R.metal(n, R.OR, ao, 1.0)
+    nz = n[..., 2:3]
+    fres = 0.04 + 0.96 * (1 - nz) ** 5
+    e = R.environnement(R.reflet(n))[..., None]
+    c_email = np.array([0.03, 0.055, 0.15]) * ao[..., None] + e * fres * 0.4
+    col = np.where((bande & ~etoile)[..., None], c_email, c_or)
+    col = np.where(fente[..., None], np.array([0.01, 0.012, 0.03]), col)
+    forme = corps | bague | bouche
+    alpha = R.flou_boite(forme.astype(np.float64), max(1, ss // 2))
+    _ecrire("glissiere.png", S, ss, col, alpha)
+
+
+def rail(W=1024, H=48, ss=2):
+    """Le rail de la glissière : une tringle d'or perlée (les perles de l'arche), d'un bout à l'autre du bloc."""
+    Wn, Hn = W * ss, H * ss
+    y, x = np.mgrid[0:Hn, 0:Wn].astype(np.float64)
+    v = (y + 0.5) / Hn * 2 - 1
+    xs = (x + 0.5) / ss
+    r_tige = 0.42
+    h_tige = np.where(np.abs(v) < r_tige, 0.42 * np.sqrt(np.clip(1 - (v / r_tige) ** 2, 0, 1)), 0.0)
+    pas = 40.0
+    cx = (np.floor(xs / pas) + 0.5) * pas
+    dp = np.hypot((xs - cx) / (H * 0.5), v)
+    h_perle = np.where(dp < 0.72, 0.72 * np.sqrt(np.clip(1 - (dp / 0.72) ** 2, 0, 1)), 0.0)
+    bout = np.minimum(xs, W - xs)
+    h = np.where(bout > 8, np.maximum(h_tige, h_perle), 0.0)
+    dv, du = np.gradient(h, 2.0 / Hn)
+    n = R.norme(np.stack([-du, -dv, np.ones_like(h)], axis=-1))
+    ao = np.ones(h.shape)
+    col = R.metal(n, R.OR, ao, 1.0)
+    alpha = np.clip(h * 8.0, 0, 1)
+    col = np.clip(col, 0, 1)
+    col = 1.0 - np.exp(-col * 1.55)
+    col = col / (1.0 - math.exp(-1.55))
+    col = np.clip(col, 0, 1) ** (1 / 1.08)
+    prem = col * alpha[..., None]
+    p = prem.reshape(H, ss, W, ss, 3).mean(axis=(1, 3))
+    a = alpha.reshape(H, ss, W, ss).mean(axis=(1, 3))
+    rgb = p / np.maximum(a, 1e-6)[..., None]
+    Image.fromarray((np.clip(np.dstack([rgb, a]), 0, 1) * 255 + 0.5).astype(np.uint8), "RGBA").save(os.path.join(SORTIE, "rail.png"))
+
+
 if __name__ == "__main__":
     os.makedirs(SORTIE, exist_ok=True)
     for k in PHASES:
         lune(k)
     lune_allumee()
     cadran()
-    print("lunes :", ", ".join("%+.3f" % k for k in PHASES), "+ allumée + cadran")
+    glissiere()
+    rail()
+    print("lunes :", ", ".join("%+.3f" % k for k in PHASES), "+ allumée + cadran + glissière + rail")
