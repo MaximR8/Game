@@ -69,7 +69,7 @@ l'APK 0.7 (versionCode 7, 80 Mo), signée.
 et celle des comètes.
 
 ### ✅ À tester
-- [ ] Outils de test → « Décor : … › » : les sept décors, la machine et la Supernova dans chacun
+- [x] Outils de test → « Décor : … › » : les sept décors, la machine et la Supernova dans chacun *(Maxim, 03/10 : les couleurs de la Supernova vont sur tous)*
 
 ---
 
@@ -105,7 +105,7 @@ sans erreur. Déployé : `index.pck` servi (200) ; l'APK 0.6 (versionCode 6), si
 poussières en plus).
 
 ### ✅ À tester
-- [ ] Outils de test → Supernova : la pluie, les trois poussières, le cœur ; puis lâcher des pièces juste après (plus de refus)
+- [x] Outils de test → Supernova : la pluie, les trois poussières, le cœur ; puis lâcher des pièces juste après (plus de refus) *(Maxim, 03/10)*
 
 ---
 
@@ -147,7 +147,8 @@ cœur est sur le plateau pendant la Supernova), `test_son`, `test_objets`, `test
 le dessin sans erreur ; le film à 30 images/s regardé par Claude, pas montré). Déployé : `index.pck` servi (200, 45,4 Mo) ;
 l'APK 0.5 (versionCode 5), signée (SHA-256 `03:77:21:13:…:E4:69:40`).
 
-**Pas vu sur le téléphone** : la fluidité pendant la pluie (36 pièces qui se posent ensemble : la physique, D13).
+**Pas vu sur le téléphone** : la fluidité pendant la pluie (36 pièces qui se posent ensemble : la physique, D13). *(03/10 — Maxim, sur le
+web en local : « ça lag pas trop » ; l'APK pas encore essayée.)*
 
 ### ✅ À tester
 - [ ] Outils de test → Supernova : l'aspiration, l'explosion, le mot, la pluie d'or sur le plateau, le cœur qui se pose
