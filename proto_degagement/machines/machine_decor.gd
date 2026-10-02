@@ -350,6 +350,7 @@ func _plateau(vue: Node) -> void:
 	var mur := BoxMesh.new()
 	mur.size = Vector3(w + 3.0, 1.2, 0.3)
 	_mi(vue, mur, peint, Vector3(cx, 0.6, zs(p.MUR) - 0.15))
+	_front_de_marche(vue, cx, w, habit.albedo_texture)
 	var levre := BoxMesh.new()
 	levre.size = Vector3(w + 4.0, 3.0, 0.8)
 	_mi(vue, levre, peint, Vector3(cx, -1.5, p.BORD + 0.4))
@@ -379,6 +380,47 @@ func _plateau(vue: Node) -> void:
 			bout.bottom_radius = 0.035
 			bout.height = f
 			_mi(vue, bout, or_, Vector3(fx, 0.0, z), Basis(Vector3(0, 0, 1), PI * 0.5))
+
+
+# Le front de la marche fixe (02/10 — Maxim, sur les six autres décors : « la plaque mobile, on dirait qu'elle passe sous un
+# jpeg du décor ; sur la Base céleste, on dirait une barre qui pousse les pièces »). Le bloc disparaît sous le mur du fond
+# (zs(MUR), la physique) ; mais la marche peinte commence plus haut à l'écran : entre les deux, le décor montrait le dessus de
+# la marche, immobile, au-dessus du bloc qui bouge (20 px sur la Base céleste, 35 à 75 sur les autres). Un front de marche
+# (l'habit de la face du bloc) couvre cette bande : le bloc sort de dessous une marche fixe, comme dans une vraie machine, et
+# les pièces du bloc butent contre lui ; une ombre en bas : la fente.
+func _front_de_marche(vue: Node, cx: float, w: float, tex: Texture2D) -> void:
+	if not d.has("dessus"):
+		return
+	var des: Array = d["dessus"]
+	var y_dos := _ecran_image(0.0, (float(des[0][1]) + float(des[1][1])) * 0.5).y
+	var bas := float(p.H_BLOC)
+	if ecran(Vector3(cx, bas, float(p.MUR))).y <= y_dos + 1.0:
+		return
+	var lo := 0.0
+	var hi := 4.0
+	for i in 30:
+		var m := (lo + hi) * 0.5
+		if ecran(Vector3(cx, bas + m, float(p.MUR))).y > y_dos:
+			lo = m
+		else:
+			hi = m
+	var h := (lo + hi) * 0.5
+	var mat := ShaderMaterial.new()
+	var sh := Shader.new()
+	sh.code = """shader_type spatial;
+render_mode unshaded, cull_disabled;
+uniform sampler2D habit : filter_linear_mipmap, repeat_disable;
+void fragment() {
+	vec3 c = texture(habit, UV).rgb;
+	float fente = smoothstep(0.0, 0.22, 1.0 - UV.y);
+	ALBEDO = c * mix(0.35, 1.0, fente);
+}
+"""
+	mat.shader = sh
+	mat.set_shader_parameter("habit", tex)
+	var q := QuadMesh.new()
+	q.size = Vector2(w, h)
+	_mi(vue, q, mat, Vector3(cx, bas + h * 0.5, zs(float(p.MUR)) + 0.003))
 
 
 func _mi(parent: Node, mesh: Mesh, mat: Material, pos: Vector3, b := Basis()) -> MeshInstance3D:

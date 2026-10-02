@@ -296,6 +296,8 @@ def exporter_jeu(noms):
             "image": r + "decor.jpg", "or": r + "or.png", "bloc_dessus": r + "bloc-dessus.jpg", "bloc_face": r + "bloc-face.jpg",
             "cameras": j["cameras"], "alveoles": j["alveoles"], "embleme": j["embleme"], "r_embleme": j["r_embleme"],
             "flammes": j["flammes"], "etoiles": j["etoiles"],
+            # (02/10) la marche peinte : son dessus (4 points) et sa face — le jeu y pose le front du mur du fond
+            "dessus": [list(q) for q in dec["dessus"]], "face": list(dec["face"]),
         }
     texte = json.dumps(donnees, ensure_ascii=False, indent="\t")
     entete = [

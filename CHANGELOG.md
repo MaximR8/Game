@@ -12,6 +12,24 @@
 
 ---
 
+## ✅ **Le bloc ne passe plus « sous un jpeg » : un front de marche fixe au fond de la machine** — **EN PROD** *(02/10/2026, 23 h 39 ; l'APK 0.8)*
+
+**En clair.** Maxim, en essayant les décors : *« petit souci sur tous sauf la Base céleste : la plaque mobile, on dirait
+qu'elle passe sous un jpeg du décor, alors que sur la Base céleste on dirait une barre qui pousse les pièces »*. Mesuré : le
+bloc disparaît sous le mur du fond (la physique), mais la marche peinte commence plus haut à l'écran — entre les deux, le
+décor montrait le dessus de la marche, immobile, au-dessus du bloc qui bouge (20 px sur la Base céleste, de 35 à 75 sur les
+autres : le « jpeg »). Un **front de marche fixe**, habillé de la face du bloc (la frise grecque de l'Olympe, l'or de
+l'Égypte, les étoiles de la Perse…), couvre maintenant cette bande, avec une ombre en bas (la fente) : le bloc sort de dessous
+une marche, comme dans une vraie machine, et les pièces du bloc butent contre elle.
+
+· `machines/machine_decor.gd` `_front_de_marche()` (sa hauteur cherchée pour que son bord tombe sur le dos de la marche
+  peinte) ; `analyser.py --jeu` écrit maintenant `dessus` et `face` (la marche peinte) dans `machines/decors.gd`.
+
+**Tests faits** : `capture_decor` (Olympe, Égypte, Perse, Base céleste : vu par Claude) ; `test_supernova` : OK. Déployé :
+`index.pck` servi (200) ; l'APK 0.8 (versionCode 8), signée.
+
+---
+
 ## ✅ **Les sept décors dans le jeu ; un bouton caché pour changer le décor de la machine** — **EN PROD** *(02/10/2026, 23 h 23 ; l'APK 0.7)*
 
 **En clair.** Maxim : *« faudrait que je teste les skins, donc sur le local, mets-moi un bouton caché pour changer le skin »*.

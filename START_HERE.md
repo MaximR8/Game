@@ -99,7 +99,11 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
-> #### *✅ Le lot qui vient d'être clos — les sept décors dans le jeu, le bouton caché « Décor » (02/10, en ligne à 23 h 23 ; APK 0.7)*
+> #### *✅ Le lot qui vient d'être clos — le front de marche fixe : le bloc ne passe plus « sous un jpeg » (02/10, en ligne à 23 h 39 ; APK 0.8)*
+>
+> Maxim, sur les six autres décors : *« la plaque mobile, on dirait qu'elle passe sous un jpeg du décor »*. CHANGELOG.
+>
+> #### *✅ Juste avant — les sept décors dans le jeu, le bouton caché « Décor » (02/10, en ligne à 23 h 23 ; APK 0.7)*
 >
 > Maxim : *« mets-moi un bouton caché pour changer le skin »*. Outils de test (réseau local) → « Décor : … › ». Les réglages
 > de l'appareil gardent le choix. À régler selon ses essais : l'émail du mot SUPERNOVA et la teinte des comètes par thème.
