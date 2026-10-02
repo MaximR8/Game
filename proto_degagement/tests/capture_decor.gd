@@ -33,6 +33,9 @@ func _ready() -> void:
 		elif a.begins_with("fov="):
 			DECOR.champ = a.trim_prefix("fov=")
 	GS.sauvegarde_active = false
+	# (02/10) une photo au plein du jeu se calcule lentement, et le film tourne à 30 images/s : sans ce plafond (une étape
+	# de physique par image, le réglage du téléphone), le temps du jeu ralentirait avec eux
+	Engine.max_physics_steps_per_frame = 8
 	if not film:
 		get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
 	GS.poussiere = 1240
@@ -98,12 +101,26 @@ func _scenario() -> void:
 	await _attendre(0.8)
 	_capture("pieces")
 	GS.jauge_supernova = PusherScreen.JAUGE_SUPERNOVA - 1
-	await _attendre(0.2)
+	await _attendre(0.3)
+	# la Supernova (refaite le 02/10) : l'aspiration, l'explosion, le mot, la pluie d'or, le cœur, le compte, la fin
 	p.declencher_supernova()
-	await _attendre(1.4)
+	await _attendre(0.42)
+	_capture("sn_aspiration")
+	await _attendre(0.28)
+	_capture("sn_eclat")
+	await _attendre(0.6)
 	_capture("sn_mot")
-	await _attendre(5.0)
+	await _attendre(0.9)
+	_capture("sn_pluie")
+	await _attendre(1.3)
+	_capture("sn_coeur_vol")
+	await _attendre(1.6)
 	_capture("sn_compte")
+	p.supernova_t = 0.2
+	await _attendre(0.45)
+	_capture("sn_fin")
+	await _attendre(1.5)
+	_capture("sn_apres")
 	get_tree().quit(0)
 
 
@@ -126,8 +143,12 @@ func _film() -> void:
 	await _images(10)
 	_lever()
 	await _images(60)
+	GS.jauge_supernova = PusherScreen.JAUGE_SUPERNOVA - 1
+	await _images(20)
 	p.declencher_supernova()
-	await _images(300)
+	await _images(215)
+	p.supernova_t = 1.6               # (le film saute au bout des 30 s : la fin)
+	await _images(100)
 	get_tree().quit(0)
 
 
@@ -143,7 +164,8 @@ func _attendre(s: float) -> void:
 func _capture(nom: String) -> void:
 	var img := get_viewport().get_texture().get_image()
 	var err := img.save_png(dossier.path_join("machine_%s_%s.png" % [theme, nom]))
-	print("capture %s : %s" % [nom, "ok" if err == OK else "erreur %d" % err])
+	# (l'enregistrement d'une photo au plein du jeu fige ~0,6 s : les suivantes arrivent un peu plus tard dans le spectacle)
+	print("capture %s : %s (Supernova à %.2f s)" % [nom, "ok" if err == OK else "erreur %d" % err, float(p.decor_peint.get("_sn_t"))])
 
 
 func _sans_cadeau() -> void:

@@ -336,8 +336,12 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
   [Grec …]` (les décors retenus → `proto_degagement/machines/<décor>/` et `machines/decors.gd` ; puis l'import de Godot :
   `--headless --path ./proto_degagement --import`, et le décor en « Lossy » 0,92 dans son `.import`) ; `python
   design/machines/lunes.py` (les lunes, le cadran, les lance-pièces) ; `tests/capture_decor.tscn -- <dossier>
-  [theme=<décor exporté>] [fov=90] [film]` (en fenêtre : le vrai jeu, un doigt simulé). Les décors sources : `Machine/`
-  (hors du dépôt).
+  [theme=<décor exporté>] [fov=90] [film]` (en fenêtre : le vrai jeu, un doigt simulé ; la Supernova en entier). Les décors
+  sources : `Machine/` (hors du dépôt). `python design/machines/supernova.py` : le mot SUPERNOVA, le rai, l'étoile de
+  l'explosion (copiés dans `machines/lunes/` ; puis `--import` ; leurs mipmaps sont activées dans leur `.import`).
+  ⚠️ *Les photos : chacune fige ~0,6 s à l'enregistrement (un PNG au plein du jeu) — les suivantes arrivent plus tard dans
+  l'animation. Pour juger un mouvement, le film (`--write-movie`, 30 images/s ; la capture lève le plafond d'une étape de
+  physique par image, sinon le temps du jeu ralentit avec elle).*
 
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 

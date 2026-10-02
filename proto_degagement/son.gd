@@ -165,8 +165,17 @@ static func gain() -> void:
 
 
 # LA SUPERNOVA (30/09) : l'aspiration qui monte, puis la révélation et les cloches les plus riches — le gros son.
-static func supernova() -> void:
+static func supernova(peint := false) -> void:
 	if global == null:
+		return
+	if peint:
+		# (02/10) le décor peint : l'aspiration monte 0,6 s (les lunes versent leur lumière dans l'astrolabe), la
+		# révélation et les cloches éclatent avec lui (machines/machine_decor.gd, SN_ECLAT) ; les pics des sons y tombent
+		inv("tension", 0.0, 0.0)
+		global.get_tree().create_timer(0.15).timeout.connect(func(): inv("aspiration", 2.0, 0.0))
+		global.get_tree().create_timer(0.52).timeout.connect(func():
+			inv("revelation", 2.0, 0.0)
+			rarete(5))
 		return
 	inv("aspiration", 2.0, 5.0)
 	global.get_tree().create_timer(0.32).timeout.connect(func():

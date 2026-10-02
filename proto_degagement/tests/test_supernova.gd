@@ -4,6 +4,8 @@ extends Node
 # 30 s, le poussoir va deux fois plus vite, une pluie de pièces offertes tombe sur le bloc, tout ce qui tombe devant compte
 # double ; le son part ; à la fin, un cœur d'étoile tombe sur le plateau ; gagné, il compte (GS.coeurs) ; la frise de lunes
 # suit la jauge ; la sauvegarde garde la jauge et les cœurs.
+# (02/10) Dans le décor peint : la pluie d'or et le cœur jaillissent de l'astrolabe et volent jusqu'au plateau, devant le
+# bloc, dès le début (machines/machine_decor.gd) ; rien ne reste en l'air.
 #
 #   Godot_v4.7.2-stable_win64_console.exe --headless --path ./proto_degagement res://tests/test_supernova.tscn
 
@@ -48,6 +50,7 @@ func _scenario() -> void:
 	GS.jauge_supernova = J - 1
 	var j0 := Son.journal.size()
 	var n0 := p.pieces.size()
+	var avant := p.pieces.duplicate()
 	p._nourrir_jauge()
 	_ok("la jauge pleine : la Supernova part (30 s), la jauge repart de zéro",
 		p.supernova_t > 29.0 and GS.jauge_supernova == 0 and p.supernovas == 1)
@@ -64,7 +67,25 @@ func _scenario() -> void:
 	_ok("le son : l'aspiration, puis la révélation et les cloches", noms.has("inv-celeste-aspiration")
 		and noms.has("inv-celeste-revelation") and noms.has("rarete-5"))
 	await get_tree().create_timer(3.5).timeout
-	_ok("la pluie : des pièces offertes sur le bloc (+%d)" % (p.pieces.size() - n0), p.pieces.size() - n0 >= 20)
+	_ok("la pluie : des pièces offertes (+%d)" % (p.pieces.size() - n0), p.pieces.size() - n0 >= 20)
+	if p.decor_peint != null:
+		var neuves := 0
+		var devant := 0
+		var en_l_air := 0
+		for q in p.pieces:
+			if avant.has(q):
+				continue
+			neuves += 1
+			if q.position.z > PusherScreen.MILIEU + PusherScreen.COURSE - 0.3:
+				devant += 1
+			if q.has_meta("vol") or q.freeze:
+				en_l_air += 1
+		_ok("la pluie d'or a volé jusqu'au plateau, devant le bloc (%d / %d), plus rien en l'air (%d)" % [devant, neuves, en_l_air],
+			neuves >= 30 and devant >= neuves * 0.8 and en_l_air == 0)
+		var coeur_tot := false
+		for l in p.lots:
+			coeur_tot = coeur_tot or (str(l.get_meta("lot")) == "coeur-etoile" and not l.has_meta("vol") and not l.freeze)
+		_ok("le cœur d'étoile est sorti de l'astrolabe : posé sur le plateau pendant la Supernova", coeur_tot)
 	# tout compte double
 	var m0 := GS.main_pieces
 	var b := p._piece(Vector3(5.0, 0.1, PusherScreen.BORD + 0.2))

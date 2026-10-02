@@ -258,6 +258,8 @@ func _visibilite() -> void:
 	if not gel:
 		PhysicsServer3D.set_active(visible)
 	set_physics_process(visible)
+	if not visible and decor_peint != null:
+		decor_peint.achever_pluie()
 	if not visible and pieces.size() > 0:
 		# le tas est figé : on le sauve une fois la transition finie, pas pendant
 		get_tree().create_timer(0.6).timeout.connect(func():
@@ -268,6 +270,8 @@ func _visibilite() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED \
 			or what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if decor_peint != null:
+			decor_peint.achever_pluie()
 		if pieces.size() > 0:
 			_sauver()
 
@@ -400,6 +404,8 @@ func _hauteur_libre(x: float, z: float, r: float, sol: float, parmi: Array = [])
 	var h := sol
 	for arr in ([pieces, lots] if parmi.is_empty() else [parmi]):
 		for q in arr:
+			if q.has_meta("vol"):
+				continue          # (02/10) il vole de l'astrolabe au plateau : il n'occupe aucune place
 			if Vector2(q.position.x - x, q.position.z - z).length() < r + float(q.get_meta("r")):
 				h = maxf(h, q.position.y + float(q.get_meta("ep")) + 0.01)
 	return h
@@ -410,7 +416,7 @@ func _voisines(x: float, z: float, portee: float) -> Array:
 	var res: Array = []
 	for arr in [pieces, lots]:
 		for q in arr:
-			if absf(q.position.x - x) < portee and absf(q.position.z - z) < portee:
+			if absf(q.position.x - x) < portee and absf(q.position.z - z) < portee and not q.has_meta("vol"):
 				res.append(q)
 	return res
 
@@ -1101,6 +1107,9 @@ func _poser_avec_amas(k: String, bande: Vector2) -> void:
 # (la frise de lunes s'allume, une lune après l'autre) ; pleine : 30 s où la machine s'emballe — le poussoir ×2, une pluie
 # de pièces OFFERTES sur le bloc, tout ce qui tombe devant compte double —, et un CŒUR D'ÉTOILE tombe sur le plateau à la
 # fin (trois allument une Nouvelle machine). L'animation : supernova_fx.gd. Le son : Son.supernova.
+# 🔴 (02/10) Dans le décor peint (machines/machine_decor.gd) — Maxim : « pas assez spectaculaire », « il n'y a pas de
+#    récompense sur le plateau » : la pluie (offerte, toujours PLUIE_SUPERNOVA pièces) et le cœur d'étoile JAILLISSENT de
+#    l'astrolabe et volent jusqu'au plateau, devant le bloc, dès le début ; le décor a sa propre animation.
 # 🔴 Réglée au banc (sim_poussoir : les Supernovas par minute) — JAUGE_SUPERNOVA.
 # ─────────────────────────────────────────────────────────────
 const JAUGE_SUPERNOVA := 150
@@ -1132,6 +1141,12 @@ func declencher_supernova() -> void:
 	_pluie = PLUIE_SUPERNOVA
 	_pluie_t = 0.4
 	GS.demander_sauvegarde()
+	if decor_peint != null:
+		_pluie = 0
+		decor_peint.supernova(PLUIE_SUPERNOVA, is_visible_in_tree())
+		if is_visible_in_tree():
+			Son.supernova(true)          # (la vibration : à l'explosion, machine_decor._eclater)
+		return
 	if is_visible_in_tree():
 		Son.supernova()
 		supernova_fx.lancer(SUPERNOVA_S)
@@ -1154,8 +1169,12 @@ func _tic_supernova(delta: float) -> void:
 		_fin_supernova()
 
 
-# La fin : le cœur d'étoile tombe au milieu du plateau (il faudra le pousser jusqu'au bord).
+# La fin : le cœur d'étoile tombe au milieu du plateau (il faudra le pousser jusqu'au bord). Dans le décor peint, il est
+# sorti de l'astrolabe au début (s'il n'a pas pu, il tombe maintenant) ; les lunes s'éteignent.
 func _fin_supernova() -> void:
+	if decor_peint != null:
+		decor_peint.fin_supernova()
+		return
 	var x := randf_range(X0 + 2.0, X1 - 2.0)
 	_lot("coeur-etoile", Vector3(x, 1.6, randf_range(10.6, 11.6)))
 	if is_visible_in_tree():

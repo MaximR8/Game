@@ -4,6 +4,10 @@ render_mode unshaded, depth_draw_opaque, cull_back;
 // LES BILLES, VUES EN PERSPECTIVE (01/10, prototype « Base céleste ») : le modèle d'objets/bille.gdshader
 // (le voile qui tourne comme une planète, l'objet qui flotte au centre, le verre), mais sur une vraie
 // sphère vue par une caméra : la normale de la vue donne directement le point de la boule qu'on regarde.
+// 🔴 (02/10 — Maxim : « les poussières d'étoile et l'étoile qui sont dedans, on dirait qu'elles sont collées sur un côté,
+//    pas en plein milieu ») : le milieu de la boule, c'est la direction où on la REGARDE (de son centre vers la caméra),
+//    pas l'axe de la vue — en perspective, les deux s'écartent d'autant plus que la bille est loin du milieu de l'écran
+//    (80° de champ : jusqu'à ~30°, l'objet glissait vers le bord). La normale est relue dans ce repère.
 
 uniform sampler2D voile : filter_linear_mipmap, repeat_enable;
 uniform sampler2D coeur : filter_linear_mipmap, repeat_disable;
@@ -19,6 +23,10 @@ uniform float echelle = 0.9;
 // le creux peint est plus profond que notre plateau ; etirement = 1 : rien ne change.
 uniform float etirement = 1.0;
 uniform float bord_plateau = 14.0;
+uniform float leve = 0.0;                 // la sphère est posée sur son corps : son centre, au-dessus de celui du corps
+uniform float lueur = 0.0;                // (02/10) le cœur d'étoile brille de l'intérieur (0 : les autres billes)
+
+varying vec3 vers_cam;                    // du centre de la sphère vers la caméra (repère de la vue)
 
 void vertex() {
 	// seul le CENTRE suit l'étirement : la bille reste ronde (étirée, elle devenait un œuf)
@@ -26,6 +34,7 @@ void vertex() {
 	vec3 w = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	vec3 c2 = vec3(c.x, c.y, bord_plateau - etirement * (bord_plateau - c.z));
 	POSITION = PROJECTION_MATRIX * VIEW_MATRIX * vec4(w - c + c2, 1.0);
+	vers_cam = -(VIEW_MATRIX * vec4(c2 + vec3(0.0, leve, 0.0), 1.0)).xyz;
 }
 
 const vec3 L_CLE = vec3(-0.4545, -0.6126, 0.6324);
@@ -62,8 +71,11 @@ void fragment() {
 		discard;
 	}
 	vec3 nvue = normalize(NORMAL);
+	vec3 f = normalize(vers_cam);
+	vec3 droite = normalize(cross(vec3(0.0, 1.0, 0.0), f));
+	vec3 haut = cross(f, droite);
 	// l'écran vers le bas, comme le dessin d'avant (l'image du cœur est rendue ainsi)
-	vec2 p = vec2(nvue.x, -nvue.y);
+	vec2 p = vec2(dot(nvue, droite), -dot(nvue, haut));
 	float r2 = min(dot(p, p), 0.999);
 	vec3 nv = vec3(p.x, p.y, sqrt(1.0 - r2));
 	float lon = atan(nv.x, max(nv.z, 1e-4));
@@ -79,7 +91,10 @@ void fragment() {
 	col += teinte * caust * 0.35;
 	vec4 c_coeur = texture(coeur, vec2(0.5) + 0.5 * p / taille_coeur);
 	float a_c = c_coeur.a * 0.95 * (1.0 - step(taille_coeur, max(abs(p.x), abs(p.y))));
-	col = mix(col, c_coeur.rgb * (0.85 + 0.15 * lum), a_c);
+	// le cœur d'étoile : une lumière chaude monte du centre (dans le verre : pas de halo autour), l'étoile s'avive
+	float pouls = lueur * (0.80 + 0.20 * sin(TIME * 2.6));
+	col += teinte * pouls * pow(clamp(nv.z, 0.0, 1.0), 2.2) * 0.75;
+	col = mix(col, c_coeur.rgb * (0.85 + 0.15 * lum) * (1.0 + 0.55 * pouls), a_c);
 	float fres = 0.04 + 0.96 * pow(1.0 - clamp(nv.z, 0.0, 1.0), 4.0);
 	vec3 R = 2.0 * nv.z * nv - VUE;
 	float e = environnement(R);

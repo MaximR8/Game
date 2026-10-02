@@ -26,6 +26,22 @@
 
 ## Les décisions prises
 
+### La Supernova paie sur le plateau, dès le début : la pluie d'or et le cœur d'étoile jaillissent de l'astrolabe — 02/10/2026
+
+**Ce qu'on a tranché** (Claude, le design fonctionnel — Maxim, 02/10 au soir : *« la Supernova, l'animation n'est pas assez
+spectaculaire, et il n'y a pas de récompense sur le plateau »*) : dans le décor peint, la récompense se VOIT arriver. Les 36
+pièces offertes (PLUIE_SUPERNOVA, inchangé) jaillissent de l'astrolabe et volent jusqu'au **plateau, devant le bloc** (plus
+sur le bloc du fond, où elles apparaissaient sans bruit) ; le **cœur d'étoile** sort en dernier, ~3 s après le départ (plus à
+la fin des 30 s). Toujours un cœur par Supernova ; les 30 s à ×2 restent.
+
+**Ce qui a fait pencher** : le cœur arrivait quand l'excitation était retombée, et ressemblait aux autres billes ; posé au
+début, il est le but des 30 s (le poussoir ×2 l'amène au bord) ; les pièces devant le bloc tombent vite, comptent double :
+la récompense se sent tout de suite. Les pièces arrivent un peu plus près du bord qu'avant (le rendement de la Supernova monte
+un peu : à relire au banc et chez le cousin).
+
+🔓 **Ce qui la rouvrirait** : la Supernova trop généreuse au banc (sim_poussoir) ; le cœur qui tombe trop vite pour qu'on le
+voie.
+
 ### Les décors de la machine : les sept gardés, Base céleste par défaut ; les cartes à une seule évolution sont voulues — 02/10/2026
 
 **Ce qu'on a tranché** (Maxim, 02/10) : *« on garde tous les décors, mais le céleste est celui par défaut »* — Base céleste,

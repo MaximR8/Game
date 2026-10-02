@@ -12,6 +12,52 @@
 
 ---
 
+## ✅ **La Supernova refaite : le spectacle, et la récompense qui tombe sur le plateau ; les billes recentrées** — **EN PROD** *(02/10/2026, 22 h 46 ; l'APK 0.5)*
+
+**En clair.** Maxim, sur la machine en ligne : *« c'est nickel, sublime, juste la Supernova, l'animation n'est pas assez
+spectaculaire et il n'y a pas de récompense sur le plateau »* ; puis : *« les poussières d'étoile et l'étoile qui sont
+dedans, on dirait qu'elles sont collées sur un côté et pas en plein milieu »*.
+
+- **La récompense se voit** : la pluie offerte (36 pièces) ne naît plus en silence sur le bloc du fond — elle **jaillit de
+  l'astrolabe** : de vraies pièces qui volent en tournoyant au-dessus du bloc et retombent **sur le plateau, devant lui**
+  (il les pousse : elles tombent vite, ×2). Puis le **cœur d'étoile** sort du cadran, **en dernier**, laisse un sillage
+  d'étoiles et se pose au milieu du plateau — **au début de la Supernova** (avant : à la fin, 30 s plus tard, une bille
+  rouille qu'on ne distinguait pas). Il brille maintenant de l'intérieur, et deux éclats tournent sur son verre.
+- **Le spectacle** : la salle s'assombrit, les lunes versent leur lumière dans l'astrolabe (des comètes d'or) ; il
+  **explose** — une couronne de rais, l'étoile du cœur, deux ondes nettes ; l'onde court dans tout l'or du décor, l'or
+  s'allume d'un coup, la machine tremble ; le mot **SUPERNOVA en lettres d'or gravées** (rendues comme le cadran) jaillit,
+  deux reflets le traversent, puis il se range dans le cadran du compte à rebours ; pendant les 30 s, les lunes en
+  chenillard, trois petites étoiles tournent autour du cadran, les bougies flambent ; les cinq dernières secondes battent ;
+  à la fin, les lunes s'éteignent du centre vers les bords. Le son suit : la tension et l'aspiration montent jusqu'à
+  l'explosion, la révélation et les cloches éclatent avec elle.
+- **Les billes** (poussière d'étoile, étoile d'invocation, cœur) : l'objet du dedans est **au milieu** — en perspective,
+  le shader prenait le milieu dans l'axe de la caméra, pas dans la direction où on regarde la bille (80° de champ : plus la
+  bille était loin du milieu de l'écran, plus l'objet glissait vers le bord).
+
+🔴 **POURQUOI** — DECISIONS 02/10 (la récompense de la Supernova). Maxim : *« ne filme pas, mets dans le jeu direct »*.
+
+· `machines/machine_decor.gd` § la Supernova (`supernova()`, `fin_supernova()`, `achever_pluie()` : machine cachée ou app
+  en pause, tout ce qui reste tombe d'un coup avant la sauvegarde — pas une pièce perdue, surtout pas le cœur) ; un corps
+  qui vole est figé, sans collision, et `PusherScreen._hauteur_libre` / `_voisines` ne le comptent pas (méta `vol`) ;
+  `machines/mot_or.gdshader` ; `reflet_or` (l'onde, l'éclair de l'or) ; `decor_fondu` (la salle qui s'assombrit) ;
+  `bille_vue` (le repère du regard ; `lueur`) ; `MachineRendu` (l'ombre d'un corps qui vole haut s'efface) ;
+  `Son.supernova(true)` ; les images : `design/machines/supernova.py` (le mot, le rai, l'étoile de l'explosion). Le mot et
+  une onde sont dessinés invisibles aux premières images, les sons chargés 2 s après l'ouverture (pas d'à-coup à
+  l'explosion).
+
+**Tests faits** : `test_supernova` (14 vérifications, dont : les 36 pièces arrivent devant le bloc, plus rien en l'air ; le
+cœur est sur le plateau pendant la Supernova), `test_son`, `test_objets`, `test_journee` : OK ; `capture_decor` (en fenêtre :
+le dessin sans erreur ; le film à 30 images/s regardé par Claude, pas montré). Déployé : `index.pck` servi (200, 45,4 Mo) ;
+l'APK 0.5 (versionCode 5), signée (SHA-256 `03:77:21:13:…:E4:69:40`).
+
+**Pas vu sur le téléphone** : la fluidité pendant la pluie (36 pièces qui se posent ensemble : la physique, D13).
+
+### ✅ À tester
+- [ ] Outils de test → Supernova : l'aspiration, l'explosion, le mot, la pluie d'or sur le plateau, le cœur qui se pose
+- [ ] Les boules (poussière, étoile, cœur) : l'objet bien au milieu, partout sur le plateau
+
+---
+
 ## ✅ **La Nébuleuse dans son décor peint (Base céleste) ; le lance-pièces (la sphère armillaire)** — **EN PROD** *(02/10/2026, 19 h 35 ; l'APK 0.4)*
 
 **En clair.** La machine n'est plus un cadre dessiné avec un titre : elle vit dans le décor **Base céleste** que Maxim a

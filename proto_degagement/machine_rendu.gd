@@ -270,7 +270,7 @@ func _placer(i: int, b: RigidBody3D) -> void:
 	_buf_o[o + 9] = 0.0
 	_buf_o[o + 10] = sc
 	_buf_o[o + 11] = p.z + 0.09 + dh * 0.2
-	_buf_o[o + 14] = clampf(0.55 - dh / 4.0, 0.15, 0.55) * (1.0 - fondu)
+	_buf_o[o + 14] = clampf(0.55 - dh / 4.0, 0.15, 0.55) * (1.0 - fondu) * clampf((2.0 - dh) / 0.8, 0.0, 1.0)
 
 
 # Ce qui passe le bord s'efface en tombant.
@@ -286,7 +286,7 @@ func _ombre(p: Vector3, r: float, ep: float) -> Array:
 	var s := r * (2.3 + dh * 0.5)
 	var bas := p.y - ep * 0.5 - 0.004
 	var t := Transform3D(Basis().scaled(Vector3(s, 1.0, s)), Vector3(p.x + 0.05 + dh * 0.15, bas, p.z + 0.09 + dh * 0.2))
-	return [t, clampf(0.55 - dh / 4.0, 0.15, 0.55)]
+	return [t, clampf(0.55 - dh / 4.0, 0.15, 0.55) * clampf((2.0 - dh) / 0.8, 0.0, 1.0)]
 
 
 func oublier(b: RigidBody3D) -> void:
@@ -328,6 +328,10 @@ func _objet(b: RigidBody3D) -> void:
 				mb.shader = SH_BILLE_VUE
 				for cle_b in ["voile", "coeur", "teinte"]:
 					mb.set_shader_parameter(cle_b, mat.get_shader_parameter(cle_b))
+				# le centre de la sphère posée (_sphere_posee) : le shader y prend le milieu de la boule
+				mb.set_shader_parameter("leve", r * 0.9 - float(b.get_meta("ep")) * 0.5)
+				# (02/10) le cœur d'étoile brille de l'intérieur : on le reconnaît d'un coup d'œil sur le plateau
+				mb.set_shader_parameter("lueur", 1.0 if str(b.get_meta("lot")) == "coeur-etoile" else 0.0)
 				mat = mb
 			else:
 				mat.shader = SH_CORPS_VUE

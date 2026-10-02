@@ -99,7 +99,14 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
-> #### *✅ Le lot qui vient d'être clos — la Nébuleuse dans son décor peint, le lance-pièces (02/10, en ligne à 19 h 35 ; APK 0.4)*
+> #### *✅ Le lot qui vient d'être clos — la Supernova refaite, la récompense sur le plateau, les billes recentrées (02/10, en ligne à 22 h 46 ; APK 0.5)*
+>
+> Maxim : *« la Supernova pas assez spectaculaire, pas de récompense sur le plateau »*, *« l'étoile dans la boule collée sur un
+> côté »*, puis *« ne filme pas, mets dans le jeu direct »*. La pluie d'or et le cœur jaillissent de l'astrolabe sur le plateau
+> (DECISIONS 02/10) ; l'aspiration, l'explosion, le mot en or ; les billes recentrées (`bille_vue`). CHANGELOG. **Pas vu sur le
+> téléphone** : la fluidité pendant la pluie.
+>
+> #### *✅ Le lot d'avant — la Nébuleuse dans son décor peint, le lance-pièces (02/10, en ligne à 19 h 35 ; APK 0.4)*
 >
 > Maxim : *« top, on part sur la B et tu peux mettre en ligne »*. Le décor **Base céleste** (par défaut), la vraie machine
 > posée dedans en perspective, les lunes de la jauge dans l'arche, la Supernova dans l'astrolabe, et la **sphère armillaire**
