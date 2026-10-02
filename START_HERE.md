@@ -27,6 +27,10 @@
 
 ## 🅰️ OÙ ON EN EST — *vérifié en direct le 29/09/2026, 9 h 09*
 
+> 🆕 *03/10 : en ligne, la **0.9** (02/10, 23 h 51 ; l'APK signée dans `android/`) — la Nébuleuse dans son **décor peint**
+> (Base céleste par défaut ; sept thèmes, le bouton « Décor » des outils de test en local), la **Supernova en gros lot**
+> (l'aspiration, l'explosion, la pluie d'or, trois poussières offertes, le cœur d'étoile). Le détail : CHANGELOG, du 02/10.*
+
 > **Le jeu tourne sur le téléphone de Maxim** (https://192.168.0.17:18443/, installable en app) **et chez les cousins**
 > (https://jeu.naspoizot.synology.me, derrière un code de 5 mots — INFRA § Le jeu PUBLIC ; aucun backend : chacun sa
 > partie dans son navigateur). La Nébuleuse tourne à 34-43 images/s sur le web (D13).
@@ -82,7 +86,8 @@ deviendraient invocables.
 thème dans l'Astrolabe, une fiche dans `Portails.LISTE`) ne sont pas faits.
 **⑤** **Le nom du jeu n'est pas choisi.** « La Poussette » est un nom de travail. La Tarasque manque.
 **⓪bis** 🗓️ **L'économie et la Nébuleuse de demain (DECISIONS 30/09 et 01/10)** : ✅ la Supernova et le cœur d'étoile
-(30/09, 23 h 57). 🔄 *01/10 — les 18 points de ChatGPT, commentés par Maxim (« on ne vend ni la chance ni la victoire ») ; l'ordre
+(30/09, 23 h 57). ✅ la machine dans ses décors peints (sept thèmes) et la Supernova en gros lot (02/10, APK 0.9 — c'est la
+« machine cosmique » de la liste, faite autrement : des décors peints plutôt qu'un meuble modélisé). 🔄 *01/10 — les 18 points de ChatGPT, commentés par Maxim (« on ne vend ni la chance ni la victoire ») ; l'ordre
 proposé par Claude, ✅ confirmé par Maxim le 01/10 (les Comètes ; un style = un stade III alternatif) :* la Nouvelle machine (3 cœurs) → la série de 7 jours → **la machine cosmique** (un vrai meuble,
 à thèmes) → les Trésors → le banc de l'économie (à 150 cartes, un joueur gratuit ne doit pas mettre 2 ans) → la pose en grand et un
 premier style → le premier événement (2 prototypes de mini-jeux, joués par le cousin et sa femme) → les Maîtrises (avec le cadran) →
@@ -96,8 +101,18 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 
 ## 🎬 LE LOT EN COURS
 
-> ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
-> et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
+> ### **La Nouvelle machine (3 cœurs d'étoile)** — puis la série de 7 jours (⓪bis : l'ordre confirmé le 01/10)
+>
+> Maxim, le 03/10 : *« continue comme prévu »*, puis *« note aussi dans START_HERE et on stop pour aujourd'hui »* — **rien
+> n'est commencé**. À relire avant la fiche d'alignement : DECISIONS 30/09 (la Supernova, les cœurs, la Nouvelle machine),
+> 01/10 (l'économie : « on ne vend ni la chance ni la victoire » — une Nouvelle machine ne s'achète jamais) et 02/10 (la
+> Supernova en gros lot : un cœur par Supernova, trois allument une Nouvelle machine).
+>
+> #### *⏸️ L'arrêt du 03/10*
+>
+> En ligne : la **0.9** (le web servi ; l'APK signée dans `android/`). **Vérifié par Maxim** : les sept décors (le bouton
+> « Décor »), les couleurs de la Supernova sur chacun, la fluidité sur le web en local (*« ça lag pas trop »*). **Pas encore
+> fait** : installer l'APK sur son téléphone ; relire au banc (sim_poussoir) le rendement d'une Supernova sans le ×2.
 >
 > #### *✅ Le lot qui vient d'être clos — le bloc d'un seul niveau, plus de barre en travers (02/10, en ligne à 23 h 51 ; APK 0.9)*
 >
