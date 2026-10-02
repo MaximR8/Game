@@ -99,7 +99,15 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 > ### **À choisir avec Maxim** — ses retours du téléphone (la journée, la collection, les rangs, l'ouverture) et sur le Duel
 > et le Classé (gardés pour plus tard) d'abord ; sinon, § CE QUI RESTE OUVERT.
 >
-> #### *🧪 L'essai du 02/10 — la machine dans les sept décors peints de Maxim (PAS dans le jeu)*
+> #### *✅ Le lot qui vient d'être clos — la Nébuleuse dans son décor peint, le lance-pièces (02/10, en ligne à 19 h 35 ; APK 0.4)*
+>
+> Maxim : *« top, on part sur la B et tu peux mettre en ligne »*. Le décor **Base céleste** (par défaut), la vraie machine
+> posée dedans en perspective, les lunes de la jauge dans l'arche, la Supernova dans l'astrolabe, et la **sphère armillaire**
+> qui suit le doigt (touché n'importe où) et lâche les pièces. `machines/machine_decor.gd`, `machines/decors.gd`
+> (`design/machines/analyser.py --jeu`), CHANGELOG. **Pas vu sur le téléphone** : la netteté, la fluidité (D13), la main.
+> Ensuite (⓪bis) : la Nouvelle machine, la série de 7 jours ; les monstres de Maxim à intégrer.
+>
+> #### *🧪 L'essai du 02/10 — la machine dans les sept décors peints de Maxim (avant l'intégration)*
 >
 > Les décors générés par Maxim dans ChatGPT (`Machine/`, les prompts de `REPRISE.md`) ; la vraie machine posée dans le creux
 > peint de chacun, les lunes dans les alvéoles, les reflets, les étoiles, les flammes, la Supernova dans l'emblème (CHANGELOG).

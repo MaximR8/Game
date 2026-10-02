@@ -21,6 +21,11 @@ extends Control
 
 const SH_CORPS := preload("res://objets/corps.gdshader")
 const SH_OMBRE := preload("res://objets/ombre.gdshader")
+# (02/10) la machine dans son décor peint (machines/machine_decor.gd) : la vue en perspective, la profondeur étirée à
+# l'image (la place des corps, pas leur forme) ; les billes, de vraies sphères posées sur leur corps
+const SH_CORPS_VUE := preload("res://machines/corps_vue.gdshader")
+const SH_OMBRE_VUE := preload("res://machines/ombre_vue.gdshader")
+const SH_BILLE_VUE := preload("res://machines/bille_vue.gdshader")
 const TEX_RELIEF := preload("res://objets/piece-relief.png")
 const SEGMENTS := 36
 const CASES := 420
@@ -50,6 +55,9 @@ var _buf_p := PackedFloat32Array()     # les cases des pièces : 12 (transformé
 var _buf_o := PackedFloat32Array()     # les cases des ombres
 const PAS_BUF := 16
 var _zero := Transform3D(Basis().scaled(Vector3.ZERO), Vector3(0, -50, 0))
+var _vue_perspective := false
+var _etirement := 1.0
+var _spheres := {}
 
 
 func preparer(p_zone: Rect2, r_piece: float, ep_piece: float, p: Dictionary) -> void:
@@ -109,6 +117,41 @@ func preparer(p_zone: Rect2, r_piece: float, ep_piece: float, p: Dictionary) -> 
 	mm_ombres.custom_aabb = AABB(Vector3(-50, -50, -50), Vector3(100, 200, 100))
 	_ajuster()
 	get_tree().root.size_changed.connect(_ajuster)
+
+
+# (02/10) La machine dans son décor peint : machine_decor.gd règle la caméra ; ici, les matières des objets à venir.
+func perspective(etirement: float) -> void:
+	_vue_perspective = true
+	_etirement = etirement
+	k_h = 0.0
+
+
+func regler_vue(m: ShaderMaterial) -> void:
+	m.set_shader_parameter("k_h", 0.0)
+	m.set_shader_parameter("etirement", _etirement)
+	m.set_shader_parameter("bord_plateau", bord)
+
+
+# Une vraie sphère, posée sur le corps (un disque) : son bas au bas du disque.
+func _sphere_posee(r: float, ep: float) -> ArrayMesh:
+	var cle := "%.3f|%.3f" % [r, ep]
+	if _spheres.has(cle):
+		return _spheres[cle]
+	var rs := r * 0.9
+	var sm := SphereMesh.new()
+	sm.radius = rs
+	sm.height = 2.0 * rs
+	sm.radial_segments = 48
+	sm.rings = 24
+	var arr := sm.get_mesh_arrays()
+	var v: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
+	for i in v.size():
+		v[i] += Vector3(0, rs - ep * 0.5, 0)
+	arr[Mesh.ARRAY_VERTEX] = v
+	var am := ArrayMesh.new()
+	am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
+	_spheres[cle] = am
+	return am
 
 
 # La vue au plein de la résolution réelle : sur le téléphone, 1 px de la vue = 1 px de l'écran.
@@ -275,17 +318,29 @@ func _objet(b: RigidBody3D) -> void:
 			if d.is_empty():
 				_meshes_objets[cle] = _disque(r, ep)
 			elif bille:
-				_meshes_objets[cle] = Volumes.bille_mesh(r)
+				_meshes_objets[cle] = _sphere_posee(r, float(b.get_meta("ep"))) if _vue_perspective else Volumes.bille_mesh(r)
 			else:
 				_meshes_objets[cle] = Volumes.volume(d["contour"], d["disque"], r, ep)
 		var mat := Volumes.matiere_bille(nom, k_h, r) if bille else Volumes.matiere(nom, k_h)
+		if _vue_perspective:
+			if bille:
+				var mb := ShaderMaterial.new()
+				mb.shader = SH_BILLE_VUE
+				for cle_b in ["voile", "coeur", "teinte"]:
+					mb.set_shader_parameter(cle_b, mat.get_shader_parameter(cle_b))
+				mat = mb
+			else:
+				mat.shader = SH_CORPS_VUE
+			regler_vue(mat)
 		var mi := MeshInstance3D.new()
 		mi.mesh = _meshes_objets[cle]
 		mi.material_override = mat
 		mi.custom_aabb = AABB(Vector3(-50, -50, -50), Vector3(100, 200, 100))
 		var mat_o := ShaderMaterial.new()
-		mat_o.shader = SH_OMBRE
+		mat_o.shader = SH_OMBRE_VUE if _vue_perspective else SH_OMBRE
 		mat_o.set_shader_parameter("k_h", k_h)
+		if _vue_perspective:
+			regler_vue(mat_o)
 		var plan := PlaneMesh.new()
 		plan.size = Vector2(1, 1)
 		var mo := MeshInstance3D.new()

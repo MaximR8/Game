@@ -184,6 +184,10 @@ var lbl_hint: Label
 var lbl_perf: Label
 var outils: Control
 var bandeau: Bandeau            # le bandeau du haut (main.gd) : les objets gagnés s'y envolent
+# (02/10, DECISIONS 02/10) la machine dans son décor peint — Base céleste par défaut — et le lance-pièces : il remplace le
+# cadre dessiné d'avant (son titre, sa frise, le bloc en 2D) ; la vue 3D y passe en perspective
+const MACHINE_DECOR := preload("res://machines/machine_decor.gd")
+var decor_peint: Node
 var _reserve_retenue := 0       # les pièces en vol vers la réserve
 
 
@@ -217,8 +221,17 @@ func _ready() -> void:
 	add_child(supernova_fx)
 	visibility_changed.connect(_visibilite)
 	_ui()
+	_installer_decor()
 	_decor()
 	_charger()
+
+
+func _installer_decor() -> void:
+	decor_peint = MACHINE_DECOR.new()
+	add_child(decor_peint)
+	decor_peint.installer(self)
+	for c in [decor, bloc2d, fronton2d, jauge2d, lueur_bord]:
+		c.visible = false
 
 
 func _exit_tree() -> void:
@@ -521,6 +534,14 @@ func _physics_process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if not visible or gel:
 		return
+	if decor_peint != null:
+		# (02/10) le doigt touche la machine n'importe où : le lance-pièces le suit (machines/machine_decor.gd)
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			doigt = event.pressed
+			decor_peint.toucher(event.position, event.pressed)
+		elif event is InputEventMouseMotion and doigt:
+			decor_peint.glisser(event.position)
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		doigt = event.pressed
 		dernier_semis = Vector2(-9999, -9999)
@@ -528,6 +549,15 @@ func _input(event: InputEvent) -> void:
 			_semer(event.position)
 	elif event is InputEventMouseMotion and doigt:
 		_semer(event.position)
+
+
+# Pourquoi une pièce ne peut pas partir ("" : elle peut) — le lance-pièces le demande avant de la lâcher.
+func refus_lacher() -> String:
+	if pieces.size() >= MAX_PIECES:
+		return "La machine est pleine : fais d'abord tomber des pièces."
+	if GS.main_pieces <= 0:
+		return "Plus de pièces : les Présages en donnent."
+	return ""
 
 
 func _semer(p: Vector2) -> void:
@@ -696,7 +726,7 @@ func _process(delta: float) -> void:
 				pt["vel"] *= float(pt.get("amorti", 0.93))
 		# Le bord où l'on gagne scintille : de fines étincelles jade en montent.
 		etincelle_t += delta
-		while etincelle_t >= 0.15:
+		while etincelle_t >= 0.15 and decor_peint == null:
 			etincelle_t -= 0.15
 			var vie := randf_range(1.6, 2.6)
 			particules.append({"pos": Vector2(randf_range(X0 * U + 10.0, X1 * U - 10.0), BORD * U - 4.0),
@@ -728,8 +758,15 @@ func _process(delta: float) -> void:
 	supernova_fx.maj(supernova_t)
 
 
+# Le bord, à l'écran, au droit de x : dans le décor peint, par la caméra ; sinon, la vue d'avant.
+func _ecran_bord(x: float) -> Vector2:
+	if decor_peint != null:
+		return decor_peint.ecran(Vector3(x, 0.0, BORD))
+	return _ecran(x, BORD, 0.0)
+
+
 func _sur_gain(b: RigidBody3D) -> void:
-	var pos := _ecran(b.position.x, BORD, 0.0)
+	var pos := _ecran_bord(b.position.x)
 	if b.has_meta("lot"):
 		tombe.emit("lot")
 		_gagner_objet(str(b.get_meta("lot")), pos)
@@ -799,7 +836,7 @@ func _rendre(k: String) -> void:
 
 # Pour les captures et les outils : l'objet k est gagné, au milieu du bord.
 func demo_gain(k: String) -> void:
-	_gagner_objet(k, _ecran((X0 + X1) * 0.5, BORD, 0.0))
+	_gagner_objet(k, _ecran_bord((X0 + X1) * 0.5))
 
 
 func _eclat(pos: Vector2, col: Color, n: int) -> void:
@@ -934,7 +971,8 @@ func _maj_main(arrivee := false) -> void:
 		tw.tween_property(ico_reserve, "scale", Vector2(1.18, 1.18), 0.08)
 		tw.tween_property(ico_reserve, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	if GS.main_pieces > 0:
-		_indice("Glisse le doigt sur le bloc pour lâcher tes pièces.", Style.SOURD)
+		_indice("Glisse le doigt pour lâcher tes pièces." if decor_peint != null else "Glisse le doigt sur le bloc pour lâcher tes pièces.",
+			Style.SOURD)
 
 
 # Un chiffre de jeu : or, cerclé de sombre.

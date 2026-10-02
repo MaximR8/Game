@@ -12,6 +12,48 @@
 
 ---
 
+## ✅ **La Nébuleuse dans son décor peint (Base céleste) ; le lance-pièces (la sphère armillaire)** — **EN PROD** *(02/10/2026, 19 h 35 ; l'APK 0.4)*
+
+**En clair.** La machine n'est plus un cadre dessiné avec un titre : elle vit dans le décor **Base céleste** que Maxim a
+généré (l'arche aux sept lunes, l'astrolabe, les colonnes, les sphères armillaires, les bougies). La vraie machine (sa
+physique, ses pièces, ses objets) est posée dans le creux peint, vue en perspective (le « long plateau ») ; le bloc qui
+pousse porte l'habit de la marche peinte. Par-dessus : les **lunes de la jauge** dans les alvéoles de l'arche (des
+cabochons de pierre de lune : éteintes, la phase dans le verre ; allumées, pleines, elles « popent »), un **reflet** qui court
+sur les arêtes de l'or, des **étoiles** qui scintillent, les **flammes** qui ondulent. La **Supernova** : le mot, puis l'or de
+l'emblème qui s'allume, une gerbe d'étoiles, et le **compte à rebours dans un cadran d'émail** au cœur de l'astrolabe. Et
+pour lâcher les pièces : **le doigt touche la machine où il veut** (même en bas, près du pouce) — seule sa position
+gauche-droite compte ; la **sphère armillaire** d'or flotte au-dessus du bloc, la pièce suivante en son cœur, et suit le doigt ;
+chaque pièce tombe en tournoyant et se pose sur le bloc. Consigne : « Glisse le doigt pour lâcher tes pièces. ».
+
+🔴 **POURQUOI** — DECISIONS 02/10 (les décors ; le lance-pièces) ; Maxim : *« top, on part sur la B et tu peux mettre en ligne »*.
+
+· `machines/machine_decor.gd` (posé par `PusherScreen._installer_decor` : le décor, les couches, la caméra, le bloc, les
+  fentes, les caches peints, les lunes, la Supernova, le lance-pièces ; `ecran(pos)` : un point de la machine à l'écran ;
+  `toucher` / `glisser`) ; `machines/decors.gd` (le relevé de chaque décor, écrit par `design/machines/analyser.py --jeu`) ;
+  `machines/BaseCeleste/` (le décor en WebP avec perte 0,92 : 430 Ko ; le masque de l'or ; l'habit du bloc) ;
+  `machines/lunes/` (les lunes, le cadran, le lance-pièces : `design/machines/lunes.py`) ; les matières vues dans le décor :
+  `machines/corps_vue`, `ombre_vue`, `bille_vue` (la place étirée, la forme gardée), `peint`, `reflet_or`, `decor_fondu`,
+  `flamme`. `MachineRendu.perspective()` (les matières des objets, les billes en sphères posées). `PusherScreen` :
+  `refus_lacher()`, `_ecran_bord()` (les gains partent de la vraie place de la pièce), le cadre d'avant caché, plus
+  d'étincelles jade au bord. Les autres décors (Olympe, Valhalla, Égypte, Atlantide, Perse, Aztèque) sont relevés mais pas
+  dans le jeu : un `analyser.py --jeu <décor>` les y met (les thèmes des pass).
+
+**Tests faits** : `test_supernova`, `test_son`, `test_journee`, `test_objets`, `test_collection`, `test_codes` : OK ;
+`sim_poussoir` (300 s, graine 2) : OK, rendement 71 % — *(180 s, graine 1 : un objet gagné encore en chute à la dernière
+seconde, compté sur le tas : l'effet de fin de course, pas la machine)* ; `capture_decor` (le vrai jeu : le repos, la chute
+depuis la sphère, le semis, la Supernova et son compte à rebours) : vu. Déployé : `index.pck` servi à 19 h 35 (17:35 UTC),
+`200` ; l'APK 0.4 (versionCode 4), signée (SHA-256 `03:77:21:13:…:E4:69:40`) : `android/la-poussette.apk`.
+
+**Pas vu sur le téléphone** : la netteté du décor (1024 px de large : à agrandir ×2 si besoin), les images par seconde (D13),
+la main sur le lance-pièces.
+
+### ✅ À tester
+- [ ] Le décor, les lunes qui s'allument avec les pièces des fentes, la Supernova et son compte à rebours dans l'astrolabe
+- [ ] Lâcher les pièces : toucher en bas, glisser — la sphère suit-elle bien le doigt ?
+- [ ] La fluidité (le compteur des outils : appui long sur l'onglet Nébuleuse)
+
+---
+
 ## 🧪 **La machine dans les décors peints de Maxim (7 thèmes) — ESSAI** *(02/10/2026 ; pas dans le jeu)*
 
 **En clair.** Après le meuble en volumes simples (*« ça fait vieille 3D »*), la direction de Maxim : *« un décor fixe derrière,

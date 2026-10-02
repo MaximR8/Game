@@ -331,9 +331,13 @@ java -jar $LOCALAPPDATA/Android/Sdk/build-tools/37.0.0/lib/apksigner.jar verify 
   (en fenêtre, photos en 1080 × 2400) ; le film : `--write-movie <dossier>/machine.avi --fixed-fps 30 … -- <dossier> film`, puis
   ffmpeg (celui d'imageio_ffmpeg) : `crop=1080:1785:0:0,scale=720:1190` en H.264. Le tapis céleste :
   `python design/objets/render_carre.py --celeste`, puis `tests/capture_tapis.tscn -- <dossier>`.
-- **Les décors peints de la machine, essai** (02/10) : `python design/machines/analyser.py [décor]` (le relevé →
-  `design/machines/<décor>.json`, les masques, l'habit du bloc), puis `tests/capture_decor.tscn -- <dossier> theme=<décor>
-  [fov=90] [film]` (en fenêtre). Les décors sources : `Machine/` (hors du dépôt).
+- **Les décors peints de la machine** (02/10, en prod) : `python design/machines/analyser.py [décor]` (le relevé →
+  `design/machines/<décor>.json`, les masques, l'habit du bloc) ; `python design/machines/analyser.py --jeu BaseCeleste
+  [Grec …]` (les décors retenus → `proto_degagement/machines/<décor>/` et `machines/decors.gd` ; puis l'import de Godot :
+  `--headless --path ./proto_degagement --import`, et le décor en « Lossy » 0,92 dans son `.import`) ; `python
+  design/machines/lunes.py` (les lunes, le cadran, les lance-pièces) ; `tests/capture_decor.tscn -- <dossier>
+  [theme=<décor exporté>] [fov=90] [film]` (en fenêtre : le vrai jeu, un doigt simulé). Les décors sources : `Machine/`
+  (hors du dépôt).
 
 ## 📦 Le dépôt — github.com/MaximR8/Game (privé) *(30/09/2026)*
 

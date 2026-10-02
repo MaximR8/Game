@@ -265,7 +265,58 @@ def traiter(nom, dec):
         nom, c["etirement"], c["plongee_deg"], c["erreur_px"], cams["90"]["etirement"], len(alv), len(points)))
 
 
+# ─────────────────────────────────────────────────────────────
+# Pour le jeu (02/10 — Maxim : « on part sur la B et tu peux mettre en ligne ») : les décors retenus partent dans
+# proto_degagement/machines/<décor>/ (le décor en JPEG, le masque de l'or réduit, l'habit du bloc), avec les lunes, le
+# cadran et le lance-pièces ; leurs relevés vont dans proto_degagement/machines/decors.gd (Godot n'exporte pas les .json).
+#     python design/machines/analyser.py --jeu BaseCeleste [Grec …]
+# ─────────────────────────────────────────────────────────────
+JEU = os.path.join(RACINE, "proto_degagement", "machines")
+
+
+def exporter_jeu(noms):
+    import shutil
+    os.makedirs(os.path.join(JEU, "lunes"), exist_ok=True)
+    lunes = os.path.join(BASE, "lunes")
+    for f in os.listdir(lunes):
+        if f.startswith("lune") or f in ("cadran.png", "lance-armillaire.png"):
+            shutil.copyfile(os.path.join(lunes, f), os.path.join(JEU, "lunes", f))
+    donnees = {}
+    for nom in noms:
+        dec = DECORS[nom]
+        j = json.load(open(os.path.join(BASE, "%s.json" % nom), encoding="utf-8"))
+        dossier = os.path.join(JEU, nom)
+        os.makedirs(dossier, exist_ok=True)
+        Image.open(os.path.join(SOURCE, dec["fichier"])).convert("RGB").save(os.path.join(dossier, "decor.jpg"), quality=92)
+        Image.open(os.path.join(BASE, "%s-or.png" % nom)).resize((512, 768), Image.LANCZOS).save(os.path.join(dossier, "or.png"))
+        Image.open(os.path.join(BASE, "%s-bloc-dessus.png" % nom)).convert("RGB").save(os.path.join(dossier, "bloc-dessus.jpg"), quality=90)
+        Image.open(os.path.join(BASE, "%s-bloc-face.png" % nom)).convert("RGB").save(os.path.join(dossier, "bloc-face.jpg"), quality=90)
+        r = "res://machines/%s/" % nom
+        donnees[nom] = {
+            "image": r + "decor.jpg", "or": r + "or.png", "bloc_dessus": r + "bloc-dessus.jpg", "bloc_face": r + "bloc-face.jpg",
+            "cameras": j["cameras"], "alveoles": j["alveoles"], "embleme": j["embleme"], "r_embleme": j["r_embleme"],
+            "flammes": j["flammes"], "etoiles": j["etoiles"],
+        }
+    texte = json.dumps(donnees, ensure_ascii=False, indent="\t")
+    entete = [
+        "# LES DÉCORS DE LA MACHINE — écrit par design/machines/analyser.py --jeu (ne pas modifier à la main).",
+        "# Pour chaque décor : ses images (res://machines/<décor>/), la caméra qui pose le plateau dans le creux peint",
+        "# (deux champs ; « etirement » : la profondeur étirée à l'image), les alvéoles des lunes [x, y, rayon], l'emblème,",
+        "# les flammes [x, y du bas, largeur, hauteur], les éclats — en pixels de l'image (1024 × 1536).",
+        "extends RefCounted",
+        "",
+        "const DECORS := " + texte,
+        "",
+    ]
+    with open(os.path.join(JEU, "decors.gd"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(entete))
+    print("pour le jeu :", ", ".join(noms))
+
+
 if __name__ == "__main__":
+    if "--jeu" in sys.argv:
+        exporter_jeu([n for n in sys.argv[sys.argv.index("--jeu") + 1:]] or ["BaseCeleste"])
+        sys.exit(0)
     for nom, dec in DECORS.items():
         if len(sys.argv) > 1 and nom not in sys.argv[1:]:
             continue

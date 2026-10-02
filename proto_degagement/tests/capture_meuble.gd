@@ -11,7 +11,7 @@ extends Node
 # « film » : pas de photos, une séquence pour --write-movie (à lancer avec --fixed-fps 30).
 
 const MEUBLE := preload("res://meuble/meuble_celeste.gd")
-const SH_BILLE := preload("res://meuble/bille_vue.gdshader")
+const SH_BILLE := preload("res://machines/bille_vue.gdshader")
 const ZONE := Rect2(0, 228, 1080, 1236)
 
 var main: Node

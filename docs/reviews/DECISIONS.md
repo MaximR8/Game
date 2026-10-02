@@ -59,6 +59,9 @@ une fente fixe au milieu (on perd le choix gauche-droite, le seul vrai geste de 
 le geste « glisse le doigt sur le bloc » devient « glisse le doigt » (la consigne change).
 🔓 **Ce qui la rouvrirait** : le cousin et sa femme qui visent mal, ou cherchent à toucher le bloc. *(Montrée le 02/10 au soir :
 le film « Lâcher les pièces » du canevas — le chariot d'or sur un rail perlé, `tests/capture_decor` mode `glissiere`.)*
+🔄 **Le soir même** — Maxim : *« je la mettrais plus haut, qu'on anime les pièces qui tombent de là ; je changerais l'aspect »* ;
+trois lance-pièces proposés (croissant, sphère armillaire, lanterne) → *« on part sur la B »* : **la sphère armillaire**, qui
+flotte au-dessus du bloc, la pièce suivante en son cœur ; la pièce tombe en tournoyant. **En prod le 02/10 à 19 h 35**.
 
 ### On ne vend ni la chance ni la victoire : une monnaie payante pour du connu ; 150 cartes, puis des styles ; un vrai meuble de machine, à thèmes ; les Maîtrises — 01/10/2026
 
