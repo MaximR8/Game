@@ -26,6 +26,22 @@
 
 ## Les décisions prises
 
+### Les décors de la machine : les sept gardés, Base céleste par défaut ; les cartes à une seule évolution sont voulues — 02/10/2026
+
+**Ce qu'on a tranché** (Maxim, 02/10) : *« on garde tous les décors, mais le céleste est celui par défaut »* — Base céleste,
+Olympe, Valhalla, Égypte, Atlantide, Mille et une nuits, Aztèque (`Machine/`, relevés dans `design/machines/`). Et sur ses
+nouveaux monstres : *« il y a des cartes avec une seule évolution, c'est voulu ; on retravaillera l'équilibrage des cartes et
+leur puissance quand on aura tout »* — une carte peut avoir 1, 2 ou 3 stades (le jeu n'en connaît que 1 ou 3 : à ouvrir à 2).
+**Ce qui a fait pencher** : l'essai (CHANGELOG 🧪 02/10) : la vraie machine tient dans chacun ; un thème de machine = un décor,
+son relevé, l'habit du bloc — les thèmes des pass (DECISIONS 01/10) existent déjà.
+**Ce qu'on a écarté, et pourquoi** : étirer les pièces avec la profondeur (Maxim : *« ça a déformé les pièces, c'est pas
+beau »* — seule leur place s'étire) ; des animations dessinées à plat (*« fait en CSS »* — elles sont rendues comme les objets
+de la fabrique, ou relues dans le décor lui-même).
+**Ce que ça coûte, et qu'on assume** : chaque décor se relève à la main (le creux, la marche, les alvéoles : ~10 min) ; le jeu
+devra charger un décor de 1024 × 1536 (à agrandir ×2 pour la netteté) ; l'équilibrage des cartes attend la fin de la
+collection.
+🔓 **Ce qui la rouvrirait** : le rendu sur le téléphone (la netteté, les images par seconde — D13).
+
 ### Dans la machine en perspective, le doigt choisit seulement gauche-droite : une glissière (la fente des vraies machines) suit le doigt et lâche les pièces sur le bloc — 02/10/2026
 
 **Ce qu'on a tranché** (Claude, le design fonctionnel — Maxim, 02/10 : *« comment le joueur va poser ses pièces avec le plateau

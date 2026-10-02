@@ -103,10 +103,13 @@ programmés 2 à 3 jours d'affilée (comme Clash of Critters) ; des packs **« N
 >
 > Les décors générés par Maxim dans ChatGPT (`Machine/`, les prompts de `REPRISE.md`) ; la vraie machine posée dans le creux
 > peint de chacun, les lunes dans les alvéoles, les reflets, les étoiles, les flammes, la Supernova dans l'emblème (CHANGELOG).
-> Le canevas *Les décors de la machine* (claude.ai, compte perso). **À trancher par Maxim** : les décors, le champ (80°/90°).
+> Le canevas *Les décors de la machine* (claude.ai, compte perso), **en v2** (les pièces non déformées, les lunes en cabochons
+> calées dans les trous, le compte à rebours entier dans un cadran, l'or de l'emblème qui s'allume). **Décidé** : les sept décors
+> gardés, **Base céleste par défaut** (DECISIONS 02/10). **À trancher par Maxim** : le rendu de la v2.
 > La pose des pièces en perspective : DECISIONS 02/10 (gauche-droite, une glissière). Ensuite : ses **monstres** à intégrer
-> (14 dans `Cartes/Illustration` — dont 5 à 2 images seulement : Cyclope, Talos, Griffon, Cockatrice, Barghest ; Mokèlé-mbèmbé
-> 1 et 2 sont dans `Machine/`).
+> (14 dans `Cartes/Illustration` — 5 à deux stades, c'est voulu : Cyclope, Talos, Griffon, Cockatrice, Barghest ; le jeu ne
+> connaît que 1 ou 3 stades : à ouvrir à 2 ; Mokèlé-mbèmbé 1 et 2 sont dans `Machine/`). L'équilibrage des cartes : quand la
+> collection sera complète (Maxim).
 >
 > #### *🧪 Le prototype du 01/10 au soir — la machine « Base céleste » et le tapis céleste (PAS dans le jeu)*
 >

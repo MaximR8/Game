@@ -56,7 +56,7 @@ DECORS = {
         "avant": {"y": 1150, "g": 75, "d": 950}, "fond": {"y": 700, "g": 215, "d": 810},
         "dessus": [(240, 565), (785, 565), (222, 600), (800, 600)], "face": (222, 600, 800, 675),
         "alveoles": [(158, 318), (212, 233), (296, 165), (393, 125), (511, 93), (628, 123), (731, 166), (812, 233), (866, 318)],
-        "r_alveole": 28,
+        "r_alveole": 31.5,
         "embleme": (512, 400), "r_embleme": 150,
         "flammes": [(66, 330, 52, 92), (952, 322, 52, 92)],
         "eclats": "nuit", "ciel_max_y": 300,
@@ -140,24 +140,34 @@ def calibrer(dec, fov):
     }
 
 
-def recentrer_alveoles(lum, approx, r):
-    """Chaque alvéole recentrée sur son fond sombre (la moyenne la plus basse dans un disque de rayon r)."""
-    ri = int(r)
-    yy, xx = np.mgrid[-ri:ri + 1, -ri:ri + 1]
-    disque = (xx * xx + yy * yy) <= (r * 0.8) ** 2
+def mesurer_alveoles(lum, approx, r):
+    """Chaque alvéole MESURÉE sur son trou sombre (02/10 — Maxim : « les lunes ne sont pas bien alignées dans les trous ») :
+    autour du point relevé, le seuil entre le fond du trou et la bague d'or ; la tache sombre qui contient le point (ses
+    étoiles bouchées) ; son centre de gravité et le rayon du disque de même aire. → [x, y, rayon], en pixels de l'image."""
+    from scipy import ndimage
     out = []
+    ri = int(r * 1.8)
     for (x, y) in approx:
-        best = None
-        for dy in range(-8, 9):
-            for dx in range(-8, 9):
-                cx, cy = x + dx, y + dy
-                bloc = lum[cy - ri:cy + ri + 1, cx - ri:cx + ri + 1]
-                if bloc.shape != disque.shape:
-                    continue
-                m = bloc[disque].mean()
-                if best is None or m < best[0]:
-                    best = (m, cx, cy)
-        out.append([int(best[1]), int(best[2])])
+        f = lum[y - ri:y + ri + 1, x - ri:x + ri + 1]
+        yy, xx = np.mgrid[-ri:ri + 1, -ri:ri + 1]
+        d = np.hypot(xx, yy)
+        fond = np.median(f[d < r * 0.5])
+        bague = np.percentile(f[(d > r * 1.05) & (d < r * 1.45)], 75)
+        sombre = f < (fond + bague) / 2
+        etiq, n = ndimage.label(sombre)
+        k = etiq[ri, ri]
+        if k == 0:
+            # le point relevé tombe sur une étoile du fond : la tache sombre la plus proche du centre
+            centres = ndimage.center_of_mass(sombre, etiq, range(1, n + 1))
+            k = 1 + int(np.argmin([math.hypot(cy - ri, cx - ri) for (cy, cx) in centres]))
+        tache = ndimage.binary_fill_holes(etiq == k)
+        cy, cx = ndimage.center_of_mass(tache)
+        rayon = math.sqrt(tache.sum() / math.pi)
+        if not (0.6 * r < rayon < 1.5 * r):
+            # une tache qui déborde (le fond rejoint le ciel) : le point et le rayon relevés
+            out.append([int(x), int(y), round(float(r), 1)])
+            continue
+        out.append([round(float(x - ri + cx), 1), round(float(y - ri + cy), 1), round(rayon, 1)])
     return out
 
 
@@ -228,7 +238,7 @@ def traiter(nom, dec):
     rgb = np.asarray(im).astype(np.float64) / 255.0
     lum = rgb.mean(axis=-1)
     cams = {str(fov): calibrer(dec, fov) for fov in (80, 90)}
-    alv = recentrer_alveoles(lum, dec["alveoles"], dec["r_alveole"])
+    alv = mesurer_alveoles(lum, dec["alveoles"], dec["r_alveole"])
     mor, mor_img = masque_or(rgb)
     mor_img.save(os.path.join(BASE, "%s-or.png" % nom))
     points = eclats(rgb, mor, dec)

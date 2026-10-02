@@ -132,7 +132,9 @@ uniform float etirement = 1.0;
 uniform float bord_plateau = 14.0;
 void vertex() {
 	vec3 w = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	w.z = bord_plateau - etirement * (bord_plateau - w.z);
+	// seul le CENTRE suit l'étirement : la pièce garde sa forme (étirée, elle se déformait — Maxim, 02/10)
+	vec3 c_obj = MODEL_MATRIX[3].xyz;
+	w = w - c_obj + vec3(c_obj.x, c_obj.y, bord_plateau - etirement * (bord_plateau - c_obj.z));
 	vec3 ax = MODEL_MATRIX[0].xyz;
 	vec3 ay = MODEL_MATRIX[1].xyz;
 	vec3 az = MODEL_MATRIX[2].xyz;

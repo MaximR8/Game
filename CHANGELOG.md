@@ -40,7 +40,19 @@ peut bien aller, test »*.
   rondes) ; `meuble/peint.gdshader` (les caches), `reflet_or.gdshader`, `decor_fondu.gdshader`.
 · `Machine/` (les sources de Maxim, lourdes) reste hors du dépôt, comme `Cartes/`.
 
-**À trancher par Maxim** : les décors (garder, refaire) ; le champ (80°, retenu, ou 90° : moins d'étirement). **Pour
+🔄 **Version 2 (02/10, le soir)** — Maxim, sur la v1 : *« en étirant, ça a déformé les pièces, c'est pas beau ; sinon la machine
+en elle-même c'est bien, sauf les animations : ça ne va pas avec le décor, le compteur en Supernova est coupé à moitié, les
+lunes ne sont pas bien alignées dans les trous, et ça fait très pauvre, fait en CSS »*. Donc : les pièces gardent leur forme
+(seule leur PLACE suit l'étirement : `corps_vue`, `ombre_vue`) ; les lunes sont de vrais cabochons de pierre de lune
+(`design/machines/lunes.py` : éteintes, un verre nuit où la phase se devine ; allumées, la pierre pleine), posés au centre
+MESURÉ de chaque trou et à sa taille (`analyser.py` § `mesurer_alveoles` : la tache sombre du trou, son centre, son
+rayon) ; une lune qui s'allume « pope » et lâche quelques étoiles ; le compte à rebours dans un cadran d'émail cerclé d'or,
+au-dessus de la vue 3D (le mur peint du fond, trop haut, le coupait : il est bas) ; plus d'anneaux plats : l'OR de l'emblème
+s'allume (le masque de l'or, pas un carré), une gerbe d'étoiles ; le reflet ne court que sur les arêtes claires de l'or ;
+les flammes ondulent à partir de leurs propres pixels (`meuble/flamme.gdshader`). **Décidé** (Maxim) : on garde les sept
+décors, **Base céleste par défaut**.
+
+**À trancher par Maxim** : le rendu de la v2 (le canevas). **Pour
 l'intégrer** : la pose des pièces (DECISIONS 02/10 : le doigt choisit gauche-droite, une glissière suit) ; un décor par
 thème = son image + son relevé ; les images en ×2 (netteté) ; mesurer sur le téléphone (D13).
 

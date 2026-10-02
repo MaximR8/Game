@@ -16,7 +16,9 @@ uniform float etirement = 1.0;
 uniform float bord_plateau = 14.0;
 void vertex() {
 	vec3 w = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	w.z = bord_plateau - etirement * (bord_plateau - w.z);
+	// seul le CENTRE suit l'étirement : la pièce garde sa forme (étirée, elle se déformait — Maxim, 02/10)
+	vec3 c_obj = MODEL_MATRIX[3].xyz;
+	w = w - c_obj + vec3(c_obj.x, c_obj.y, bord_plateau - etirement * (bord_plateau - c_obj.z));
 	v_force = force_objet >= 0.0 ? force_objet : INSTANCE_CUSTOM.b;
 	vec3 s = vec3(w.x, w.y + k_h * w.z, w.z - k_h * w.y);
 	POSITION = PROJECTION_MATRIX * VIEW_MATRIX * vec4(s, 1.0);
